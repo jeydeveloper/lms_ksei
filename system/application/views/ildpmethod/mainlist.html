@@ -1,0 +1,93 @@
+<script>
+	$(document).ready(
+		function()
+		{
+			page(0);
+		}
+	);	
+	
+	function page(n)
+	{
+		if (! n) n = 0;
+		
+		$("#wait").show();
+		
+		var url = "{* $base_url *}index.php/ildpmethod/search/" + n;
+		$.post(url, $("#frmsearch").serialize(),
+			function(r)
+			{
+				$("#wait").hide();
+				$("#list").html(r.html);
+			}
+			, "json"
+		);
+	}
+	
+	function sortby(field)
+	{
+		if ($("#sortby").val() == field)
+		{
+			if ($("#orderby").val() == "asc")
+			{
+				$("#orderby").val("desc");
+			}
+			else
+			{
+				$("#orderby").val("asc");
+			}
+		}
+		else
+		{
+			$("#orderby").val("asc");
+		}
+		
+		$("#sortby").val(field);	
+		page(0);	
+	}
+	
+	function changelimit(elmt)
+	{
+		$("#limit").val(elmt.value);
+		page(0);
+		
+	}
+
+	function chagestatus(id, status)
+	{
+		if (! confirm('{* $lconfirm_change_status *}')) return;
+		
+		$.post("{* $site_url *}/ildpmethod/changestatus/" + id + "/" + status, {},
+			function(r)
+			{
+				if (r.error)
+				{
+					alert(r.message);
+					return;
+				}
+				
+				$("#status"+id).html(r.newstatus);
+			}
+			, "json"
+		);
+		
+	}
+
+</script>
+<h2>{* $llearning_method *}</h2>
+<p><em>{* $lheader_ildp_method_list *}</em><br />
+        <br />                
+	<a href="{* $base_url *}index.php/ildpmethod/form">{* $ldata_added *}</a>
+	<div id="wait" style="display: none;"><img src="{* $base_url *}images/anim_wait.gif" border="0" /></div>
+ <form id="frmsearch" onsubmit="javascript:page(0); return false;">
+	<input type="hidden" id="limit" name="limit" value="{* $limit *}" />
+	<input type="hidden" id="sortby" name="sortby" value="ildp_method_name" />
+	<input type="hidden" id="orderby" name="orderby" value="asc" />
+      <p>{* $lsearch_by *}
+      <select name="searchby" id="searchby">
+      	<option value="ildp_method_name">{* $llearning_method *}</option>
+      </select> 
+      <input type='text' name="keyword" id="keyword" class='formdefault' value="">
+      <input type='submit' value=" {* $lsearch *} ">
+      </p>    
+</form>  
+<div id="list"></div>

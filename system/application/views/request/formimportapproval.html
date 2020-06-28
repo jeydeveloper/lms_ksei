@@ -1,0 +1,49 @@
+<script>
+  function checking_form() {
+    var bict_name = $("#bict_name").val();
+    var ret = true;
+
+    if(bict_name == '') $("#message").empty();
+
+    if(bict_name == '') {
+      $("#message").append('<div class="flash error"><font color="#ff0000">Please type name!</font><br></div>');
+      ret = false;
+    }
+
+    return ret;
+  }
+
+	function frmbicategory_onsubmit()
+	{
+		$("#message").html("Saving...");
+    return checking_form();
+	}
+	
+</script>
+
+<h2>{* $ltitle_form *}</h2>
+<form method="post" name="frmbicategory" id="frmbicategory" action="{* $site_url *}/request/importapproval" onsubmit="javascript: return frmbicategory_onsubmit()" enctype="multipart/form-data">
+<table width="100%" border="0" cellpadding="0" cellspacing="0" class="tb_data">
+	{* if $edit *}
+  <tr>
+    <td>
+      &nbsp;&nbsp; ID</td>
+    <td>:</td>
+    <td>{* $bicategoryedit.bict_id *}</td>
+  </tr>
+  {* /if *}
+  <input type="hidden" name="parent" id="parent" value="0" />
+  
+  <tr>
+    <td width="200">* Name</td>
+    <td width="1">:</td>
+    <td><input type="file" name="userfile"> <br/> <a href="{* $base_url *}uploads/format_import_approval.xls" target="_blank">(Download format import approval)</a></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td><div id="message"></div><input name="submit" type="submit" value=" Submit " />
+  </tr>
+</table>
+
+</form>

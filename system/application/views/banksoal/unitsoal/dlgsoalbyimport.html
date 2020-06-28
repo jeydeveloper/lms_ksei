@@ -1,0 +1,41 @@
+<script>
+	function setErrorMessage(err)
+	{
+		$("#messageunitsoalquest").html(err);
+		
+	}
+	
+	function setSuccess(msg)
+	{
+		$("#messageunitsoalquest").html(msg);
+		setTimeout("tutup()", 1000);
+	}
+	
+	function tutup()
+	{		
+		{* if ! $smarty.post.istraining *}
+			loadunitsoaldetailquest($("#jabatan").val(), $("#unitid").val(), true);
+		{* else *}
+			onload(true);			
+		{* /if *}		
+	}
+	
+</script>
+<form id="frmdlgsoal" action="{* $site_url *}/banksoal/addsoalbyimport/" method="post" enctype="multipart/form-data" target="savesoalframe">
+	<input type="hidden" name="istraining" id="unitid" value="{* $smarty.post.istraining *}" />
+	<input type="hidden" name="unitid" id="unitid" value="{* $smarty.post.unitid *}" />
+	<input type="hidden" name="jabatanid" id="jabatanid" value="{* $smarty.post.jabatan *}" />
+	<input type="hidden" name="banksoalid" id="banksoalid" value="{* $smarty.post.banksoalid *}" />
+	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="tablepop">
+		<tr>
+			<td width="20%">{* $lfile *}</td>
+			<td><input type='file' name="userfile" id="userfile" class='formdefault' value=""></td>
+		</tr>
+		<tr>
+			<td colspan="2"><div id="messageunitsoalquest"></div><input type="submit" value=" Import " /></td>
+		</tr>
+		<tfoot>				
+		</tfoot>
+	</table>
+</form>
+<iframe id="savesoalframe" name="savesoalframe" src="" style="width:0px;height:0px;border:0px solid #fff;"></iframe>

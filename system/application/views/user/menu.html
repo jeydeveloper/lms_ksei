@@ -1,0 +1,85 @@
+<script>
+    function getcart()
+    {
+        $.post("{* $base_url *}index.php/ildp/getcart", {},
+            function(r)
+            {
+                if (r.total == 0)
+                {
+                    $("#menucartildp").hide();
+                }
+                else
+                {
+                    $("#menucartildp").show();
+                    $("#nildpcart").html(r.htmltotal);
+                }
+            }
+            , "json"
+        )
+    }
+
+    $(document).ready(
+        function()
+        {
+            //getcart();
+        }
+    );
+
+</script>
+
+<aside class="main-sidebar" style="background-color: #243d56;">
+	<!-- sidebar: style can be found in sidebar.less -->
+	<section class="sidebar">
+		<!-- sidebar menu: : style can be found in sidebar.less -->
+		<ul class="sidebar-menu" data-widget="tree">
+			<li class="header">{* $lview_options *}</li>
+			<li class="{* if $page eq "user" and $subpage eq "info" *} active{*/if*}">
+				<a href="{* $site_url *}/user/info">
+					<i class="fa fa-user-circle-o"></i> <span>{* $profile *}</span>
+				</a>
+			</li>
+			<li class="{* if $page eq "user" and $subpage eq "changepass" *} active{*/if*}">
+				<a href="{* $site_url *}/user/changepass">
+					<i class="fa fa-key"></i> <span>{* $change_pass *}</span>
+				</a>
+			</li>
+			{* if $sessmodules.trainee and ! $sess.asadmin *}
+			<li class="treeview {* if ($page eq "training" and $subpage eq "history") or ($page eq "classroom" and $subpage eq "history") or ($page eq "certificate" and $subpage eq "history") *} active menu-open{*/if*}">
+				<a href="#">
+					<i class="fa fa-dashboard"></i> <span>{* $llearning_trainee *}</span>
+					<span class="pull-right-container">
+					  <i class="fa fa-angle-left pull-right"></i>
+					</span>
+				</a>
+				<ul class="treeview-menu">
+					<li class="{* if $page eq "training" and ($subpage eq "history" or $subpage eq "historydetail") *} active{*/if*}"><a href="{* $site_url *}/training/history"><i class="fa fa-mobile" style="font-size: 23px;"></i> {* $lonline_training *}</a></li>
+					<li class="{* if $page eq "classroom" and ($subpage eq "history" or $subpage eq "historydetail") *} active{*/if*}"><a href="{* $site_url *}/classroom/history"><i class="fa fa-university"></i> {* $classroom_training *}</a></li>
+					<li class="{* if $page eq "certificate" and ($subpage eq "history" or $subpage eq "historydetail") *} active{*/if*}"><a href="{* $site_url *}/certificate/history"><i class="fa fa-pencil-square-o"></i> {* $lcertification *}</a></li>
+				</ul>
+			</li>
+			<li class="{* if ($page eq "user" and $subpage eq "activities") or $page eq "activities" *} active{*/if*}">
+				<a href="{* $site_url *}/user/activities">
+				<i class="fa fa-th"></i> <span>{* $luser_activities *}</span>
+				</a>
+			</li>
+			{* if $showildp  eq 1 *}
+			<li class="treeview">
+				<a href="#">
+					<i class="fa fa-dashboard"></i> <span>ILDP</span>
+					<span class="pull-right-container">
+					  <i class="fa fa-angle-left pull-right"></i>
+					</span>
+				</a>
+				<ul class="treeview-menu">
+					<li class="{* if $page eq "ildpform" and $subpage ne "approval" and $subpage ne "approvalhist" *} active{*/if*}"><a href="{* $site_url *}/ildpform"><i class="fa fa-circle-o"></i> {* $lildp_form *}</a></li>
+					<li class="{* if $page eq "ildphist" *} active{*/if*}"><a href="{* $site_url *}/ildphist"><i class="fa fa-circle-o"></i> {* $lmy_form *}</a></li>
+					<li class="{* if $page eq "ildpapproval" or ($page eq "ildpform" and $subpage eq "approval") *} active{*/if*}"><a href="{* $site_url *}/ildpapproval"><i class="fa fa-circle-o"></i> {* $lpending_approval *}</a></li>
+					<li class="{* if $page eq "ildpapprovalhist" or ($page eq "ildpform" and $subpage eq "approvalhist") *} active{*/if*}"><a href="{* $site_url *}/ildpapprovalhist"><i class="fa fa-circle-o"></i> {* $lapproval_history *}</a></li>
+				</ul>
+			</li>
+			{* /if *}
+			{* /if *}
+		</ul>
+	</section>
+	<!-- /.sidebar -->
+</aside>

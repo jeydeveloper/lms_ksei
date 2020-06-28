@@ -1,0 +1,99 @@
+<script>
+  		function cetak(id)
+  		{
+  			$.post("{* $site_url *}/training/printcertificate", {id: id, isajax: 1},
+  				function (data)
+  				{
+  					if (data.err > 0)
+  					{
+  						location = data.redirect;
+  						return;
+  					}
+  					
+  					window.open(data.url, 'materiwin2', 'menubar=no, toolbar=no, location=no, status=no,scrollbars=1 ,width=780,height=590"');
+  				}
+  				, "json"
+  			);
+  		}
+</script>
+<div class="content-wrapper">
+	<!-- Content Header (Page header) -->
+	<section class="content-header">
+		<h1>
+			&nbsp;
+		</h1>
+		<ol class="breadcrumb">
+			<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+			<li><a href="#">Training</a></li>
+			<li class="active">Exam Intro</li>
+		</ol>
+	</section>
+
+	<!-- Main content -->
+	<section class="content">
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="box">
+					<div class="box-body table-responsive">
+						<h3>{* $certificate_name *}</h3>
+						<table width='60%' border='0'>
+							<tr>
+								<td colspan='2'>{* $sess.user_first_name *} {* $sess.user_last_name *}</td>
+							</tr>
+							<tr>
+								<td width='30%'>{* $ldate *}</td><td>: {* $tgl *}</td>
+							</tr>
+							<tr>
+								<td>{* $lrightanswered *}</td><td>: {* $rightanswered *}</td>
+							</tr>
+							<tr>
+								<td>{* $lwronganswered *}</td><td>: {* $wronganswered *}</td>
+							</tr>
+							<tr>
+								<td>{* $lscore *}</td><td>: {* $score *}</td>
+							</tr>
+							{* if $show_min_lulus eq 1 *}
+							<tr>
+								<td>{* $ltraining_pass *}</td><td>: {* $min_score *}</td>
+							</tr>
+							{* /if *}
+							<tr>
+								<td>{* $lstatus *}</td><td>: {* $status *}</td>
+							</tr>
+							<tr>
+								<td>{* $llength *}</td><td>: {* $length *}</td>
+							</tr>
+
+
+							{* if $statuscode eq 1 *}
+							{* if $show_print eq 1 *}
+							<tr height='25px'>
+								<td colspan='2'>&nbsp;</td>
+							</tr>
+							<tr>
+								<td colspan='2'>
+									<form>
+										<input type="button" value=" Print Certificate " onclick="javascript:cetak({* $examid *})" />
+									</form>
+								</td>
+							</tr>
+							{* /if *}
+							{* /if *}
+
+							{* if $training_type eq 'training' *}
+							<tr height='25px'>
+								<td colspan='2'>&nbsp;</td>
+							</tr>
+							<tr>
+								<td colspan='2'>
+									[<a href='{* $site_url *}/training/examintro/{* $trainingid *}'>{* $ltraining_intro *}</a>]
+								</td>
+							</tr>
+							{* /if *}
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+</div>

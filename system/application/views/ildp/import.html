@@ -1,0 +1,39 @@
+<script>
+	function import_onsubmit()
+	{
+		$("#message").show();
+		$("#message").html("importing...");		
+		
+		return true;
+	}
+	
+	function setErrorMessage(err)
+	{
+		$("#message").html(err);		
+	}
+	
+	function setSuccess(id, msg)
+	{
+		$("#"+id).html(msg);
+	}	
+</script>
+<form action="{* $site_url *}/ildp/doimport" method="post" enctype="multipart/form-data" onsubmit="javascript: return import_onsubmit()" target="iframe_import">
+      <h2>{* $limport *}</h2>
+        <br />
+      <table width="100%" cellpadding="3">
+        <tbody>
+          <tr class="odd">
+            	<td class="odd" width="15%">{* $lfile *}</td>
+		<td class="odd"><input type="file" name="userfile" value="" /> </td> 
+          </tr>
+          <tr class="odd">
+          	<td class="odd">&nbsp;</td>
+          	<td class="odd">
+          		<div id="message" style="display: none;"></div>
+          		<input type="submit" value="Import" /> 
+          	</td> 
+          </tr>
+        </tbody>
+      </table>
+</form>
+<iframe id="iframe_import" name="iframe_import" src="" style="width:800px;height:500px;border:1px solid #000000;display: none;"></iframe>

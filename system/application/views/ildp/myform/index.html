@@ -1,0 +1,59 @@
+<script>
+	$(document).ready(
+		function()
+		{
+			page(0);
+		}
+	);	
+	
+	function page(n)
+	{
+		if (! n) n = 0;
+		
+		$("#wait").show();
+		
+		var url = "{* $base_url *}index.php/ildp/searchmyform/" + n;
+		$.post(url, $("#frmsearch").serialize(),
+			function(r)
+			{
+				$("#list").html(r.html);
+				$("#wait").hide();
+			}
+			, "json"
+		);
+	}
+	
+	function sortby(field)
+	{
+		if ($("#sortby").val() == field)
+		{
+			if ($("#orderby").val() == "asc")
+			{
+				$("#orderby").val("desc");
+			}
+			else
+			{
+				$("#orderby").val("asc");
+			}
+		}
+		else
+		{
+			$("#orderby").val("asc");
+		}
+		
+		$("#sortby").val(field);	
+		page(0);	
+	}
+	
+	function changelimit(elmt)
+	{
+		$("#limit").val(elmt.value);
+		page(0);
+		
+	}
+	
+</script>
+<h2>{* $lmy_ildp_form *}</h2>
+<p><em>{* $lheader_my_ildp_form *}</em><br />
+<div id="wait" style="display: none;"><img src="{* $base_url *}images/anim_wait.gif" border="0" /></div>
+<div id="list"></div>

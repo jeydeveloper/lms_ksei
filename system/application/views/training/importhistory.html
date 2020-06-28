@@ -1,0 +1,39 @@
+<script>
+	function import_onsubmit(id)
+	{
+		$("#"+id).html("importing...");
+		
+		return true;
+	}
+	
+	function setErrorMessage(id, err)
+	{
+		$("#" + id).html(err);		
+	}
+	
+	function setSuccess(id, msg)
+	{
+		$("#messageimportnew").html("");
+		$("#"+id).html(msg);
+	}	
+</script>
+<form action="{* $site_url *}/training/savehistory" method="post" enctype="multipart/form-data" onsubmit="javascript: return import_onsubmit('messageimportnew')" target="iframe_import">
+      <h2>{* $limport_training_history *}</h2>
+        <br />
+      <table width="100%" cellpadding="3">
+        <tbody>
+          <tr class="odd">
+            	<td class="odd" width="15%">{* $lbrowse_file_csv *}</td>
+		<td class="odd"><input type="file" name="userfile" value="" /> </td> 
+          </tr>
+          <tr class="odd">
+          	<td class="odd">&nbsp;</td>
+          	<td class="odd"><input type="submit" value="Import" /> </td> 
+          </tr>
+          <tr class="odd">
+          	<td class="odd" colspan='2'><div id="messageimportnew"></div></td> 
+          </tr>          
+        </tbody>
+      </table>
+</form>
+<iframe id="iframe_import" name="iframe_import" src="" style="width:800px;height:300px;border:1px solid #000000;"></iframe>

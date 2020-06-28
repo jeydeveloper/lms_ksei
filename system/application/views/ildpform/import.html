@@ -1,0 +1,42 @@
+<script type="text/javascript" src="{*$base_url*}js/date.js"></script>
+<script type="text/javascript" src="{*$base_url*}js/jquery.datePicker.js"></script>
+<link rel="stylesheet" type="text/css" media="screen" href="{*$base_url*}css/datePicker.css"> 
+<link rel="stylesheet" type="text/css" media="screen" href="{*$base_url*}css/date.css"> 
+<script>
+	function frmcatalog_onsubmit()
+	{
+		if(confirm("{* $limport_confirm *}")) {
+			$("#message").html("importing...");
+			$("#message").show();
+			
+			return true;
+		} 
+		return false;
+	}
+	
+	function setErrorMessage(err)
+	{
+		$("#message").html(err);		
+	}
+	
+	function setSuccess(msg)
+	{
+		$("#message").html(msg);
+	}	
+		
+</script>
+<h2>{* $lilpd_form_import *}</h2>
+<form name="frmcatalog" id="frmcatalog" action="{* $site_url *}/ildpformimport/doimport" onsubmit="javascript: return frmcatalog_onsubmit()" enctype="multipart/form-data" method="post" target="iframe_import">
+	<table id="tbltrainingtime" width="100%" cellpadding="3" cellspacing="3" border="0">
+		<tr>
+			<td width="15%">* {* $lfile *}</td>
+			<td><input type="file" name="file" value="" />
+				</td>
+		</tr>	
+		<tr>
+			<td valign="top">&nbsp;</td>
+			<td valign="top"><input type="submit" value=" {* $limport *} " /><div id="message" style="display: none;"></div></td>
+		</tr>	
+	</table>
+</form>
+<iframe id="iframe_import" name="iframe_import" src="" style="width:700px;height:500px;border:1px solid #000000;display: none;"></iframe>

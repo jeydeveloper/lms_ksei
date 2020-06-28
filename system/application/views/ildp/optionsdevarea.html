@@ -1,0 +1,6 @@
+							<select name="devarea[]" id="devarea[]"  class="selectmedium" >
+								<option value=""></option>
+								{* foreach from=$rows item=devarea *}
+								<option value="{* $devarea->dev_area_title *}"{* if $default eq $devarea->dev_area_title *} selected {*/if*} >{* $devarea->dev_area_title *}</option>
+								{* /foreach *}
+							</select>

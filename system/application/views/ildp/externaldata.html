@@ -1,0 +1,47 @@
+{* $lpart3_cart *}
+<br /> <br />
+<table width="100%" cellpadding="3" class="tablelist"> 
+	<thead> 
+		<tr> 
+			<th width="200">{* $lexternal_catalog_title *}</th> 
+			<th width="200">{* $lexternal_catalog_tag *}</th> 
+			<th width="200">{* $lexternal_catalog_objective *}</th> 
+			<th>{* $lstatus *}</th>
+			{* if $smarty.post.referer ne "approval" and $smarty.post.referer ne "myform" *}
+			<th>&nbsp;</th>
+			{* /if *}		
+			<th width="75">&nbsp;</th>	
+			{* if $smarty.post.referer ne "approval" *}
+			<th width="75">&nbsp;</th>
+			{* /if *}
+		</tr>
+		{* foreach from=$exttitles item=exttitle key=i *}		
+		<tr>
+			<td>{* $exttitles[$i] *}</td>
+			<td>{* $exttags[$i] *}</td>
+			<td>{* $extobjs[$i] *}</td>
+			{* if $smarty.post.referer eq "approval" *}
+				{* if $extstatus[$i] eq 1 *}
+				<td id="status{* $i *}">{* $extlaststatus[$i] *}</td>
+				<td><input type="button" value="Reject" onclick="javascript:rejectedextdata({* $i *})" /></td>
+				{* else *}
+				<td id="status{* $i *}">{* $extlaststatus[$i] *}</td>
+				<td>&nbsp;</td>
+				{* /if *} 			
+			{* else *}
+				<td>{* $extlaststatus[$i] *}<td>
+			</td>				
+				{* if $isowner and $extstatus[$i] eq 2 *}
+				<td><input type="button" value="Repropose" onclick="javascript:extdatarepropose({* $i *})" />
+				{* else *}
+				<td>&nbsp;</td>	
+				{* /if *}
+						
+			{* /if *}
+			{* if $smarty.post.referer ne "approval" and $smarty.post.referer ne "myform" *}
+			<td><a href="javascript:removeextdata({* $i *})" onclick="javascript: return confirm('{* $lconfirm_delete *}');"><img src="{* $base_url *}images/b_del.gif" alt=" {* $ldelete_from_ildp *}" width="16" height="16" border="0" /></a> </td>
+			{* /if *}
+		</tr>
+		{* /foreach *}
+	</thead>
+</table>

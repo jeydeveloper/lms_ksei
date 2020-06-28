@@ -1,0 +1,85 @@
+      <script>
+		  function page(offset, isexport)
+		  {
+			  if (! offset) offset = 0;
+			  if (! isexport) isexport = 0;
+			  
+			  $("#isexport").val(isexport);
+			  
+			  document.frmtemp.action = "{* $base_url *}index.php/resources/historydetail/{* $myreference->reference_id *}/"+offset;
+			  document.frmtemp.submit();
+		  }
+		  
+		  $(document).ready(
+			function()
+			{
+				$("#_searchby").change(
+					function()
+					{
+						$("#searchby").val($(this).val());
+						page(0);
+					}
+				);
+				
+				$("#btnexport").click(
+					function()
+					{
+						$("#searchby").val($("#_searchby").val());
+						page(0, 1);
+						
+						return false;
+					}
+				);
+			}
+		  );
+      </script>
+      {* if $sess.asadmin *}
+      <h2>{* $lresources_history *}: {* $myreference->reference_name *}</h2>
+      {* else *}
+      <h2>{* $lmypersonal_report *}: {* $myreference->reference_name *}</h2>
+      {* /if *}            
+      <form name="frmexport" id="frmexport" method="post" action="{* $base_url *}index.php/resources/historydetail/{* $myreference->reference_id *}">
+      <p>{* $lsearch_by *}
+      <select name="_searchby" id="_searchby">
+		  <option value="0"{* if $searchby eq 0 *} selected {* /if *}>{* $lall_access *}</option>
+		  <option value="1"{* if $searchby eq 1 *} selected {* /if *}>{* $lfirst_access *}</option>
+		  <option value="2"{* if $searchby eq 2 *} selected {* /if *}>{* $llast_access *}</option>
+		</select>
+<p>		
+			<input type="button" id="btnexport" value=" {* $lexport *}" />
+		</form>
+		<br />
+      <table width="100%" cellpadding="3" class="tablelist">
+        <thead>
+          <tr>
+          	{* if $sess.asadmin *}
+          	<th width="10%">{* $lnpk *}</th>
+          	<th width="23%">{* $luser *}</th>
+          	{* /if *}
+            <th width="23%">{* $ldate *}</th>            
+          </tr>          
+        </thead>
+        <tbody>
+          {* counter start=1 print=false assign="no" *}
+          {* foreach from=$list item=row *}
+          	<tr{* if $no%2 eq 1 *} class="odd"{* /if *}>            
+          			{* if $sess.asadmin *}
+          			<td>{* $row->user_npk *}</td>
+          			<td>{* $row->user_first_name *} {* $row->user_last_name *}</td>
+          			{* /if *}
+          			<td>{* $row->datetime *}</td>          			
+			</tr>
+          	{* counter *}
+          {* /foreach *}        
+        </tbody>
+        <tfoot>
+          <tr>
+            	<td colspan="4">{* $paging *}</td>
+          </tr>
+        </tfoot>        
+      </table>
+      <form name="frmtemp" action="{* $base_url *}index.php/resources/historydetail/{* $myreference->reference_id *}/" method="post">
+		<input type="hidden" name="limit" id="limit" value="{* $limit *}">
+		<input type="hidden" name="searchby" id="searchby" value="{* $searchby *}">
+		<input type="hidden" name="isexport" id="isexport" value="0">
+      </form>

@@ -1,0 +1,27 @@
+	<table width="100%" cellpadding="3" class="tablelist" border='0'> 
+		<thead> 
+			<tr> 
+				<th width="50%">{* $llearning_method *}</th> 
+				<th width="5%">{* $lstatus *}</th> 
+				<th width="5%">&nbsp;</th>
+				<th>&nbsp;</th>
+			</tr> 
+		</thead>
+		<tbody>
+			{* counter start=1 print=false assign="no" *}
+			{* foreach from=$catalogs item=catalog *}
+			<tr> 
+				<td class="odd"><a href="{* $site_url *}/ildpmethod/form/{* $catalog->ildp_method_id *}">{* $catalog->ildp_method_name *}</a></td>
+				<td class="odd"><div id="status{* $catalog->ildp_method_id *}"><a href="#" onclick="javascript:chagestatus({* $catalog->ildp_method_id *},{* $catalog->ildp_method_status *})">{* $catalog->ildp_method_status_image *}</a></div></td>
+				<td>{* if $catalog->isused *}&nbsp;{* else *}<a href="{* $site_url *}/ildpmethod/remove/{* $catalog->ildp_method_id *}" onclick="javascript: return confirm('{* $lconfirm_delete *}');"><img src="{* $base_url *}images/b_del.gif" width="12" height="12" border="0" /></a>{* /if *}</td>
+				<td>&nbsp;</td>
+			</tr>
+				{* counter *}
+			{* /foreach *}
+		</tbody>
+		<tfoot>
+			<tr>
+				<td colspan="4">{* $paging *}</td>
+			</tr>
+		</tfoot>
+	</table>

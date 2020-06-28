@@ -1,0 +1,100 @@
+<script>
+	$(document).ready( function() { 
+		$("#pass").val('');
+	});
+	
+	function frmlogin_onsubmit()
+	{
+		$("#msg").html("Logging...");
+		$.post("{* $site_url *}/user/login/", $("#frmlogin").serialize(),
+			function(data)
+			{		
+				$("#msg").html("");
+				
+				var datas = data.split("\1");
+				if (parseInt(datas[0]) > 0)
+				{
+					$("#msg").html(datas[1]);
+					return false;	
+				}
+				
+				if (datas[1] == 1)
+				{
+					alert("{* $lexpired_password *}");
+					location = "{* $site_url *}/user/changepass";
+				}
+				else
+				if ("{* $site_url *}/user/login" ==  "{* $referrer *}")
+				{
+					location = "{* $base_url *}";
+				}
+				else
+				{				
+					location = "{* $referrer *}";
+				}
+			}
+		);
+		
+		return false;
+	}	
+</script>
+<form id="frmlogin" onsubmit="javascript:return frmlogin_onsubmit()">
+  <table align="center">
+    <tr>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <td><table style="border-collapse:collapse; border:1px #FFFFFF solid">
+        <tr>
+          <td><table cellpadding="5" style="border-collapse:collapse">
+              <tr>
+                <td bgcolor="#CCCCCC"><strong>Login</strong></td>
+                <td bgcolor="#CCCCCC">&nbsp;</td>
+                <td bgcolor="#CCCCCC">&nbsp;</td>
+              </tr>
+
+              {*if $loginbyemail *}
+              <tr>
+                <td>{* $lemail *}</td>
+                <td valign="top">:</td>
+                <td valign="top"><input type='text' name="email" id="email" class='formshort' value="" autocomplete='off'/></td>
+              </tr>
+              {* else *}
+              <tr>
+                <td>{* $lnpk *}</td>
+                <td valign="top">:</td>
+                <td valign="top"><input type='text' name="npk" id="npk" class='formshort' value="" autocomplete='off'/></td>
+              </tr>
+              {* /if *}
+
+              <tr>
+                <td>{* $password *}</td>
+                <td valign="top">:</td>
+                <td valign="top"><input type="password" name="pass" id="pass" class='formshort' value="" autocomplete='off'/></td>
+              </tr>
+              <tr>
+                <td>&nbsp;</td>
+                <td valign="top">&nbsp;</td>
+                <td valign="top"><div id="msg"></div>
+                    <input type="submit" name="submit" id="submit" value=" Login " /></td>
+              </tr>
+              <tr>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td><a href="{* $site_url *}/home/forgotpass">{* $forgot_password *}</a></td>
+              </tr>
+              <!--<tr>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td><a href="{* $site_url *}/register">Register</a></td>
+              </tr>-->
+          </table></td>
+        </tr>
+        
+      </table></td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+    </tr>
+  </table>
+</form>

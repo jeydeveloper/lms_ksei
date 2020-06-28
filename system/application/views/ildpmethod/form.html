@@ -1,0 +1,40 @@
+<script>
+	function frmcatalog_onsubmit()
+	{
+		if (! confirm("{* $lconfirm_ildp_catalog_save *}")) return false;
+		
+		$("#message").show();
+		$("#message").html("saving...");
+		
+		$.post("{* $site_url *}/ildpmethod/save{* if $rowedit *}/{*$rowedit->ildp_method_id*}{*/if*}", $("#frmcatalog").serialize(),
+			function(r)
+			{
+				if (r.error)
+				{
+					$("#message").html(r.message);
+					return;
+				}
+				
+				$("#message").html(r.message);
+				setTimeout("location='{* $site_url *}/ildpmethod/';", 1000);
+			}
+			, "json"
+		);
+		
+		return false;
+	}
+	
+</script>
+<h2>{* $ltitle *}</h2>
+<form name="frmcatalog" id="frmcatalog" onsubmit="javascript: return frmcatalog_onsubmit()">
+	<table id="tbltrainingtime" width="100%" cellpadding="3" cellspacing="3" border="0">
+		<tr>
+			<td width="25%">* {* $llearning_method *}</td>
+			<td><input type='text' name="nama" id="nama" class='formdefault' value="{* if $rowedit *}{* $rowedit->ildp_method_name *}{* /if *}" maxlength='100'> </td>
+		</tr>		
+		<tr>
+			<td valign="top">&nbsp;</td>
+			<td valign="top"><div id="message" style="display: none;"></div><input type="submit" value=" {* $lsubmit *} " /></td>
+		</tr>	
+	</table>
+</form>

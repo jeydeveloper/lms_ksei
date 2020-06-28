@@ -1,0 +1,31 @@
+<script>
+</script>
+<table width="100%" cellpadding="3" class="tablelist"> 
+	<thead> 
+		<tr> 
+			<th width="102">{* $lnpk *}</th> 
+			<th>{* $lcategory *}</th> 
+			<th width="100">{* $lstatus *}</th> 
+			<th>&nbsp;</th>
+		</tr> 
+	</thead>
+	<tbody>
+		{* counter start=1 print=false assign="no" *}
+		{* foreach from=$settings item=setting *}
+		<tr> 
+			<td class="odd">{* $setting->user_npk *}</td>
+			<td class="odd">{* $setting->category_name *}</td>
+			<td class="odd"><a href="{* $site_url *}/hrld/status/{* $setting->hrld_id *}"><img src="{* $base_url *}images/16/{* if $setting->hrld_status eq 1 *}active.png{* else *}inactive.png{* /if *}" width="12" height="12" border="0" title="{* $ldelete *}"/></a></td>
+			<td class="odd">				
+				<a href="{* $site_url *}/hrld/remove/{* $setting->hrld_id *}" onclick="javascript: return confirm('{* $lconfirm_delete *}');"><img src="{* $base_url *}images/b_del.gif" width="12" height="12" border="0" title="{* $ldelete *}"/></a>
+			</td>
+		</tr>
+			{* counter *}
+		{* /foreach *}
+	</tbody>
+	<tfoot>
+		<tr>
+			<td colspan="4">{* $paging *}</td>
+		</tr>
+	</tfoot>
+</table>

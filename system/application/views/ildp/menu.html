@@ -1,0 +1,52 @@
+<script>
+	function getcart()
+	{
+		$.post("{* $base_url *}index.php/ildp/getcart", {},
+			function(r)
+			{
+				if (r.total == 0)
+				{
+					$("#menucartildp").hide();
+				}
+				else
+				{
+					$("#menucartildp").show();
+					$("#nildpcart").html(r.htmltotal);
+				}				
+			}
+			, "json"
+		)		
+	}
+	
+	$(document).ready(
+		function()
+		{
+			getcart();
+		}
+	);
+			
+</script>
+<h3>{* $lview_options *}</h3>
+<div id="actionmenu">
+	<ul id="actionlist">
+		{* if ! $sess.asadmin *}
+		<li><a href="{* $site_url *}/topic/"{* if $page eq "ildp" and ($subpage eq "" or $subpage eq "form" or $subpage eq "topic") *} id="active"{*/if*}><img src="{* $base_url *}images/16/as_preview.png" alt="" width="16" height="16" border="0"> {* $ltopic *}</a></li>
+		{* else *}
+		<li><a href="{* $site_url *}/ildpcatalog/"{* if $page eq "ildpcatalog" and ($subpage eq "" or $subpage eq "form" or $subpage eq "import") *} id="active"{*/if*}><img src="{* $base_url *}images/16/as_preview.png" alt="" width="16" height="16" border="0"> {* $lcatalog *}</a></li>
+		<li><a href="{* $site_url *}/ildpcategory"{* if $page eq "ildpcategory" and ($subpage eq "" or $subpage eq "form") *} id="active"{*/if*}><img src="{* $base_url *}images/16/as_preview.png" alt="" width="16" height="16" border="0"> {* $lcategory *}</a></li>
+		<li><a href="{* $site_url *}/ildpmethod/"{* if $page eq "ildpmethod" and ($subpage eq "" or $subpage eq "form") *} id="active"{*/if*}><img src="{* $base_url *}images/16/as_preview.png" alt="" width="16" height="16" border="0"> {* $llearning_method *}</a></li>
+		{* /if *}
+		{* if $sess.asadmin *}
+		<li><a href="{* $site_url *}/ildpregperiod"{* if $page eq "ildpregperiod" *} id="active"{*/if*}><img src="{* $base_url *}images/16/general_settings.png" alt="" width="16" height="16" border="0"> {* $lildp_registration_period *}</a></li>
+		<li><a href="{* $site_url *}/ildp/setting"{* if $page eq "ildp" and $subpage eq "setting" *} id="active"{*/if*}><img src="{* $base_url *}images/16/general_settings.png" alt="" width="16" height="16" border="0"> {* $lsetting *}</a></li>
+		<li><a href="{* $site_url *}/hrrm"{* if $page eq "hrrm" *} id="active"{*/if*}><img src="{* $base_url *}images/16/general_settings.png" alt="" width="16" height="16" border="0"> {* $lhrrm_setting *}</a></li>
+		<!-- <li><a href="{* $site_url *}/hrld"{* if $page eq "hrld" *} id="active"{*/if*}><img src="{* $base_url *}images/16/general_settings.png" alt="" width="16" height="16" border="0"> {* $lhrld_setting *}</a></li>		 --> 
+		<!-- <li><a href="{* $site_url *}/ildp/import"{* if $page eq "ildp" and $subpage eq "import" *} id="active"{*/if*}><img src="{* $base_url *}images/16/import.png" alt="" width="16" height="16" border="0"> {* $limport *}</a></li> -->
+		<li><a href="{* $site_url *}/ildpqueue"{* if $page eq "ildpqueue" or $page eq "ildpform" *} id="active"{*/if*}><img src="{* $base_url *}images/16/import.png" alt="" width="16" height="16" border="0"> {* $lildp_form *}</a></li>
+		<li><a href="{* $site_url *}/ildpformimport"{* if $page eq "ildpformimport" *} id="active"{*/if*}><img src="{* $base_url *}images/16/import.png" alt="" width="16" height="16" border="0"> {* $lildp_form_import *}</a></li>
+		<li><a href="{* $site_url *}/ildpreport"{* if $page eq "ildpreport" *} id="active"{*/if*}><img src="{* $base_url *}images/16/import.png" alt="" width="16" height="16" border="0"> {* $lreport *}</a></li>
+		{* else *}
+		<li id="menucartildp" style="display: none;"><a href="{* $site_url *}/ildp/cart/"{* if $page eq "ildp" and $subpage eq "cart" *} id="active"{*/if*}><img src="{* $base_url *}images/16/as_preview.png" alt="" width="16" height="16" border="0"> {* $lildp_form *}<span id="nildpcart">{* $ncartildp *}</span></a></li>
+		{* /if *}
+	</ul>
+</div>

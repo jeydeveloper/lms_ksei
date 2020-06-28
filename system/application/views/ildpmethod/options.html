@@ -1,0 +1,6 @@
+							<select name="method[]" id="method[]"  class="selectmedium" >
+								<option value=""></option>
+								{* foreach from=$rows item=method *}
+								<option value="{* $method->ildp_method_id *}"{* if $default eq $method->ildp_method_id *} selected {*/if*} >{* $method->ildp_method_name *}</option>
+								{* /foreach *}
+							</select>

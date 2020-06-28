@@ -1,0 +1,65 @@
+<script>
+	  $(document).ready(
+	  	function()
+	  	{	  		
+	  		var jabatan = $("#jabatan").val();
+	  		if (jabatan)
+	  		{
+	  			loadunitsoaldetailquest(jabatan, {* $unitid *});
+	  		}
+	  	}
+	  );
+	  
+	function loadunitsoaldetailquest(id, id1, isclose)
+	{
+		$("#dvunitsoaldetailquest").html("Loading...");							
+		
+		$.post("{* $site_url *}/banksoal/unitsoaldetailquest/", {jabatan: id, unitsoal: id1, readonly: "{* $smarty.post.readonly *}"},
+			function (data)
+			{
+				$("#dvunitsoaldetailquest").html(data);	
+				if (isclose)
+				{
+					$("#dialogquest").dialog("close");						
+				}
+			}
+		);
+	}
+	
+	function jabatan_onchange(elmt)
+	{
+		loadunitsoaldetailquest(elmt.value, {* $unitid *});
+	}	
+</script>
+<h2>{* $lunit_soal_question *}</h2>
+	<input type="hidden" name="unitid" id="unitid" value="{* $unitid *}" />	
+	<table width="100%">
+		<tr>
+			<td>
+				<table width="100%" border="0" cellpadding="0" cellspacing="0" class="tb_data">
+						<tr>
+							<td width="75">{* $ljabatan *}</td>
+							<td width='1'>:</td>
+							<td align='left'>
+								<select name="jabatan" id="jabatan" onchange="javascript: jabatan_onchange(this)" style='width:300px'>
+									{* foreach from=$jabatans item=jabatan *}
+									<option value="{* $jabatan->jabatan_name *}">{* $jabatan->jabatan_name *}</option>
+									{* /foreach *}
+								</select>
+							</td>
+						</tr>	
+						<tr>
+							<td>{* $ljumlah_soal *}</td>
+							<td width='1'>:</td>
+							<td align='left'><div id="dvjabatanjmlsoal">{* $jumlahsoal *}</div></td>
+						</tr>						
+						<tr>
+							<td colspan="3"><div id="dvunitsoaldetailquest"></div></td>
+						</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+<div id="dialogquest" title="{* $ledit_soal *}" style="display: none;"> 	
+	<div id="dialogquestcontent"></div>
+</div>

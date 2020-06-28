@@ -1,0 +1,75 @@
+{* assign var="z" value=$maxJawaban+7 *}
+{* assign var="xx" value=$maxJawaban+2 *}
+{* assign var="yy" value=$maxJawaban+4 *}
+<table width="100%" cellpadding="3" border="1">
+  <thead>
+    <tr>
+      <td colspan="{* $z *}">Unit Pembuat Soal:</td>
+    </tr>
+    <tr>
+      <td>Soal</td>
+      <td colspan="2">{* $unitSoal *}</td>
+      <td>NIK</td>
+      <td>{* $nik *}</td>
+      <td colspan="{* $xx *}">&nbsp;</td>
+    </tr>
+    <tr>
+      <td colspan="3">&nbsp;</td>
+      <td>Nama</td>
+      <td>{* $nama *}</td>
+      <td colspan="{* $xx *}">&nbsp;</td>
+    </tr>
+    <tr>
+      <td colspan="{* $z *}">&nbsp;</td>
+    </tr>
+    <tr>
+      <th rowspan="2" width="80px">No</th>
+      <th rowspan="2" width="180px">Tipe Paket</th>
+      <th rowspan="2" width="180px">Soal</th>
+      <th rowspan="2" width="180px">Kunci Jawaban</th>
+      <th colspan="{* $maxJawaban *}">Pilihan Jawaban</th>
+      <th rowspan="2" width="180px">Bobot</th>
+      <th rowspan="2" width="180px">Jawaban</th>
+      <th rowspan="2" width="180px">T/F</th>
+    </tr>
+    <tr>
+      {* foreach from=$urutanJawaban item=row *}
+      <th width="180px">{* $arrOpt[$row] *}</th>
+      {* /foreach *}
+    </tr>
+  </thead>
+  <tbody>
+    {* counter start=1 print=false assign="no" *}
+    {* foreach from=$rowSoal item=row *}
+    {* assign var="x" value=$row.urutanJawaban[$row.kunciJawaban] *}
+    {* assign var="y" value=$row.urutanJawaban[$row.jawaban] *}
+    <tr{* if $no%2 eq 1 *} class="odd"{* /if *}>
+      <td class="odd">{* $no *}</td>
+      <td class="odd">{* $row.paketSoal *}</td>
+      <td class="odd">{* $row.soal *}</td>
+      <td class="odd">{* $arrOpt[$x] *}</td>
+
+      {* foreach from=$row.pilihanJawaban item=jawaban *}
+      <td class="odd">{* $jawaban *}</td>
+      {* /foreach *}
+
+      <td class="odd">{* $row.bobotSoal *}</td>
+      <td class="odd">{* $arrOpt[$y] *}</td>
+      <td class="odd">{* $row.statusJawaban *}</td>
+    </tr>
+    {* counter *}
+    {* /foreach *}
+    <tr>
+      <td colspan="{* $yy *}">&nbsp;</td>
+      <td>Score</td>
+      <td>{* $score *}</td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <td colspan="{* $yy *}">&nbsp;</td>
+      <td>Status</td>
+      <td>{* $arrStatus[$status] *}</td>
+      <td>&nbsp;</td>
+    </tr>
+  </tbody>
+</table>

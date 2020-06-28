@@ -1,0 +1,175 @@
+<link type="text/css" href="{*$base_url*}js/jquery-ui-1.7.2.custom/development-bundle/themes/base/ui.all.css" rel="stylesheet" /> 
+<script type="text/javascript" src="{*$base_url*}js/jquery-ui-1.7.2.custom/development-bundle/external/bgiframe/jquery.bgiframe.js"></script> 
+<script type="text/javascript" src="{*$base_url*}js/jquery-ui-1.7.2.custom/development-bundle/ui/ui.core.js"></script> 
+<script type="text/javascript" src="{*$base_url*}js/jquery-ui-1.7.2.custom/development-bundle/ui/ui.draggable.js"></script> 
+<script type="text/javascript" src="{*$base_url*}js/jquery-ui-1.7.2.custom/development-bundle/ui/ui.resizable.js"></script> 
+<script type="text/javascript" src="{*$base_url*}js/jquery-ui-1.7.2.custom/development-bundle/ui/ui.dialog.js"></script>       
+      <script>
+	function shownpkorder(jabatan, sortby, orderby)
+	{	
+		searchby = $("#_searchby").val();
+		keyword = $("#_keyword").val();
+		
+		searchnpk(jabatan, sortby, orderby, searchby, keyword, 0);
+	}
+	      
+      	function pagedelegetion(n)
+      	{
+		if (! n) n = 0;
+		
+		searchnpk(0, $("#sortby").val(), $("#orderby").val(), $("#_searchby").val(), $("#_keyword").val(), n);
+      	}
+      	
+      	function page(n)
+      	{
+		if (! n) n = 0;
+		
+		$("#offset").val(n);		
+		var data = $("#frmtemp").serialize();
+		
+		$("#subcontent").html("loading...");		
+		$.post("{* $site_url *}/training/getdelegetion/", data,
+			function(data)
+			{				
+				$("#subcontent").html(data);
+			}
+		);		
+      		
+      	}
+      	
+      	function removedelegetion(id)
+      	{
+      		if (! confirm('{* $confirm_delete *}')) return;
+      		
+      		$.post("{* $site_url *}/training/removedelegetion/", {id: id},
+      			function(r)
+      			{
+      				page(0);
+      			}
+      		);      		      		
+      	}
+      	      	
+      	function shownpk()
+      	{
+		$.post("{* $site_url *}/user/showlist", {pageid: '{* $pageid *}', delegetion: 1, notadmin: 1, jabatan: -1, dialog: 1, ischecked: 0, noheader: 1, funcpage: 'pagedelegetion', deltraining: $("#_name").val(), deltopic: $("#_topic").val()},
+			function (data)
+			{			
+				$("#dialogcontent").html(data);	
+				$("#dialoguser").dialog("open");								
+			}
+		);	      	
+      	}
+      	
+	function searchnpk(jabatan, sortby, orderby, searchby, keyword, offset)
+	{	
+		if (! offset) offset = 0;
+		
+		$("#offset").val(offset);
+
+		$.post("{* $site_url *}/user/showlist", $("#frmtempdialog").serialize(),
+			function (data)
+			{							
+				$("#dialogcontent").html(data);	
+				$("#dialoguser").dialog("open");								
+			}
+		);		
+	}
+	
+	function adduser2delegetion()
+	{		
+		var found = false;
+		var html = "";
+	
+		$("input[id='_npk[]']").each( 
+		    function() 
+		    { 
+		    	
+			var ischecked = $("input[id='_npk[]'][value='"+$(this).val()+"']").attr("checked");			
+			if (ischecked) 
+			{				
+				html += "<input type='hidden' name='userids[]' value='" + $(this).val() + "' />";
+				found = true;
+			}
+		    } 
+		);		
+		
+		if (! found)
+		{
+			alert("{* $lplease_select_user *}");
+			return;
+		}
+		
+		$("#dvuseridshidden").html(html);
+
+		$.post("{* $site_url *}/training/adddelegetion", $("#frmtemp").serialize(),
+			function(r)
+			{	
+				if (r.error)
+				{
+					location = "{* $base_url *}";
+					return;
+				}
+				
+				location = "{* $site_url *}/training/delegetion/0/"+r.trainingid;
+				//showSubContent();
+				//$("#dialoguser").dialog("close");
+			}
+			, "json"
+		);
+		
+	}
+	
+	$(document).ready(
+		function()
+		{
+			$("#dialoguser").dialog(
+				{ 
+					autoOpen: false 
+					,modal: true
+					,width: 850
+					,height: 450
+				}
+			);			
+		}
+	);	
+      	
+      </script>
+      <a href="javascript:shownpk()">{* $date_added *}</a>
+      <table width="100%" cellpadding="3" class="tablelist">
+        <thead>
+          <tr>
+          	<th width="4%">No.</th>
+            <th width="30%">{* $lnpk *}</th>
+            <th>{* $lname *}</th>
+            <th width="30%">{* $ldate *}</th>
+            <th width="10%">&nbsp;</th>
+          </tr>
+          {* counter start=1 print=false assign="no" *}
+          {* foreach from=$list item=row *}
+          <tr{* if $no%2 eq 1 *} class="odd"{* /if *}>
+          	<td class="odd">{* $no+$offset *}</td>
+            <td class="odd">{* $row->user_npk *}</td>
+            <td class="odd">{* $row->user_first_name *} {* $row->user_last_name *}</td>
+            <td class="odd">{* $row->delegetion_created_fmt *}</td>
+            <td><a href="javascript: removedelegetion({* $row->delegetion_id *});"><img src="{* $base_url *}images/b_del.gif" width="12" height="12" border="0" /></a></td>
+          </tr>          	
+          	{* counter *}
+          {* /foreach *}
+          
+        </thead>
+        <tbody>
+        </tbody>
+        <tfoot>
+          <tr>
+            	<td colspan="5">{* $paging *}</td>
+          </tr>
+        </tfoot>        
+      </table>
+<br />
+<form id="frmtemp" name="frmtemp" method="post" action="{* $site_url *}/training/getdelegetion/">
+	<div id="dvuseridshidden"></div>
+	<input type="hidden" id="limit" name="limit" value="{* $limit *}" />
+	<input type="hidden" id="offset" name="offset" value="{* $offset *}" />
+	<input type="hidden" id="_topic" name="_topic" value="{* $smarty.post._topic *}" />
+	<input type="hidden" id="_name" name="_name" value="{* $smarty.post._name *}" />
+</form>

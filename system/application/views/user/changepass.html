@@ -1,0 +1,153 @@
+<link rel="stylesheet" href="{* $base_url *}js/autocomplete3/easy-autocomplete.min.css" type="text/css" />
+<script type="text/javascript" src="{* $base_url *}js/autocomplete3/jquery.easy-autocomplete.min.js"></script>
+<script>
+    {* if $reset *}
+    function frmchangepass_onchange()
+    {
+        return f_onsubmit("{* $site_url *}/user/doresetpass/{* $user->user_forgotpass_confirm *}", "frmchangepass", "message", "Submitting...",
+            function(data)
+            {
+                $("#message").html("{* $ok_change_pass *}");
+                {* if $reset *}
+                location = "{* $base_url *}"
+                {* else *}
+                document.frmchangepass.reset();
+                {* /if *}
+                }
+            );
+    }
+    {* else *}
+    function frmchangepass_onchange()
+    {
+        return f_onsubmit("{* $site_url *}/user/dochangepass/", "frmchangepass", "message", "Submitting...",
+            function(data)
+            {
+                $("#message").html("{* $ok_change_pass *}");
+                document.frmchangepass.reset();
+            }
+        );
+    }
+    {* /if *}
+
+        {* if $admin *}
+        $(document).ready(function(){
+            /*$.post("{* $site_url *}/user/getnpk", {},
+                function (data)
+                {
+                    var datas = data.split("\1");
+                    $("#npk").autocomplete(datas,
+                        {
+                            autoFill: true
+                        }
+                    );
+                }
+            );*/
+            var options = {
+
+                url: function(phrase) {
+                    return "{* $site_url *}/user/getnpk";
+                },
+
+                getValue: function(element) {
+                    return element.name;
+                },
+
+                ajaxSettings: {
+                    dataType: "json",
+                    method: "POST",
+                    data: {}
+                },
+
+                preparePostData: function(data) {
+                    data.phrase = $("#example-ajax-post").val();
+                    return data;
+                },
+
+                requestDelay: 200
+            };
+
+            $("#npk").easyAutocomplete(options);
+        });
+        {* /if *}
+</script>
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            {* $change_pass *}
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li><a href="#">User</a></li>
+            <li class="active">{* $change_pass *}</li>
+        </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-xs-12">
+                <div id="msg-content" class="alert alert-danger alert-dismissible" style="display: none;">
+                    <div id="message"></div>
+                </div>
+                <div class="box">
+                    <div class="box-body table-responsive no-padding">
+                        <form name="frmchangepass" id="frmchangepass"
+                              onsubmit="javascript: return frmchangepass_onchange()" class="form-horizontal">
+                            {* if $admin *}
+                            <input type="hidden" name="isadmin" value="{* $admin *}"/>
+                            {* /if *}
+                            <div class="box-body">
+                                {* if $admin *}
+                                <div class="form-group">
+                                    <label for="npk" class="col-sm-2 control-label">{* $lnpk *}</label>
+
+                                    <div class="col-sm-10">
+                                        <input name="npk" id="npk" class="form-control" placeholder="{* $lnpk *}">
+                                    </div>
+                                </div>
+                                {* /if *}
+                                {* if ! $reset and ! $admin *}
+                                <div class="form-group">
+                                    <label for="oldpass" class="col-sm-2 control-label">{* $old_password *}</label>
+
+                                    <div class="col-sm-10">
+                                        <input type='password' name="oldpass" id="oldpass" class="form-control"
+                                               placeholder="{* $old_password *}">
+                                    </div>
+                                </div>
+                                {* /if *}
+                                <div class="form-group">
+                                    <label for="newpass" class="col-sm-2 control-label">{* $new_password *}</label>
+
+                                    <div class="col-sm-10">
+                                        <input type='password' name="newpass" id="newpass" class="form-control"
+                                               placeholder="{* $new_password *}">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="cnewpass" class="col-sm-2 control-label">{* $confirm_new_password
+                                        *}</label>
+
+                                    <div class="col-sm-10">
+                                        <input type='password' name="cnewpass" id="cnewpass" class="form-control"
+                                               placeholder="{* $confirm_new_password *}">
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /.box-body -->
+                            <div class="box-footer">
+                                <button name="submit" type="submit" class="btn btn-info pull-right">Sign in</button>
+                            </div>
+                            <!-- /.box-footer -->
+                        </form>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
+            </div>
+        </div>
+    </section>
+    <!-- /.content -->
+</div>

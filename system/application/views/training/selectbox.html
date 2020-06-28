@@ -1,0 +1,6 @@
+<select name="name" id="name" class="formdefault" onchange="javascript:training_onchange()">
+	<option value="">--- {* $lselect_training *} ---</option>
+	{* foreach from=$trainings item=training *}
+	<option value="{* $training->training_name *}"{* if $def eq $training->training_name *} selected{* /if *}>{* $training->training_name *}</option>
+	{* /foreach *}
+</select>

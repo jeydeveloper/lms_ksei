@@ -1,0 +1,29 @@
+	<script>
+		function editsoal()
+		{
+			$.post("{* $site_url *}/bansksoal/addsoal", {},
+				function(data)
+				{
+				}
+			);
+		}
+	</script>
+	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="tablepop">
+		<tr>
+			<td width="20%" class="baru">{* $lquestion *}</td>
+			<td><input type='text' name="inpertanyaan" id="inpertanyaan" id="quest" class='formdefault' value=""></td>
+		</tr>
+		{* counter start=1 print=false assign="no" *}
+		{* foreach from=$questcodes item=code *}
+		<tr>
+			<td align="right"><input type="radio" name="injawaban" id="injawaban" value="{* $code *}" /> {* $code *}</td>			
+			<td><input type='text' name="inpilihan[]" id="inpilihan[]" class='formdefault' value=""></td>
+		</tr>		
+		{* counter *}
+		{* /foreach *}		
+		<tfoot>
+		<tr>
+			<td colspan="2"><div id="messagesoal"></div><input type="button" value=" Save " onclick="javascript:editsoal()" /></td>
+		</tr>
+		</tfoot>
+	</table>

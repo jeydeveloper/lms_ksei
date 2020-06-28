@@ -1,0 +1,6 @@
+    	<select name="function" id="function" class='formdefault'>
+    	<option value="">--- {* $lfunction *} ---</option>
+    	{* foreach from=$rows item=row *}
+    	<option value="{* $row->function_id *}" {* if $def eq $row->function_id *}selected{* /if *}>{* $row->function_desc *}</option>
+    	{* /foreach *}
+    	</select>

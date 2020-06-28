@@ -1,0 +1,20 @@
+<aside class="main-sidebar" style="background-color: #243d56;">
+	<!-- sidebar: style can be found in sidebar.less -->
+	<section class="sidebar">
+		<!-- sidebar menu: : style can be found in sidebar.less -->
+		<ul class="sidebar-menu" data-widget="tree">
+			{* if $sess.user_type eq 0 or  $sessmodules.report *}
+			<li class="{* if $page eq "report" and ($subpage eq "") *} active{*/if*}">
+			<a href="{* $site_url *}/report/">
+				<i class="fa fa-user-circle-o"></i> <span>{* $lgeneral_report *}</span>
+			</a>
+			</li>
+			<li class="{* if $page eq "report" and ($subpage eq "certification") *} active{*/if*}">
+			<a href="{* $site_url *}/report/certification">
+				<i class="fa fa-user-circle-o"></i> <span>{* $lcertification_list *}</span>
+			</a>
+			</li>
+			{* /if *}
+		</ul>
+	</section>
+</aside>

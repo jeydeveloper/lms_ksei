@@ -1,0 +1,22 @@
+<script>
+	function frmtraining_onsubmit()
+	{
+	    $('#topic').attr('disabled', false);
+	    $('#name').attr('disabled', false);
+		f_onsubmit("{* $site_url *}/training/saveprequisite/{* $id *}", "frmtraining", "message", "Saving...",
+			function(data)
+			{
+                $('#topic').attr('disabled', true);
+                $('#name').attr('disabled', true);
+				$("#message").html("{* $ok_update_prequisite_training *}");
+				
+			}
+		);	
+		
+		return false;			
+	}
+</script>
+{* $lprerequisite_info *}
+
+{* $tree *}
+<div id="message"></div><input type="submit" value=" Save " />

@@ -1,0 +1,187 @@
+<link type="text/css" href="{*$base_url*}js/jquery-ui-1.7.2.custom/css/smoothness/jquery-ui.css" rel="stylesheet" />
+<link type="text/css" href="{*$base_url*}js/jquery-ui-1.7.2.custom/css/smoothness/ui.datepicker.css" rel="stylesheet" />
+<script type="text/javascript" src="{*$base_url*}js/jquery-ui-1.7.2.custom/development-bundle/ui/ui.core.js"></script>
+<script type="text/javascript" src="{*$base_url*}js/jquery-ui-1.7.2.custom/development-bundle/ui/ui.datepicker.js"></script>
+
+<style type="text/css">
+input[type="text"],textarea{width: 100%;}
+input.datex{width: inherit;}
+h1{margin: 0;padding: 0;}
+p{padding: 5px 10px;}
+.error_form{border: solid 1px; background: red;color:#fff;}
+td{vertical-align: top;}
+.search_wrap{margin-top: 10px;}
+.search_wrap select{width: 300px;height: 180px;}
+.search_wrap_content{display: inline-block;vertical-align:top;min-width: 100px;text-align: center;}
+.delete_row_schedule{display: none;}
+</style>
+
+<form name="frmsetting" id="frmsetting" action="{* $site_url *}/request/formtraining_edit_setting" method="post">
+	<input type="hidden" name="hd_request_id" value="{* $hd_request_id *}">
+    {* if $error_form *}
+    <p class="error_form">{* $request_inputerror *} : {* $error_form *}</p>
+    {* /if *}
+	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="tb_data">
+		<tr>
+			<td colspan="3">
+				<h1>Edit Setting Proposal Training</h1>
+			</td>
+		</tr>
+
+    {* if $flash_msg *}
+    <tr>
+      <td colspan="3">
+        <div style="background:#ffc107;padding:10px;display:block;color:#fff;">{* $flash_msg *}</div>
+      </td>
+    </tr>
+    {* /if *}
+
+		<tr>
+			<td width="200">Request No</td>
+			<td width="1">:</td>
+			<td>
+				{* $frm.rqtr_request_no *}
+			</td>
+		</tr>
+		<tr>
+			<td width="200">Default Approval Request Proposal</td>
+			<td width="1">:</td>
+			<td style="padding:0;">
+				<table width="100%" border="0" cellpadding="0" cellspacing="0" class="tb_data">
+		          <tr>
+		            <td colspan="4">
+		              {* foreach from=$frm.hd_step_approval item=row *}
+		              <div class="step_approval" style="margin-bottom: 10px;border-bottom:solid 1px #eee;padding-bottom:10px;">
+		                <input type="hidden" name="hd_step_approval[]" value="1">
+		                <h4 style="margin: 0 0 10px;">Step <span class="no_urut">1</span> (jabatan : {* $row.jabatan *}) <a href="#" class="delete_approval" style="display:none;color:red;">[ DELETE ]</a></h4>
+		                <select name="extra_option" class="extra_option">
+		                  <option value="">---Pilih Jabatan---</option>
+		                  {* foreach from=$extra_option_approval item=row_jabatan *}
+		                  <option value="{* $row_jabatan.jabatan_name *}">{* $row_jabatan.jabatan_name *}</option>
+		                  {* /foreach *}
+		                </select>
+		                <input type="text" name="user_keyword" class="user_keyword" style="width: 215px;" placeholder="Nama or NPK"> <button class="btn_search">Search</button>
+		                <div class="search_wrap">
+		                  <div class="search_wrap_content">
+		                    <select name="user_search[]" class="user_search" size="5" multiple></select>
+		                  </div>
+		                  <div class="search_wrap_content">
+		                    <div class="search_wrap_button" style="padding-top: 10px;">
+		                      <button class="btn_in">&gt;&gt;</button>
+		                      <br /><br />
+		                      <button class="btn_out">&lt;&lt;</button>
+		                    </div>
+		                  </div>
+		                  <div class="search_wrap_content">
+		                    <select name="user_approval_request_training_1[]" class="user_approval_request_training" size="5" multiple>
+		                      {* foreach from=$row.detail item=row2 *}
+		                      <option value="{* $row2.id *}" title="{* $row2.name *}" selected>{* $row2.name *}</option>
+		                      {* /foreach *}
+		                    </select>
+		                  </div>
+		                </div>
+		              </div>
+		              {* /foreach *}
+		              <button id="add_step">Add Step</button>
+		            </td>
+		          </tr>
+		       </table>	
+			</td>
+		</tr>
+		<tr>
+			<td colspan="3" style="text-align:right;">
+				<input type="submit" name="btn_submit" value="Submit"> <input type="submit" name="btn_sendemail" value="Send Email">
+			</td>
+		</tr>
+	</table>
+</form>
+
+<script type="text/javascript">
+  $(function(){
+    $('.delete_approval').live('click', function(e){
+      e.preventDefault();
+      var me = $(this).closest('.step_approval');
+      me.remove();
+      reposition();
+    });
+
+    $('.btn_in').live('click', function(e){
+      e.preventDefault();
+      var me = $(this).closest('.step_approval');
+      var el = me.find('.user_search option:selected');
+      me.find('.user_approval_request_training').append(el);
+    });
+
+    $('.btn_out').live('click', function(e){
+      e.preventDefault();
+      var me = $(this).closest('.step_approval');
+      var el = me.find('.user_approval_request_training option:selected');
+      me.find('.user_search').append(el);
+    });
+
+    $('.btn_search').live('click', function(e){
+      e.preventDefault();
+      var me = $(this).closest('.step_approval');
+      var extra_option = me.find('.extra_option').val() || '';
+      var user_keyword = me.find('.user_keyword').val() || '';
+
+      if(user_keyword == '' && extra_option == '') {
+        me.find('.user_search').empty()
+        return true;
+      }
+      
+      $.ajax({
+        url : '{* $site_url *}/request/do_search_user',
+        type: 'POST',
+        data: {user_keyword: user_keyword, extra_option: extra_option},
+        dataType : 'json',
+        success : function(data){
+          var tmp = '';
+          var detail = data.detail || {};
+          if(Object.keys(detail).length > 0) {
+            $.each(detail, function(idx, val){
+              tmp += '<option value="'+val.id+'">';
+              tmp += val.label;
+              tmp += '</option>';
+            });
+          }
+          me.find('.user_search').empty().append(tmp);
+        }
+      });
+    });
+
+    $('#frmsetting').submit(function(){
+      $('.user_approval_request_training option').attr('selected', true);
+    });
+
+    var info_no_urut = function(){
+      var lgt = $('.step_approval').length || 1;
+      return parseInt(lgt);
+    };
+
+    var reposition = function(){
+      $('.step_approval').each(function(idx,val){
+        idx += 1;
+        $(this).find('.no_urut').text(idx);
+        $(this).find('.user_approval_request_training').attr('name', 'user_approval_request_training_'+idx+'[]');
+      });
+    };
+
+    $('#add_step').click(function(e){
+      e.preventDefault();
+      var no_urut = info_no_urut() + 1;
+      var cln = $('.step_approval:eq(0)').clone();
+      cln.find('.no_urut').text(no_urut);
+      cln.find('.user_search').empty();
+      cln.find('.user_approval_request_training').empty();
+      cln.find('.user_approval_request_training').attr('name', 'user_approval_request_training_'+no_urut+'[]');
+      cln.find('.user_keyword').val('');
+      cln.find('.extra_option').val('');
+      cln.find('.delete_approval').show();
+      cln.insertBefore('#add_step');
+    });
+
+    $('.delete_approval:not(:eq(0))').show();
+    reposition();
+  });
+</script>

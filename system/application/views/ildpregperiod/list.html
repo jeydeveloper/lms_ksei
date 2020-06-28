@@ -1,0 +1,29 @@
+	<table width="100%" cellpadding="3" class="tablelist"> 
+		<thead> 
+			<tr> 
+				<th width="25%">{* $lstart_period *}</th> 
+				<th width="40%">{* $lend_period *}</th>
+				<th width="10%">{* $lildp_period *}</th>  
+				<th width="10%">{* $lstatus *}</th> 
+				<th>&nbsp;</th>
+			</tr> 
+		</thead>
+		<tbody>
+			{* counter start=1 print=false assign="no" *}
+			{* foreach from=$rows item=row *}
+			<tr> 
+				<td class="odd">{* $row->ildp_registration_period_start_t *}</td>
+				<td class="odd">{* $row->ildp_registration_period_end_t *}</td>
+				<td class="odd">{* $row->ildp_registration_period_ildp *}</td>
+				<td class="odd"><div id="status{* $row->ildp_registration_period_id *}"><a href="#" onclick="javascript:chagestatus({* $row->ildp_registration_period_id *},{* $row->ildp_registration_period_status *})">{* $row->ildp_registration_period_status_image *}</a></div></td>
+				<td><a href="{* $site_url *}/ildpregperiod/remove/{* $row->ildp_registration_period_id *}" onclick="javascript: return confirm('{* $lconfirm_delete *}');"><img src="{* $base_url *}images/b_del.gif" width="12" height="12" border="0" /></a></td>
+			</tr>
+				{* counter *}
+			{* /foreach *}
+		</tbody>
+		<tfoot>
+			<tr>
+				<td colspan="5">{* $paging *}</td>
+			</tr>
+		</tfoot>
+	</table>

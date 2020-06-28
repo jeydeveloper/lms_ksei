@@ -1,0 +1,5 @@
+<select name="courseid" id="courseid" onchange="javascript:courseid_onchange()">
+{* foreach from=$courses item=row *}
+	<option value="{* $row->training_id *}">{* $row->training_code *} {* $row->training_name *}</option>
+{* /foreach *}
+</select>

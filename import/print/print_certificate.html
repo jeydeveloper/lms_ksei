@@ -1,0 +1,92 @@
+<html>
+<head>
+<title></title>
+<style>
+{literal}
+	body {		
+		margin: 0px; 
+		padding: 0px;
+		width: 100%;
+	}
+	
+	#center {		
+		margin: 35px;
+		padding: 10px;
+		border: 1px solid #000;
+	}
+	
+	#divContent {
+		text-align: center;
+		margin-top: 28px;
+		margin-right: 28px;
+		margin-bottom: 28px;
+		margin-left: 28px;
+		width: auto;
+		font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+		font-weight: normal;
+		font-size: 14pt;
+		line-height: 32pt;
+	}
+	
+	.fntVerdana {
+		font-family: Verdana, Arial, Helvetica, sans-serif;
+		font-weight: bold;
+	}
+	
+	.fntImpact {
+		font-family: Impact;
+		font-weight: bold;		
+	}
+	
+	.fntClarendon {
+		font-family: Clarendon;
+		font-weight: bold;	
+	}
+	
+	.fntTimes {
+	font-family: "Times New Roman", Times, serif;
+	font-weight: bold;
+	font-style: italic;
+	font-size: 26pt;
+	}
+	
+	.training {
+	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+	font-weight: normal;
+	font-size: 22pt;
+	line-height: 30pt;
+	}
+	
+	.footer {
+	margin-top: 45px;
+	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+	font-weight: normal;
+	font-size: 8pt;
+	line-height: 18pt;
+	text-align: left;
+	}
+{/literal}
+</style>
+<!--<script language="JavaScript" src="../js/right_click.js"></script>-->
+</head>
+
+<!--<body background="logo_bg_big.gif" style="background-position: bottom right; background-repeat: no-repeat" onLoad="window.print()">-->
+<body background="{* $base_url *}images/sertifikat/bgpermata.gif" style="background-repeat: no-repeat" onLoad="window.print()">
+<div id="center">
+		<font class="fntClarendon" style="font-size: 10pt">{* $MM *}{* $YYYY *}-{* $codeactivated*}-{* $nocertificate *}</font><br /><br /><br />
+    <div id="divContent">
+    	<br />This is to certify that<br />
+        <span  class="fntTimes"><u>{* $exam->user_first_name *} {* $exam->user_last_name *}</u></span><br />{* $exam->user_npk *}<br />
+        has successfully completed a training on<br /> 
+         <strong class="training">{* $exam->training_name *}</strong><br />
+        e-Learning module. per cert
+            <br />
+		<br />
+		<font class="fntTimes" style="font-size: 12pt">{* $sign *}</font>
+	<br /><br />
+         <div class="footer">
+        <strong><em>NOTE: </em></strong><em>This certificate is printed by system and valid without signature</em></font></div>
+	</div>
+</div>
+</body>
+</html>

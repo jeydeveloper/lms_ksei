@@ -1,0 +1,6 @@
+        	<select name="location" id="location" class='formdefault'>
+        		<option value="">--- {* $location *} ---</option>
+        		{* foreach from=$lokasies item=lokasi *}
+        		<option value="{* $lokasi->lokasi_id *}"{* if $def eq $lokasi->lokasi_id *} selected{*/if*}>{* $lokasi->lokasi_alamat *}</option>
+        		{* /foreach *}
+        	</select>        	

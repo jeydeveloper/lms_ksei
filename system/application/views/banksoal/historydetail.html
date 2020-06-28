@@ -1,0 +1,59 @@
+<table class="table table-hover table-striped">
+        <thead>
+          <tr>
+            <th width="5%">{* $lpacket *}</th>
+            <th width="5%">{* $lno *}</th>            
+            <th>{* $lquestion *}</th>
+            <th width="10%">{* $lanswer *}</th>
+            <th width="10%">{* $lbobot *}</th>
+            <th width="10%">{* $lshown *}</th>
+            <th width="10%">{* $lright_answered *}</th>
+            <th width="10%">{* $lwrong_answered *}</th>
+          </tr>
+
+        </thead>
+        <tbody>
+        {* counter start=1 print=false assign="no" *}
+        {* foreach from=$hist item=h *}
+        <tr{* if $no%2 eq 1 *} class="odd"{* /if *}>
+        <td class="odd">{* $h.data[0]->banksoal_question_packet *}</td>
+        <td class="odd">{* $no *}</td>
+        <td class="odd">
+            {* $h.data[0]->banksoal_question_quest *}
+            {* foreach from=$h.data item=a *}
+            <br />
+            {* $a->banksoal_answer_order_alpha *}. {* $a->banksoal_answer_text *}
+            {* /foreach *}
+        </td>
+        <td class="odd">
+            {* foreach from=$h.data item=a *}
+            {* if $a->banksoal_question_answer_alpha *}{* $a->banksoal_question_answer_alpha *}{* /if *}
+            {* /foreach *}
+        </td>
+        <td class="odd">
+            {* if $h.data[0]->banksoal_question_bobot|upper eq "MUDAH" *}
+            {* $lmudah*}
+            {* elseif $h.data[0]->banksoal_question_bobot|upper eq "SEDANG" *}
+            {* $lsedang *}
+            {* elseif $h.data[0]->banksoal_question_bobot|upper eq "SULIT" *}
+            {* $lsulit *}
+            {* /if *}
+
+        </td>
+        <td class="odd">{* $h.shown *}</td>
+        <td class="odd">{* $h.right *}</td>
+        {* if $h.wrong *}
+        <td class="odd"><a href="javascript:salah({* $h.data[0]->banksoal_question_id *}, {* $h.data[0]->banksoal_question_answer *})">{* $h.wrong *}</a></td>
+        {* else *}
+        <td class="odd">{* $h.wrong *}</td>
+        {* /if *}
+        </tr>
+        {* counter *}
+        {* /foreach *}
+        </tbody>
+        <tfoot>
+          <tr>
+            	<td colspan="8">&nbsp;</td>
+          </tr>
+        </tfoot>        
+      </table>

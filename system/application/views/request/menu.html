@@ -1,0 +1,24 @@
+<aside class="main-sidebar" style="background-color: #243d56;">
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+        <!-- sidebar menu: : style can be found in sidebar.less -->
+        <ul class="sidebar-menu" data-widget="tree">
+            {* if $sessmodules.master and ($is_admin eq 1 ) *}
+            <li class="{* if $page eq "request" and ($subpage eq
+            "jenispendidikan") *} active{*/if*}"><a href="{* $site_url *}/request/jenispendidikan"><i class="fa fa-th"></i> <span>Jenis Pendidikan</span></a>
+            </li>
+            <li class="{* if $page eq "request" and ($subpage eq "bicategory") *}
+            active{*/if*}"><a href="{* $site_url *}/request/bicategory"><i class="fa fa-th"></i> <span>BI Category</span></a></li>
+            <li class="{* if $page eq "request" and ($subpage eq
+            "importapproval") *} active{*/if*}"><a href="{* $site_url *}/request/importapproval"><i class="fa fa-th"></i> <span>Import Approval</span></a></li>
+            {* /if *}
+            <li class="{* if $page eq "request" and ($subpage eq "training" or
+            $subpage eq "new") *} active{*/if*}"><a href="{* $site_url *}/request/training"><i class="fa fa-th"></i> <span>{* $request_list *}</span></a>
+            </li>
+            <li class="{* if $page eq "request" and ($subpage eq "approval" or
+            $subpage eq "new") *} active{*/if*}"><a href="{* $site_url *}/request/approval"><i class="fa fa-th"></i> <span>Need Your Approval</span></a>
+            </li>
+        </ul>
+    </section>
+    <!-- /.sidebar -->
+</aside>

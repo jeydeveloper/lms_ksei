@@ -1,0 +1,38 @@
+<script>
+</script>
+<table width="100%" cellpadding="3" class="tablelist"> 
+	<thead> 
+		<tr> 
+			<th width="102">{* $lnpk *}</th> 
+			<th width="200">{* $lname *}</th> 
+			{* foreach from=$levels item=level *}
+			<th>{* $level->level_name *}</th> 
+			{* /foreach *}
+			<th width="50">{* $lstatus *}</th> 
+			<th>&nbsp;</th>
+		</tr> 
+	</thead>
+	<tbody>
+		{* counter start=1 print=false assign="no" *}
+		{* foreach from=$settings item=setting *}
+		<tr> 
+			<td class="odd">{* $setting->user_npk *}</td>
+			<td class="odd">{* $setting->user_first_name *} {* $settig->user_last_name *}</td>			
+			{* foreach from=$levels item=level *}
+			{* assign var="index" value=$level->level_nth *}
+			<td class="odd">{* $setting->grouplevels[$index] *}</td>
+			{* /foreach *}
+			<td class="odd" ><a href="{* $site_url *}/hrrm/status/{* $setting->hrrm_id *}" onclick="javascript: return confirm('{* $lconfirm_change_status *}');"><img src="{* $base_url *}images/16/{* if $setting->hrrm_status eq 1 *}active.png{* else *}inactive.png{* /if *}" width="12" height="12" border="0" title="{* $ldelete *}"/></a></td>
+			<td class="odd">				
+				<a href="{* $site_url *}/hrrm/remove/{* $setting->hrrm_id *}" onclick="javascript: return confirm('{* $lconfirm_delete *}');"><img src="{* $base_url *}images/b_del.gif" width="12" height="12" border="0" title="{* $ldelete *}"/></a>
+			</td>
+		</tr>
+			{* counter *}
+		{* /foreach *}
+	</tbody>
+	<tfoot>
+		<tr>
+			<td colspan="{* $nlevel+4 *}">{* $paging *}</td>
+		</tr>
+	</tfoot>
+</table>

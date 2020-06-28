@@ -1,0 +1,55 @@
+<h2>Questionaire</h2>
+{* if $deny *}
+<table border="0" cellpadding="0" cellspacing="0">
+  <tr>
+    <td>Maaf.. kamu sudah pernah ikut questionaire ini</td>
+  </tr>
+</table>
+{* else *}
+<form method="post" action="">
+  <input type="hidden" name="bank_soal_id" value="{* $detail.bank_soal_id *}">
+  <table border="0" cellpadding="0" cellspacing="0">
+    <tr>
+      <td>
+        {* counter start=1 print=false assign="no" *}
+        {* foreach from=$detail.bank_soal item=item *}
+        {* assign var="x" value=$item.id *}
+        <input type="hidden" name="soal[]" value="{* $item.id *}">
+        <table>
+          <thead>
+            <tr>
+              <td width="20" valign="top" align="right">{* $item.no_urut *}.</td>
+              <td> {* $item.text *}</td>
+            </tr>
+          </thead>
+          <tr>
+            <td>&nbsp;</td>
+            <td>
+              <table>
+                {* foreach from=$item.opt item=pil key=key *}
+                {* assign var="y" value=$key+1 *}
+                <tr>
+                  <td valign="top">
+                    <label><input type="radio" name="jawaban[{* $x *}]" value="{* $y *}" /> {* $pil *}</label>
+                  </td>
+                </tr>
+                {* /foreach *}
+                {* counter *}
+              </table>
+            </td>
+          </tr>
+        </table>
+        {* /foreach *}
+      </td>
+    </tr>
+    <tfoot>
+      <tr>
+        <td align="center">
+          <div id="message"></div>
+          <input type="submit" value="Submit" />
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+</form>
+{* /if *}

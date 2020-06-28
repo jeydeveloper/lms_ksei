@@ -1,0 +1,51 @@
+          {* assign var="total" value=0 *}
+          {* foreach from=$rows item=row1 *}
+          	{* assign var="total" value=$total+$row1->participant *}
+          {* /foreach *}      
+      <h2>{* $lhistory *} &quot;{* $hist->training_name *}&quot;</h2>
+      <br />
+      <h3>{* $lperiod *}: {* $hist->training_time_date1_fmt *} {* $luntil *} {* $hist->training_time_date2_fmt *}</h3>
+        <br />
+        	<b>{* $ltotal *}</b>: 
+           	{* if $total *}
+           	<a href="{* $site_url *}/training/historynpk/{* if $periodid *}{* $periodid *}{* else *}0{* /if *}/0/{* $hist->training_time_training *}">{* $total *}</a>
+           	{* else *}
+           	{* $total *}
+           	{* /if *}        
+      <table width="100%" cellpadding="3" class="tablelist">
+        <thead>
+          <tr>
+            <th width="50%">{* $ljabatan *}</th>
+            <th width="20%">{* $lparticipant *}</a></th>
+            <th>&nbsp;</th>
+          </tr>          
+        </thead>
+        <tbody>
+          {* counter start=1 print=false assign="no" *}
+          {* foreach from=$rows item=row *}
+          <tr{* if $no%2 eq 1 *} class="odd"{* /if *}>            
+            	<td class="odd">{* $row->jabatan_name *}</td>
+            	{* if $row->participant *}
+            	<td class="odd">(<a href="{* $site_url *}/{* $pageid *}/historynpk/{* $hist->training_time_id *}/{* $row->jabatan_id *}">{* $row->participant *} / {* $row->totparticipant *}</a>)</td>
+            	<td class="odd"><a href="{* $site_url *}/certificate/resetter/{* $hist->training_time_training *}/{* $hist->training_time_id *}/{* $row->jabatan_id *}" onclick="javascript:return confirm('{* $lreset_npk_per_jabatan *}')">{* $lreset *}</a></td>
+            	{* else *}
+            	<td class="odd">0</td>
+            	<td class="odd">&nbsp;</td>
+            	{* /if *}
+          </tr>          	
+          	{* counter *}
+          {* /foreach *}        
+        </tbody>
+        <tfoot>
+          <tr>
+            	<td colspan="3">&nbsp;</td>
+          </tr>
+        </tfoot>        
+      </table>
+<br />
+<form id="frmtemp" name="frmtemp" method="post" action="{* $site_url *}/{* $pageid *}/showlist/{* $topicid *}">
+	<input type="hidden" id="limit" name="limit" value="{* $limit *}" />
+	<input type="hidden" id="sortby" name="sortby" value="{* $sortby *}" />
+	<input type="hidden" id="orderby" name="orderby" value="{* $orderby *}" />
+	<input type="hidden" id="offset" name="offset" value="{* $offset *}" />
+</form>

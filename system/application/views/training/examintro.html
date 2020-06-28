@@ -1,0 +1,126 @@
+<script>
+      	
+      	function materi(id)
+      	{
+      		$.post("{* $site_url *}/training/materi/"+id, {},
+      			function(data)
+      			{
+      				if (data.err > 0)
+      				{
+      					location = data.url;
+      					return;
+      				}
+      				      	
+      				if (data.tipe == 1)
+      				{
+					var w = 800;
+					var h = 600;
+					/*if (window.screen) 
+					{ 
+						w = window.screen.availWidth; 
+						h = window.screen.availHeight; 
+					}*/
+					//data.url = "{* $site_url *}/training/showmateri/"+id;
+					window.open(data.url, 'materiwin', 'menubar=no, toolbar=no, location=no, status=no, scrollbars=1, resizable=yes,width='+w+',height='+h+'');      				
+      				}
+      				else
+      				{
+      					//offline message	
+      					MM_openBrWindow("{* $site_url *}/training/materioffline/"+id,'Courses','scrollbars=yes,resizable=1,width=500,height=300');
+      					//alert(data.message);
+      				}	
+      			}
+      			, "json"
+      		);
+      	}
+      	
+      	function preexam(id)
+      	{
+      		location = "{* $site_url *}/training/preexam/"+id;
+      	}
+      	
+      	function exam(id)
+      	{
+      		location = "{* $site_url *}/training/exam/"+id;
+      	}
+      	
+      	function certificate(id)
+      	{      		
+      		$.post("{* $site_url *}/certificate/exam/"+id, {},
+      			function(data)
+      			{ 
+      				if (data.err > 0)
+      				{
+      					location = data.url;
+      					return;
+      				}
+      			      					      				
+      				location = "{* $site_url *}/certificate/exam/"+id+"/1";
+      			}
+      			, "json"
+      		);      		
+      	}      	
+</script>
+
+<div class="content-wrapper">
+	<!-- Content Header (Page header) -->
+	<section class="content-header">
+		<h1>
+			&nbsp;
+		</h1>
+		<ol class="breadcrumb">
+			<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+			<li><a href="#">Training</a></li>
+			<li class="active">Exam Intro</li>
+		</ol>
+	</section>
+
+	<!-- Main content -->
+	<section class="content">
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="box">
+					<div class="box-body table-responsive">
+						<p>
+						<H3>{* $ltopic*} &quot;<a href='{* $site_url *}/training/showlist/{* $rowtopic->category_id *}'>{* $rowtopic->category_name *}</a>&quot;</H3>
+						</p>
+
+
+						<H2>{* $ltraining *} &quot;{* $rowxyz->training_name *}&quot;</H2>
+						<br />{* $rowxyz->training_desc *}
+
+						{* if $rowxyz->training_type eq 1 *}
+						<br />
+						<br />	{* $lcourse_taken *} (Exam) <br />
+
+						{* if $showCounterPraexamMateri == 1 *}
+						<br />	{* $lcourse_taken_praexam *} (Praexam) <br />
+						<br />	{* $lcourse_taken_materi *} (Materi) <br />
+						{* /if *}
+						
+						{* /if *}
+						<br />
+						{* if $rowxyz->training_type eq 2 *}
+						<Br />
+						{* if $Author *}
+						{* $lcertification_prepared *} <b>{* $Author *}</b>
+						<Br />
+						<Br />
+						{* /if *}
+
+						<input type="button" value=" {* $lstart *} " onclick="javascript:certificate({* $rowxyz->training_id *})" />
+						{* else *}
+						{* if $rowxyz->hasPraExam *}
+						<input type="button" value=" {* $lpraexam *} " onclick="javascript:preexam({* $rowxyz->training_id *})" />
+						{* /if *}
+						<input type="button" value=" {* $lmateri *} " onclick="javascript:materi({* $rowxyz->training_id *})" />
+						{* if $rowxyz->hasExam *}
+						<input type="button" value=" {* $lexam *} " onclick="javascript:exam({* $rowxyz->training_id *})" />
+						{* /if *}
+						{* /if *}
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+</div>

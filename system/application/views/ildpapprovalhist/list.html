@@ -1,0 +1,31 @@
+	<table width="100%" cellpadding="3" class="tablelist"> 
+		<thead> 
+			<tr> 
+				<th width="5%">{* $lnpk *}</th> 
+				<th width="30%">{* $lname *}</th> 
+				<th width="15%">{* $ldate *}</th> 
+				<th width="30%">{* $lstatus *}</th> 
+				<th width="10%">{* $lildp_period *}</th> 				
+				<th>&nbsp;</th>
+			</tr> 
+		</thead>
+		<tbody>
+			{* counter start=1 print=false assign="no" *}
+			{* foreach from=$rows item=row *}
+			<tr> 
+				<td class="odd">{* $row->user_npk *}</td>
+				<td class="odd"><a href="{* $site_url *}/ildpapprovalhist/view/{* $row->ildp_trail_id *}">{* $row->user_first_name *} {* $row->user_last_name *}</a></td>
+				<td class="odd">{* $row->ildp_trail_created_time_t *}</td>
+				<td class="odd">{* $row->laststatus *}</td> 
+				<td class="odd">{* $row->data->ildp_form_ildp_period *}</td>				
+				<td>&nbsp;</td>
+			</tr>
+				{* counter *}
+			{* /foreach *}
+		</tbody>
+		<tfoot>
+			<tr>
+				<td colspan="6">{* $paging *}</td>
+			</tr>
+		</tfoot>
+	</table>

@@ -1,0 +1,63 @@
+<script>
+	$(document).ready(
+		function()
+		{
+			rtype_onchange();
+		}
+	);	
+	
+	function rtype_onchange()
+	{
+		$("#dvdetail").hide();
+		$("#dvrekap").hide();
+		
+		var rtype;
+		
+		rtype = $("#rtype").val();
+		if (rtype == "rekap")
+		{
+			$("#dvrekap").show();
+		}
+		else
+		{
+			$("#dvdetail").show();
+		}
+	}
+</script>
+<h2>{* $lildp_report *}</h2>
+ <form id="frmsearch" method="post" action="{* $site_url *}/ildpreport/doexport" onsubmit="javascript: return confirm('{* $lexport_ildp_report_confirm *}');">
+	 <table width="100%" border="0" cellpadding="5" cellspacing="5">
+		 <tr>
+			 <td width="10%">{* $lildp_period *}</td>
+			 <td>
+				 <select name="period" id="period">
+					 {* foreach from=$periods item=period *}
+					 <option value="{* $period->ildp_registration_period_ildp *}"{* if $period->ildp_registration_period_ildp eq $yearnow *} selected{* /if *}>{* $period->ildp_registration_period_ildp *}</option>
+					 {* /foreach *}
+				</select>
+			 </td>
+		 </tr>
+		 <tr>
+			 <td>{* $lreport_type *}</td>
+			 <td>
+				 <select name="rtype" id="rtype" onchange="javascript: rtype_onchange()">
+					 <option value="rekap">{* $lrekap *}</option>
+					 <option value="detail">{* $ldetail *}</option>
+				</select>
+				<span id="dvrekap">
+				  <select name="rekaptype" id="rekaptype">
+					{* foreach from=$levels item=level *}
+					<option value="	{* $level->level_nth *}">{* $level->level_name *}</option>
+					{* /foreach *}
+				  </select> 		
+				  </span>
+				<span id="dvdetail">
+				  </span>				  		 
+			 </td>
+		 </tr>
+		 <tr>
+			 <td>&nbsp;</td>
+			 <td><input type='submit' value=" {* $lexport *} "></td>
+		 </tr>
+	 </table>
+</form>  

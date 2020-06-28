@@ -1,0 +1,361 @@
+<script>
+    function chagestatus(id, status) {
+        f_onsubmit("{* $site_url *}/{* $pageid *}/changestatus/" + id + "/" + status, "frmtemp", "status" + id, "Updating...",
+            function (data) {
+                document.frmtemp.submit();
+            }
+        );
+    }
+
+    function search() {
+        $("#keyword").val($("#_keyword").val());
+        $("#searchby").val($("#_searchby").val());
+
+        document.frmtemp.submit();
+    }
+
+    function historynpk(trainingid) {
+        m_trainingid = trainingid;
+        $('#modal-default').modal('show');
+    }
+
+    function dohistorynpk() {
+        var val_checked = $('input[name=exporttype]:checked', '#frmexportype').val();
+        location = "{* $site_url *}/{* $pageid *}/historynpk/0/0/" + m_trainingid + "/export/1/1/" + val_checked;
+        $("#exportdialog").dialog("close");
+    }
+
+    $(document).ready(
+        function () {
+            $("#exportdialog").dialog(
+                {
+                    autoOpen: false
+                    , modal: true
+                    , width: 550
+                }
+            )
+
+            {*
+                if $smarty.post.searchby *}
+            $("#_searchby").val('{* $smarty.post.searchby *}');
+            {*
+                /if *}
+            }
+        );
+
+    var m_trainingid = 0;
+</script>
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>{* $learning_topics_list *} {* if $topicid *}&quot;{* $topiccurr->category_name *}&quot;{* /if *}</h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li><a href="#">Training</a></li>
+            <li class="active">Showlist</li>
+        </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-xs-12">
+                <div id="msg-content" class="alert alert-danger alert-dismissible" style="display: none;">
+                    <div id="message"></div>
+                </div>
+                <div class="box">
+                    <div class="box-body table-responsive">
+                        <p>{* $header_list_topic *}</p>
+                        <div class="mg-btm-10">
+                            {* $sort_list_by *} <a href="#" onclick="javascript:sortby('training_code', 'asc')" {* if
+                                                   $sortby eq 'training_code' *}class="lite"{* /if *}>{* $lcode *}</a> |
+                            <a href="#" onclick="javascript:sortby('training_name', 'asc')" {* if $sortby eq
+                            'training_name' *}class="lite"{* /if *}>{* if $pageid eq "training" *}{* $ltraining *}{*
+                            else *}{* $lcertificate_name *}{* /if *}</a> {* if ($sessmodules.training or
+                            $sessmodules.certificate) and $sess.asadmin *} | <a
+                                href="{* $site_url *}/{* $pageid *}/form/0/{* $topicid *}">{* $date_added *}</a> | <a
+                                href="{* $site_url *}/{* $controller *}/export">{* $lexport *}</a> | <a
+                                href="{* $site_url *}/{* $controller *}/exporthistory">{* $lexport_history *}</a> {* /if
+                            *}
+                        </div>
+                        <div class="mg-btm-10">
+                            <form onsubmit="javascript:search(); return false;">
+                                <div class="row">
+                                    <div class="col-xs-3">
+                                        {* $lsearch_by *}
+                                    </div>
+                                    <div class="col-xs-3">
+                                        <select class="form-control" name="_searchby" id="_searchby">
+                                            <option value="training_code">{* $lcode *}</option>
+                                            <option value="training_name">{* if $pageid eq "training" *}{* $ltraining
+                                                *}{* else *}{* $lcertificate_name *}{* /if *}
+                                            </option>
+                                            {* if ! $topicid *}
+                                            <option value="category_name">{* $ltopic *}</option>
+                                            {* /if *}
+                                        </select>
+                                    </div>
+                                    <div class="col-xs-3">
+                                        <input class="form-control" type='text' name="_keyword" id="_keyword"
+                                               class='formdefault' value="{* $smarty.post.keyword *}">
+                                    </div>
+                                    <div class="col-xs-3">
+                                        <input class="btn btn-primary" type='submit' value=" {* $lsearch *} ">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <hr>
+                        <table class="table table-hover table-striped">
+                            <thead>
+                            <tr>
+                                <th width="12%"><a href="#" onclick="javascript:sortby('training_code', 'asc')"
+                                                   class="thead" title="{* $lsort_by_code *}">{* $lcode *}</a></th>
+                                <th width="20%"><a href="#" onclick="javascript:sortby('training_name', 'asc')"
+                                                   class="thead" title="{* $lsort_by_name*}">{* if $pageid eq "training"
+                                    *}{* $ltraining_column *}{* else *}{* $lcertificate_name_column *}{* /if *}</a></th>
+                                {* if $sessmodules.trainee and ! $sess.asadmin *}
+                                <th width="24%">{* $lperiod *}</th>
+                                {* else *}
+                                <th width="10%">{* $ltopic *}</th>
+                                <th width="6%"><a href="#" onclick="javascript:sortby('training_created_date', 'asc')"
+                                                   class="thead" title="created date">Created</a></th>
+                                <th>&nbsp;</th>
+                                <th width="13%">{* $lparticipant *}</th>
+                                <th width="13%">&nbsp;</th>
+                                <th width="3%">{* $lstatus *}</th>
+                                <th width="3%">&nbsp;</th>
+                                {* /if *}
+
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {* counter start=1 print=false assign="no" *}
+                            {* foreach from=$list item=row *}
+                            <tr>
+                                {* if $sessmodules.trainee and ! $sess.asadmin *}
+                                {* if $row->inperiod or $row->allperiod *}
+                                <td class="odd"><a
+                                        href="{* $site_url *}/{* $pageid *}/examintro/{* $row->training_id *}">{*
+                                    $row->training_code *}</a></td>
+                                <td class="odd"><a
+                                        href="{* $site_url *}/{* $pageid *}/examintro/{* $row->training_id *}">{*
+                                    $row->training_name *}</a></td>
+                                {* else *}
+                                <td class="odd">{* $row->training_code *}</td>
+                                <td class="odd">{* $row->training_name *}</td>
+                                {* /if *}
+                                {* if $row->inperiod *}
+                                <td class="odd"><a
+                                        href="{* $site_url *}/{* $pageid *}/examintro/{* $row->training_id *}">{* if
+                                    $row->period->training_time_date1_str *}{* $row->period->training_time_date1_str *}
+                                    {* $luntil *} {* $row->period->training_time_date2_str *}{* else *}&nbsp;{* /if
+                                    *}</a></td>
+                                {* elseif $row->allperiod *}
+                                <td class="odd"><a
+                                        href="{* $site_url *}/{* $pageid *}/examintro/{* $row->training_id *}">{*
+                                    $lall_period *}</a></td>
+                                {* else *}
+                                <td class="odd">{* if $row->period->training_time_date1_str *}{*
+                                    $row->period->training_time_date1_str *} {* $luntil *} {*
+                                    $row->period->training_time_date2_str *}{* else *}&nbsp;{* /if *}
+                                </td>
+                                {* /if *}
+                                {* else *}
+                                {* if $sess.user_id eq $row->training_creator or $sess.user_type eq 0 or
+                                $row->delegetion *}
+                                <td class="odd"><a
+                                        href="{* $site_url *}/{* $pageid *}/form/{* $row->training_id *}/{* $topicid *}">{*
+                                    $row->training_code *}</a></td>
+                                {* else *}
+                                <td class="odd">{* $row->training_code *}</td>
+                                {* /if *}
+                                {* if $sess.user_id eq $row->training_creator or $sess.user_type eq 0 or
+                                $row->delegetion *}
+                                <td class="odd"><a
+                                        href="{* $site_url *}/{* $pageid *}/form/{* $row->training_id *}/{* $topicid *}">{*
+                                    $row->training_name *}</a></td>
+                                {* else *}
+                                <td class="odd">{* $row->training_name *}</td>
+                                {* /if *}
+                                {* if $sess.user_id eq $row->category_creator *}
+                                <td class="odd"><a href="{* $site_url *}/topic/formtopic/{* $row->category_id *}">{*
+                                    $row->category_name *}</a></td>
+                                {* else *}
+                                <td class="odd">{* $row->category_name *}</td>
+                                {* /if *}
+                                <td class="odd">{* $row->training_created_date *}</td>
+                                <td class="odd">
+                                    {* if $sess.user_id eq $row->training_creator or $sess.user_type eq 0 or
+                                    $row->delegetion *}
+                                    {* if $pageid eq "certificate" *}
+                                    <a href="{* $site_url *}/{* $pageid *}/setting/{* if $topicid *}{* $topicid *}{* else *}0{* /if *}/{* $row->training_id *}"
+                                       title="{* $lsetting *}">
+                                        <img src="{* $base_url *}images/16/general_settings.png" alt="" width="16"
+                                             height="16" border="0">
+                                    </a>
+                                    |
+                                    {* /if *}
+
+                                    <a href="{* $site_url *}/{* $pageid *}/participant/{* if $topicid *}{* $topicid *}{* else *}0{* /if *}/{* $row->training_id *}"
+                                       title="{* $lparticipant *}">
+                                        <img src="{* $base_url *}images/16/participants.png" alt="" width="16"
+                                             height="16" border="0">
+                                    </a>
+                                    | <a
+                                        href="{* $site_url *}/{* $pageid *}/prequisite/{* if $topicid *}{* $topicid *}{* else *}0{* /if *}/{* $row->training_id *}"
+                                        title="{* $lprequisite *}">
+                                    <img src="{* $base_url *}images/16/proreq.png" alt="" width="16" height="16"
+                                         border="0">
+                                </a>
+                                    | <a
+                                        href="{* $site_url *}/{* $pageid *}/postrequisite/{* if $topicid *}{* $topicid *}{* else *}0{* /if *}/{* $row->training_id *}"
+                                        title="{* $lpostrequisite *}">
+                                    <img src="{* $base_url *}images/16/postreq.png" alt="" width="16" height="16"
+                                         border="0">
+                                </a>
+                                    {* if $pageid eq "training" *}
+                                    | <a
+                                        href="{* $site_url *}/{* $pageid *}/praexam/{* if $topicid *}{* $topicid *}{* else *}0{* /if *}/{* $row->training_id *}"
+                                        title="{* $lpraexam_lexam *}">
+                                    <img src="{* $base_url *}images/16/pra-exam.png" alt="" width="16" height="16"
+                                         border="0">
+
+                                </a>
+                                    {* if $pageid eq "training" *}
+                                    {* if $row->training_material_type eq 1 *}
+                                    | <a href="{* $site_url *}/training/download/{* $row->training_id *}"><img
+                                        src="{* $base_url *}images/16/backup.png" alt="download" border="0"/></a>
+                                    {* else *}
+                                    {* /if *}
+                                    {* /if *}
+
+                                    {* /if *}
+
+                                    | <a
+                                        href="{* $site_url *}/{* $pageid *}/delegetion/{* if $topicid *}{* $topicid *}{* else *}0{* /if *}/{* $row->training_id *}"
+                                        title="{* $ldelegetion *}">
+                                    <img src="{* $base_url *}images/16/participants.png" alt="" width="16" height="16"
+                                         border="0">
+                                </a>
+
+                                </td>
+                                <td class="old">
+                                    {* if $row->taked *}
+                                    <a href="{* $site_url *}/{* $pageid *}/historyexam/{* $row->training_id *}">{*
+                                        $row->taked *} | {* $row->percentpeserta *}%</a>
+                                    {* if $pageid ne "training" *}
+                                    | <a href="{* $site_url *}/certificate/resetter/{* $row->training_id *}"
+                                         onclick="javascript: return confirm('{* $lconfirm_reset_all_npk *}')">{*
+                                    $lreset *}</a>
+                                    {* /if *}
+                                    {* else *}
+                                    &nbsp;
+                                    {* /if *}
+                                </td>
+                                <td class="odd">
+                                    {* if $row->taked *}
+                                    <a href="{* $site_url *}/{* $pageid *}/historynpk/0/0/{* $row->training_id *}">{*
+                                        $lshow_all *}</a>
+                                    |
+                                    <a href="javascript: historynpk({* $row->training_id *})">{* $lexport *}</a>
+                                    {* else *}
+                                    &nbsp;
+                                    {* /if *}
+                                </td>
+                                <td class="odd">
+                                    <div id="status{* $row->training_id *}"><a href="#"
+                                                                               onclick="javascript:chagestatus({* $row->training_id *},{* $row->training_status *})"><img
+                                            src="{* $base_url *}images/16/{* if  $row->training_status eq 2 *}inactive.png{* else *}active.png{* /if *}"
+                                            border="0" alt="{* $row->training_status_desc *}"
+                                            title="{* $row->training_status_desc *}"/></a></div>
+                                </td>
+                                {* if $row->used *}
+                                <td class="odd">&nbsp;</td>
+                                {* else *}
+                                <td class="odd"><a href="{* $site_url *}/{* $pageid *}/remove/{* $row->training_id *}"
+                                                   onclick="javascript: return confirm('{* $confirm_delete *}');"><img
+                                        src="{* $base_url *}images/b_del.gif" width="12" height="12" border="0"
+                                        title="{* $ldelete *}"/></a></td>
+                                {* /if *}
+                                {* else *}
+                                <td class="odd">&nbsp;</td>
+                                <td class="odd">&nbsp;</td>
+                                <td class="odd">&nbsp;</td>
+                                <td class="odd">&nbsp;</td>
+                                {* /if *}
+                                {* /if *}
+                            </tr>
+                            {* counter *}
+                            {* /foreach *}
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer clearfix">
+                        <div class="content-paging">{* $paging *}</div>
+                    </div>
+                </div>
+                <!-- /.box -->
+            </div>
+        </div>
+    </section>
+    <!-- /.content -->
+</div>
+
+<form id="frmtemp" name="frmtemp" method="post" action="{* $site_url *}/{* $pageid *}/showlist/{* $topicid *}">
+    <input type="hidden" id="limit" name="limit" value="{* $limit *}"/>
+    <input type="hidden" id="sortby" name="sortby" value="{* $sortby *}"/>
+    <input type="hidden" id="orderby" name="orderby" value="{* $orderby *}"/>
+    <input type="hidden" id="offset" name="offset" value="{* $offset *}"/>
+    <input type="hidden" id="keyword" name="keyword" value="{* $smarty.post.keyword *}"/>
+    <input type="hidden" id="searchby" name="searchby" value="{* $smarty.post.searchby *}"/>
+</form>
+
+<div class="modal fade" id="modal-default">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="frmexportype">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">History NPK</h4>
+                </div>
+                <div class="modal-body text-center">
+                    <div class="alert alert-info alert-dismissible">
+                        {* $lexport_type *}
+                    </div>
+                    <div class="form-group">
+                        <div class="radio">
+                            <label>
+                                <input type="radio" name="exporttype" value="1">
+                                {* $lmax_score *}
+                            </label>
+                        </div>
+                        <div class="radio">
+                            <label>
+                                <input type="radio" name="exporttype" value="2" checked>
+                                {* $llast_lulus *}
+                            </label>
+                        </div>
+                        <div class="radio">
+                            <label>
+                                <input type="radio" name="exporttype" value="3">
+                                {* $llast_score *}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                    <input class="btn btn-primary" type="button" onclick="javascript:dohistorynpk()"
+                           value="{* $lexport *}"/>
+                </div>
+            </form>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->

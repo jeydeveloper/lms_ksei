@@ -1,0 +1,490 @@
+<script>
+	var loaddvs = new Array();
+	var n_npk = {* $totalnpk *};
+	var lastjabatan = 0;			
+	
+	function showLevelGroup(parent, dv)
+	{
+		if ($(dv).css("display") != "none")
+		{
+			$(dv).hide();
+		}
+		else
+		{
+			if (hasLoad(dv))
+			{
+				$(dv).show();
+			}
+			else
+			{					
+				if (parent > 0)
+				{
+					//ischecked = $("INPUT[name='levelgroup[]'][value='"+parent+"']").attr("checked");
+					ischecked = $("INPUT[name='levelgroup[]'][value='"+parent+"']").is(":checked");
+				}
+				else
+				{
+					//ischecked = $("INPUT[name='allemp']").attr("checked")
+					ischecked = $("INPUT[name='allemp']").is(":checked")
+				}
+				
+				$.post("{* $site_url *}/level/showgroup/", {parent: parent, ischecked: ischecked, trainingid: {* $training->training_id *}},
+					function(data)
+					{
+						$(dv).html(data);
+						$(dv).show();
+					}
+				);
+				
+				loaddvs.push(dv);
+			}
+		}
+	}
+	
+	function showJabatan(id, dv)
+	{	
+		if ($(dv).css("display") != "none")
+		{
+			$(dv).hide();
+		}
+		else
+		{
+			if (hasLoad(dv))
+			{
+				$(dv).show();
+			}
+			else
+			{		
+				if (id > 0)
+				{
+					//ischecked = $("INPUT[name='jabatan[]'][value='"+id+"']").attr("checked");
+					ischecked = $("INPUT[name='jabatan[]'][value='"+id+"']").is(":checked");
+				}
+				else
+				{
+					//ischecked = $("INPUT[name='allemp']").attr("checked")
+					ischecked = $("INPUT[name='allemp']").is(":checked")
+				}
+							
+				$.post("{* $site_url *}/jabatan/show/", {id: id, ischecked: ischecked, trainingid: {* $training->training_id *}},
+					function(data)						
+					{
+						$(dv).html(data);
+						$(dv).show();
+					}
+				);
+				
+				loaddvs.push(dv);
+			}
+		}
+	}	
+	
+	function hasLoad(dv)
+	{
+		for(var i=0; i < loaddvs.length; i++)
+		{
+			if (loaddvs[i] == dv)
+			{
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	function jabatan_onclick(id, ischecked)
+	{
+				
+		$.post("{* $site_url *}/jabatan/getfunctions", {id: id},
+			function (data)
+			{							
+				for(var i=0; i < data.length; i++)
+				{
+					$("INPUT[name='function[]'][value='"+data[i]+"']").attr("checked", ischecked);
+				}
+				
+				$("INPUT[name='allnpk"+id+"']").attr("checked", ischecked);
+			}
+			, "json"
+		);		
+		
+		
+		if (! ischecked)
+		{
+			uncheckjabatan(id);
+		}		
+	}
+	
+	function levelgroup_onclick(elmt)
+	{
+		checklevelgroup(elmt.value, elmt.checked);
+		checkjabatan(elmt.value, elmt.checked);
+	}
+	
+	function checklevelgroup(id, ischecked)
+	{
+		$.post("{* $site_url *}/level/getgroups", {id: id},
+			function (data)
+			{				
+				for(var i=0; i < data.length; i++)
+				{
+					$("INPUT[name='levelgroup[]'][value='"+data[i]['id']+"']").attr("checked", ischecked);	
+					if (data[i]['ishavejabatan'])
+					{
+						for(var j=0; j < data[i]['jabatan'].length; j++)
+						{
+							$("INPUT[name='jabatan[]'][value='"+data[i]['jabatan'][j]+"']").attr("checked", ischecked);
+							//checkjabatan(data[i], ischecked, true);
+						}
+					}
+				}
+			}
+			, "json"
+		);
+		
+		if (! ischecked)
+		{
+			uncheckallparents(id);
+		}
+	}
+	
+	function uncheckallparents(id)	
+	{
+		$.post("{* $site_url *}/level/getparents", {id: id},
+			function (data)
+			{	
+				for(var i=0; i < data.length; i++)
+				{
+					$("INPUT[name='levelgroup[]'][value='"+data[i]+"']").attr("checked", false);	
+				}
+			}
+			, "json"
+		);	
+		
+		$("INPUT[name='allemp']").attr("checked", false)
+	}
+	
+	function checkjabatan(id, ischecked, notonclick)
+	{
+		$.post("{* $site_url *}/level/getjabatans", {id: id},
+			function (data)
+			{
+				for(var i=0; i < data.length; i++)
+				{
+					$("INPUT[name='jabatan[]'][value='"+data[i]+"']").attr("checked", ischecked);	
+					if (! notonclick)
+					{
+						jabatan_onclick(data[i], ischecked);				
+					}
+				}
+			}
+			, "json"
+		);	
+	}
+	
+	function uncheckjabatan(id)
+	{		
+		$.post("{* $site_url *}/level/getjabatanparents", {id: id},
+			function (data)
+			{	
+				for(var i=0; i < data.length; i++)
+				{
+					$("INPUT[name='levelgroup[]'][value='"+data[i]+"']").attr("checked", false);	
+				}
+			}
+			, "json"
+		);
+		
+		$("INPUT[name='allemp']").attr("checked", false)
+	}
+	
+	function allnpk_onclick(elmt, id)
+	{
+		if (! elmt.checked)
+		{
+			$("INPUT[name='jabatan[]'][value='"+id+"']").attr("checked", false);
+			uncheckjabatan(id);
+		}
+	}
+	
+	function allemp_onclick(elmt)
+	{
+		checklevelgroup(0, elmt.checked);	
+	}
+	
+	function saveparticipant()
+	{
+		// dipaksa, jika tidak id, tidak akan error
+		
+		$("#cat").removeAttr("disabled");   
+		$("#topic").removeAttr("disabled");   
+		$("#name").removeAttr("disabled");
+		$("#training_periode").removeAttr("disabled");
+		$("#showsubcontentbutton").removeAttr("disabled");		
+		
+		
+		$("#message").html("updating...");
+		$.post("{* $site_url *}/training/saveparticipant", $("#frmtraining").serialize(),
+			function(data)
+			{
+				$("#cat").attr("disabled", true);
+				$("#topic").attr("disabled", true);
+				$("#name").attr("disabled", true);				
+				$("#training_periode").attr("disabled", true);
+				$("#showsubcontentbutton").attr("disabled", true);
+				
+				$("#showreloadbutton").show();
+				
+				if (data.err > 0)
+				{					
+					$("#message").html(data.message);
+					return;
+				}
+				
+				$("#message").html(data.message);
+				var t=setTimeout("refresh()",500);
+			}
+			, "json"
+		);
+	}
+	
+	function shownpk(jabatan)
+	{
+		$("#training_periode").removeAttr("disabled");
+		var training_periode = $("#training_periode").val() || 0;
+		//var ischecked = $("INPUT[name='allnpk"+jabatan+"']").attr("checked");
+		var ischecked = $("INPUT[name='allnpk"+jabatan+"']").is(":checked");
+		$.post("{* $site_url *}/user/showlist", {jabatan: jabatan, dialog: 1, ischecked: ischecked, noheader: 1, training_npk_time_id: training_periode},
+			function (data)
+			{
+			    console.log('test');
+				$("#dialogcontent").html(data);	
+				//$("#dialoguser").dialog("open");
+                $('#modal-default').modal('show');
+
+				$("#training_periode").attr("disabled", true);
+			}
+		);	
+		
+		lastjabatan = jabatan;	
+	}
+
+	function shownpkorder(jabatan, sortby, orderby)
+	{	
+		$("#training_periode").removeAttr("disabled");
+		var training_periode = $("#training_periode").val() || 0;
+		//var ischecked = $("INPUT[name='allnpk"+jabatan+"']").attr("checked");
+		var ischecked = $("INPUT[name='allnpk"+jabatan+"']").is(":checked");
+		$.post("{* $site_url *}/user/showlist", {jabatan: jabatan, dialog: 1, ischecked: ischecked, noheader: 1, sortby: sortby, orderby: orderby, training_npk_time_id: training_periode},
+			function (data)
+			{							
+				$("#dialogcontent").html(data);	
+				//$("#dialoguser").dialog("open");
+                $('#modal-default').modal('show');
+
+				$("#training_periode").attr("disabled", true);
+			}
+		);	
+		
+		lastjabatan = jabatan;	
+	}
+	
+	function searchnpk(jabatan, sortby, orderby, searchby, keyword,_status)
+	{	
+		$("#training_periode").removeAttr("disabled");
+		var training_periode = $("#training_periode").val() || 0;
+		//var ischecked = $("INPUT[name='allnpk"+jabatan+"']").attr("checked");
+		var ischecked = $("INPUT[name='allnpk"+jabatan+"']").is(":checked");
+		$.post("{* $site_url *}/user/showlist", {jabatan: jabatan, dialog: 1, ischecked: ischecked, noheader: 1, sortby: sortby, orderby: orderby, searchby: searchby, keyword: keyword,_status:_status, training_npk_time_id: training_periode},
+			function (data)
+			{							
+				$("#dialogcontent").html(data);	
+				//$("#dialoguser").dialog("open");
+                $('#modal-default').modal('show');
+
+				$("#training_periode").attr("disabled", true);
+			}
+		);	
+		
+		lastjabatan = jabatan;	
+	}	
+	
+	$(document).ready(
+		function()
+		{
+			/*$("#dialoguser").dialog(
+				{ 
+					autoOpen: false 
+					,modal: true
+					,width: 850
+					,height: 450
+					,open: function()
+					{
+						if (n_npk > 0)
+						{
+							$("input[id='npk[]']").each( 
+							    function() 
+							    { 
+								$("input[id='_npk[]'][value='"+$(this).val()+"']").attr("checked", true);
+							    } 
+							);
+						}					
+					}
+				}
+			);*/
+
+            if (n_npk > 0)
+            {
+                $("input[id='npk[]']").each(
+                    function()
+                    {
+                        $("input[id='_npk[]'][value='"+$(this).val()+"']").attr("checked", true);
+                    }
+                );
+            }
+			
+			{* if $isopenroot *}
+				showLevelGroup(0, "#div_emp");
+			{* /if *}
+			
+			$("#training_periode").removeAttr("disabled");
+			var training_periode = $('#training_periode').val() || 0;
+
+			document.frmtraining.action = "{* $site_url *}/training/importnpk/{* $training->training_id *}/"+training_periode;
+			//document.frmtraining.enctype = "multipart/form-data";
+			document.frmtraining.target = "iframe_participant";
+
+			$("#training_periode").removeAttr("disabled");
+			var training_npk_time_id = $("#training_periode").val() || 0;
+			
+			showAvailableParticipant(training_npk_time_id);
+		}
+	);
+	
+	function showAvailableParticipant(training_npk_time_id)
+	{
+		if (! training_npk_time_id) training_npk_time_id = 0;
+		$.post("{* $site_url *}/training/getavailparticipant/{* $training->training_id *}/"+training_npk_time_id, {}, 
+			function(r)
+			{
+				$("#availparticipant").html(r);
+				$("#training_periode").attr("disabled", true);
+			}
+		);
+	}
+	
+	function adduser2participant()
+	{
+		var s = "";
+		$("input[id='_npk[]']").each(
+		    function()
+		    {
+		    	var n = ($("input[id='npk[]'][value='"+$(this).val()+"']").length);		    	
+		    	if (n == 0)
+		    	{
+		    		//var ischecked = $(this).attr("checked");
+                    var ischecked = $(this).is(":checked");
+		    		if (ischecked)
+		    		{
+			    		s += "<input type='hidden' name='npk[]' id='npk[]' value='" + $(this).val() + "' />";
+			    		n_npk++;
+			    	}
+			    	else
+			    	{
+			    		$("INPUT[name='allnpk"+lastjabatan+"']").attr("checked", false);
+
+					$("INPUT[name='jabatan[]'][value='"+lastjabatan+"']").attr("checked", false);
+					uncheckjabatan(lastjabatan);
+
+			    	}
+                    //console.log('ya');
+		    	}
+		    	else
+		    	{
+		    	    //console.log('yo');
+		    		//var ischecked = $(this).attr("checked");
+                    var ischecked = $(this).is(":checked");
+		    		if (! ischecked)
+		    		{
+		    			$("input[id='npk[]'][value='"+$(this).val()+"']").val(0);
+		    			n_npk--;
+		    			
+		    			$("INPUT[name='allnpk"+lastjabatan+"']").attr("checked", false);
+
+					$("INPUT[name='jabatan[]'][value='"+lastjabatan+"']").attr("checked", false);
+					uncheckjabatan(lastjabatan);
+		    		}
+		    	}		    	   		    	   
+		    } 
+		);
+		
+		var ori = $("#listnpk").html();
+		$("#listnpk").html(ori+s)
+		//$("#dialoguser").dialog("close");
+	}
+	
+	function setErrorMessage(err)
+	{
+		$("#rowimportnpkmessage").show();
+		$("#importnpkmessage").html(err);		
+	}
+	
+	function setSuccess(msg)
+	{
+		$("#rowimportnpkmessage").show();
+		$("#importnpkmessage").html(msg);
+		setTimeout('showSubContent()', {* $flashtime *}+1000);
+	}
+			
+	function refresh()
+	{
+		$("#training_periode").removeAttr("disabled");
+		var training_npk_time_id = $("#training_periode").val() || 0;
+		location = "{* $site_url *}/training/participant/0/{* $training->training_id *}/"+training_npk_time_id+"/";
+	}			
+</script>
+
+<span id="availparticipant"></span>
+<br />
+{* include file="training/import-participant.html" *}
+<br />
+{* include file="training/participant-search.html" *}
+<br />
+<table class="table" id="tbltrainingimport">
+<tr>
+	<td>
+		<input type="checkbox" id="allemp" name="allemp" value="1" onclick="javascript:allemp_onclick(this)" {* if $training->training_all_staff *}checked{* /if *} > <a href="javascript:showLevelGroup(0, '#div_emp')">{* $lall_staff *}</a>
+		<div id="div_emp" style="display: none;"></div>
+		<div id="message"></div><input type="button" value=" Save " onclick="javascript:saveparticipant()" />
+	</td>
+</tr>
+</table>
+<div id="listnpk">
+{* foreach from=$npks item=npk *}
+<input type="hidden" id="npk[]" name="npk[]" value="{* $npk->training_npk_npk *}" />
+{* /foreach *}
+</div>
+<iframe id="iframe_participant" name="iframe_participant" src="" style="width:0px;height:0px;border:0px solid #000000;"></iframe>
+
+<div class="modal fade" id="modal-default">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<form id="frmexportype">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title">History NPK</h4>
+				</div>
+				<div class="modal-body text-center">
+					<div id="dialogcontent"></div>
+				</div>
+				<!--<div class="modal-footer">
+					<button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+				</div>-->
+			</form>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->

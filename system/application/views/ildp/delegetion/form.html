@@ -1,0 +1,59 @@
+<script type="text/javascript" src="{*$base_url*}js/datetimepicker.js"></script>
+<script>
+	function frmsetting_onchange()
+	{
+		$("#message").show();
+		$("#message").html("submitting...");
+		
+		$.post("{* $site_url *}/ildpdelegetion/save", $("#frmsetting").serialize(),
+			function(r)
+			{
+				if (r.error)
+				{
+					$("#message").html(r.message);
+					return;
+				}
+				
+				gloc = r.redirect;
+				
+				setTimeout("golist()", 200);
+				$("#message").html(r.message);				
+			}
+			, "json"
+		);
+		
+		return false;
+	}	
+	
+	$(document).ready(
+		function()
+		{
+		}
+	);
+	
+	function golist()
+	{
+		location = gloc;
+	}
+	
+	var gloc = "";
+</script>
+   <h2>{* $lildp_add_delegetion *}</h2>   
+<form name="frmsetting" id="frmsetting" onsubmit="javascript: return frmsetting_onchange()">
+  <table width="100%">
+    <tr>
+      <td><table width="100%" border="0" cellpadding="0" cellspacing="0" class="tb_data">
+         <tr>
+         	<td>{* $lnpk *}</td>
+         	<td>:</td>
+         	<td>
+         		<input type='text' name="npk" id="npk" class='formdefault' value="">
+         	</td>
+        </tr>
+          <tr align='center'>
+            <td colspan="4"><div id="message" style="display: none;"></div><input type="submit" value=" Submit " /><input type="reset" value=" Reset " /></td>
+          </tr>
+      </table></td>
+    </tr>
+  </table>
+</form>

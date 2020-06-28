@@ -1,0 +1,118 @@
+<script>
+    $(document).ready( function() {
+        $("#pass").val('');
+    });
+
+    function frmlogin_onsubmit()
+    {
+        $("#msg-content").hide();
+        $.post("{* $site_url *}/user/login/", $("#frmlogin").serialize(),
+            function(data)
+            {
+                $("#msg").html("");
+
+                var datas = data.split("\1");
+                if (parseInt(datas[0]) > 0)
+                {
+                    $("#msg-content").show();
+                    $("#msg").html(datas[1]);
+                    return false;
+                }
+
+                if (datas[1] == 1)
+                {
+                    alert("{* $lexpired_password *}");
+                    location = "{* $site_url *}/user/changepass";
+                }
+                else
+                if ("{* $site_url *}/user/login" ==  "{* $referrer *}")
+                {
+                    location = "{* $base_url *}";
+                }
+                else
+                {
+                    location = "{* $referrer *}";
+                }
+            }
+        );
+
+        return false;
+    }
+</script>
+
+<style>
+    #msg font{color: #fff !important;}
+</style>
+
+<div class="login-box">
+    <div class="login-logo">
+        <a href="{* $site_url *}">
+            <img src="{*$base_url*}assets/img/logo-company.png" srcset="assets/img/logo-company@2x.png 2x,
+         assets/img/logo-company@3x.png 3x" class="logo-company">
+        </a>
+        <div style="text-align: center;color: #ffffff;">
+            <p style="margin-top: 10px;font-weight: bold;">Netpolitan</p>
+            <p style="font-size: 20px;">eLearning</p>
+        </div>
+    </div>
+    <!-- /.login-logo -->
+    <div class="login-box-body" style="padding-bottom: 0;">
+        <div style="text-align: center;">
+            <p style="font-size: 20px;">{* $login_welcome_back *}</p>
+            <p>{* $login_please_login *}</p>
+        </div>
+
+        <div id="msg-content" class="alert alert-danger alert-dismissible" style="display: none;">
+            <div id="msg"></div>
+        </div>
+
+        <form id="frmlogin" onsubmit="javascript:return frmlogin_onsubmit()">
+            {*if $loginbyemail *}
+            <div class="form-group has-feedback">
+                <label for="email">{* $login_email *}</label>
+                <input type='text' name="email" id="email" class="form-control" placeholder="{* $login_email *}">
+                <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+            </div>
+            {* else *}
+            <div class="form-group has-feedback">
+                <label for="npk">{* $login_nik *}</label>
+                <input type='text' name="npk" id="npk" class="form-control" placeholder="{* $login_nik *}">
+                <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+            </div>
+            {* /if *}
+            <div class="form-group has-feedback">
+                <label for="npk">{* $login_password *}</label>
+                <input type="password" name="pass" id="pass" class="form-control" placeholder="{* $login_password *}">
+                <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+            </div>
+            <div class="row">
+                <div class="col-xs-8">
+                    <a href="{* $site_url *}/home/forgotpass" style="line-height: 45px;">{* $login_forgot_password *}</a><br>
+                </div>
+                <!-- /.col -->
+                <div class="col-xs-4">
+                    <button type="submit" class="btn btn-lg btn-warning btn-block btn-flat">{* $login_button_login *}</button>
+                </div>
+                <!-- /.col -->
+            </div>
+            <div class="row" style="background: #F8F9FD;margin-top: 15px;padding-top: 20px;padding-bottom: 20px;margin-left: -20px;margin-right: -20px;">
+                <div class="col-xs-6" style="padding-right: 0;padding-left: 20px;">
+                    <span style="line-height: 30px;">{* $login_choose_language *}</span>
+                </div>
+                <div class="col-xs-6" style="padding-left: 0;padding-right: 20px;">
+                    <div class="btn-group pull-right">
+                        <a onclick="javascript:setlang('{* $site_url *}/home/setlang', '{*$base_url*}', 'id')" href="#" class="btn btn-default" style="background-color: #ffffff;">Bahasa</a>
+                        <a onclick="javascript:setlang('{* $site_url *}/home/setlang', '{*$base_url*}', 'en')" href="#" class="btn btn-default">English</a>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+    </div>
+    <!-- /.login-box-body -->
+    <div class="lockscreen-footer text-center" style="margin-top: 60px;color: #66b0eb;">
+        Powered by NCC. Rev. 2.75<br>
+        © Copyright 2010 - 2017 Netpolitan. All rights reserved.
+    </div>
+</div>
+<!-- /.login-box -->

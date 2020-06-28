@@ -1,0 +1,121 @@
+<script>
+	function import_onsubmit(id)
+	{
+		$("#"+id).html("importing...");
+		
+		return true;
+	}
+	
+	function setErrorMessage(id, err)
+	{
+		$("#" + id).html(err);		
+	}
+	
+	function setSuccess(id, msg)
+	{
+		$("#messageimportcat").html("");
+		$("#messageimporttraining").html("");
+		$("#messageimportexam").html("");		
+	
+		$("#"+id).html(msg);
+	}	
+</script>
+
+<style>
+    .box-body h2{margin: 0;}
+    .table{margin-bottom: 0;}
+</style>
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Import Data
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li><a href="#">{* if $pageid eq "training" *}{* $lcreate_course *}{* elseif $pageid eq "certificate" *}{* $lcreate_certificate *}{* else *}{* $lclassroom_update *}{* /if *}</a></li>
+            <li class="active">Form</li>
+        </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box">
+                    <div class="box-body table-responsive no-padding">
+                        <div class="box-body">
+                            <form action="{* $site_url *}/import/savecategory" method="post" enctype="multipart/form-data" onsubmit="javascript: return import_onsubmit('messageimportcat')" target="iframe_import">
+                                <h2>{* $limport_category_topic *}</h2>
+                                <br />
+                                <table class="table">
+                                    <tbody>
+                                    <tr class="odd">
+                                        <td class="odd" width="15%">{* $lcategory_topic_file *}</td>
+                                        <td class="odd"><input type="file" name="userfile" value="" /> </td>
+                                    </tr>
+                                    <tr class="odd">
+                                        <td class="odd">&nbsp;</td>
+                                        <td class="odd"><input type="submit" value="Import" /> </td>
+                                    </tr>
+                                    <tr class="odd">
+                                        <td class="odd">&nbsp;</td>
+                                        <td class="odd"><div id="messageimportcat"></div></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </form>
+                        </div>
+                        <div class="box-body">
+                            <form action="{* $site_url *}/import/savetraining" method="post" enctype="multipart/form-data" onsubmit="javascript: return import_onsubmit('messageimporttraining')" target="iframe_import">
+                                <h2>{* $limport_training *}</h2>
+                                <br />
+                                <table class="table">
+                                    <tbody>
+                                    <tr class="odd">
+                                        <td class="odd" width="15%">{* $ltraining_file *}</td>
+                                        <td class="odd"><input type="file" name="userfile" value="" /> </td>
+                                    </tr>
+                                    <tr class="odd">
+                                        <td class="odd">&nbsp;</td>
+                                        <td class="odd"><input type="submit" value="Import" /> </td>
+                                    </tr>
+                                    <tr class="odd">
+                                        <td class="odd">&nbsp;</td>
+                                        <td class="odd"><div id="messageimporttraining"></div></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </form>
+                        </div>
+                        <div class="box-body">
+                            <form action="{* $site_url *}/import/savehistoryexam" method="post" enctype="multipart/form-data" onsubmit="javascript: return import_onsubmit('messageimportexam')" target="iframe_import">
+                                <h2>{* $limport_historyexam *}</h2>
+                                <br />
+                                <table class="table">
+                                    <tbody>
+                                    <tr class="odd">
+                                        <td class="odd" width="15%">{* $lhistoryexam_file *}</td>
+                                        <td class="odd"><input type="file" name="userfile" value="" /> </td>
+                                    </tr>
+                                    <tr class="odd">
+                                        <td class="odd">&nbsp;</td>
+                                        <td class="odd"><input type="submit" value="Import" /> </td>
+                                    </tr>
+                                    <tr class="odd">
+                                        <td class="odd">&nbsp;</td>
+                                        <td class="odd"><div id="messageimportexam"></div></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<iframe id="iframe_import" name="iframe_import" src="" style="width:0px;height:0px;border:1px solid #000000;display: none;"></iframe>

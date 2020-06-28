@@ -1,0 +1,383 @@
+{*php*}
+if (isset($_POST['dialog'])) {
+
+} else {
+$_POST['dialog'] = '';
+}
+
+
+if (isset($_POST['searchby'])) {
+
+} else {
+$_POST['searchby'] = '';
+}
+
+
+if (isset($_POST['keyword'])) {
+
+} else {
+$_POST['keyword'] = '';
+}
+
+
+if (isset($_POST['delegetion'])) {
+
+} else {
+$_POST['delegetion'] = '';
+}
+
+
+if (isset($_POST['status'])) {
+
+} else {
+$_POST['status'] = '';
+}
+
+
+if (isset($_POST['notadmin'])) {
+
+} else {
+$_POST['notadmin'] = '';
+}
+
+
+{*/php*}
+
+<script>
+    $(document).ready(
+        function () {
+            $("a[id=linksession]").each(
+                function () {
+                    $(this).click(
+                        function () {
+                            var id = $(this).attr("tag");
+                            $.post("{* $site_url *}/user/deletesession", {userid: id},
+                                function () {
+                                    alert("{* $ldelete_session_successfully *}");
+                                    search();
+                                }
+                            );
+                        }
+                    );
+                }
+            );
+
+            $("#_searchby").change(
+                function () {
+                    switch ($(this).val()) {
+                        case "user_status":
+                            $("#_keyword").hide();
+                            $("#_user_status").show();
+                            break;
+                        default:
+                            $("#_keyword").show();
+                            $("#_user_status").hide();
+                    }
+                }
+            );
+
+            {* if $smarty.post.searchby *}
+            $("#_searchby").val('{* $smarty.post.searchby *}');
+            $("#_user_status").val('{* $smarty.post.status *}');
+            {* /if *}
+
+                $("#_searchby").change();
+            }
+
+        );
+
+    function chagestatus(id, status) {
+        f_onsubmit("{* $site_url *}/user/changestatus/" + id + "/" + status, "frmtemp", "status" + id, "Updating...",
+            function (data) {
+                document.frmtemp.submit();
+            }
+        );
+    }
+
+
+    {* if !$smarty.post.dialog *}
+
+    function search() {
+        $("#keyword").val($("#_keyword").val());
+        $("#searchby").val($("#_searchby").val());
+        //$("#status").val($("#_user_status").val());
+        $("#status").val($("select#_user_status option:selected").val());
+        $("#_status").val($("select#_user_status option:selected").val());
+        $('select.foo').val();
+        $("#showtype").val("");
+        $("#offset").val(0);
+
+        document.frmtemp.submit();
+    }
+
+    function _export() {
+        $("#keyword").val($("#_keyword").val());
+        $("#searchby").val($("#_searchby").val());
+        //$("#status").val($("#_user_status").val());
+        $("#status").val($("select#_user_status option:selected").val());
+
+        $("#showtype").val("export");
+
+        document.frmtemp.submit();
+    }
+
+    function page(n) {
+        if (!n) n = 0;
+        $("#offset").val(n);
+        $("#showtype").val("");
+        document.frmtemp.submit();
+    }
+
+    {* else *}
+
+    function search() {
+        $("#keyword").val($("#_keyword").val());
+        $("#searchby").val($("#_searchby").val());
+//     		$("#status").val($("#_user_status").val());
+        $("#status").val($("select#_user_status option:selected").val());
+
+        searchnpk({* $smarty.post.jabatan *},
+        $("#sortby").val(), $("#orderby").val(), $("#_searchby").val(), $("#_keyword").val(), $("#status").val()
+    )
+        ;
+    }
+
+    {* /if *}
+
+</script>
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        {* if $referer eq "activities" *}
+        <h1>{* $luser_activities *}{* if $jabatan *}( {* $jabatan->jabatan_name *} ){* /if *}</h1>
+        {* else *}
+        <h1>{* $user_list *}{* if $jabatan *}( {* $jabatan->jabatan_name *} ){* /if *}</h1>
+        {* /if *}
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li><a href="#">User</a></li>
+            <li class="active">Showlist</li>
+        </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-xs-12">
+                <div id="msg-content" class="alert alert-danger alert-dismissible" style="display: none;">
+                    <div id="message"></div>
+                </div>
+                <div class="box">
+                    <div class="box-body table-responsive">
+                        <p>{* $header_list_user *}</p>
+                        {* if ! $smarty.post.dialog *}
+                        {* if $sess.asadmin *}
+                        <p>
+                            <a title='{* $lreset_datelogin_tooltips *}'
+                               href="{* $site_url *}/user/resetdatelogin_forall">{* $lreset_datelogin *}</a>
+                            |
+                            <a href="{* $site_url *}/user/reseterrlogin_forall">{* $lreset_errorlogin *}</a>
+                        </p>
+                        {* /if *}
+                        {* /if *}
+                        <div class="mg-btm-10">
+                            {* $sort_list_by *}
+                            {* if $smarty.post.dialog *}
+                            <a href="javascript:shownpkorder({* $smarty.post.jabatan*} , 'user_npk', 'asc')"{* if $sortby eq 'user_npk' *}class="lite"{* /if *}>{* $lnpk *}</a>
+                            {* else *}
+                            <a href="#" onclick="javascript:sortby('user_npk', 'asc')"{* if $sortby eq 'user_npk' *}class="lite"{* /if *}>{* $lnpk *}</a>
+                            {* /if *}
+                            {* if $smarty.post.dialog *}
+                            | <a href="javascript:shownpkorder({* $smarty.post.jabatan*} ,'user_name', 'asc')"{* if $sortby eq 'user_name' *}class="lite"{* /if *}>{* $name *}</a>
+                            {* else *}
+                            | <a href="#" onclick="javascript:sortby('user_name', 'asc')"{* if $sortby eq 'user_name' *}class="lite"{* /if *}>{* $name *}</a>
+                            {* /if *}
+                            {* if $smarty.post.dialog *}
+                            | <a href="javascript:shownpkorder({* $smarty.post.jabatan*} , 'user_email', 'asc')"{* if $sortby eq 'user_email' *}class="lite"{* /if *}>{* $email *}</a>
+                            {* else *}
+                            | <a href="#" onclick="javascript:sortby('user_email', 'asc')"{* if $sortby eq 'user_email' *}class="lite"{* /if *}>{* $email *}</a>
+                            {* /if *}
+                            {* if ! $smarty.post.dialog *} | <a href="#" onclick="javascript:sortby('jabatan_name', 'asc')"{* if $sortby eq 'jabatan_name' *}class="lite"{* /if *}>{* $ljabatan *}</a> | <a href="#" onclick="javascript:sortby('user_status', 'asc')"{* if $sortby eq 'user_status' *}class="lite"{* /if *}>{* $status *}</a> {* if $referer ne "activities" *}| <a href="{* $site_url *}/user/form">{* $date_added *}</a> | <a href="javascript:_export()">{* $lexport *}</a> {* /if *}{* /if *}
+                        </div>
+                        <div class="mg-btm-10">
+                            <form onsubmit="javascript:search(); return false;">
+                                <div class="row">
+                                    <div class="col-xs-3">
+                                        {* $lsearch_by *}
+                                    </div>
+                                    <div class="col-xs-3">
+                                        <select class="form-control" name="_searchby" id="_searchby">
+                                            <option value="user_npk">{* $lnpk *}</option>
+                                            <option value="user_name">{* $lname *}</option>
+                                            {* foreach from=$levels item=level *}
+                                            <option value="level{* $level->level_nth *}">{* $level->level_name *}</option>
+                                            {* /foreach *}
+                                            <option value="jabatan_name">{* $ljabatan1 *}</option>
+                                            <option value="user_status">{* $lstatus *}</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-xs-3" id="_user_status">
+                                        <select class="form-control" name="_user_status">
+                                            <option value="">{* $lall_status *}</option>
+                                            <option value="1">{* $lactive *}</option>
+                                            <option value="2">{* $linactive *}</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-xs-3">
+                                        <input class="form-control" type='text' name="_keyword" id="_keyword"
+                                               class='formdefault' value="{* $smarty.post.keyword *}">
+                                    </div>
+                                    <div class="col-xs-3">
+                                        <input class="btn btn-primary" type='submit' value=" {* $lsearch *} ">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <hr>
+                        <table class="table table-hover table-striped">
+                            <thead>
+                            <tr>
+                                {* if $smarty.post.dialog *}
+                                <th width="10%">&nbsp;</th>
+                                {* /if *}
+                                {* if $smarty.post.dialog *}
+                                <th width="18%"><a href="javascript:shownpkorder({* $smarty.post.jabatan*} ,'user_npk', 'asc')" class="thead" title="{* $lsort_by_npk *}">{* $lnpk *}</a></th>
+                                <th width="18%"><a href="javascript:shownpkorder({* $smarty.post.jabatan*} ,'user_name', 'asc')" class="thead" title="{* $lsort_by_name *}">{* $name *}</a></th>
+                                <th><a href="javascript:shownpkorder({* $smarty.post.jabatan*} ,'user_email', 'asc')" class="thead" title="{* $lsort_by_email *}">{* $email *}</a></th>
+                                {* else *}
+                                <th width="18%"><a href="#" onclick="javascript:sortby('user_npk', 'asc')" class="thead" title="{* $lsort_by_npk *}">{* $lnpk *}</a></th>
+                                <th width="18%"><a href="#" onclick="javascript:sortby('user_name', 'asc')" class="thead" title="{* $lsort_by_name *}">{* $name *}</a></th>
+                                <th width="18%"><a href="#" onclick="javascript:sortby('user_email', 'asc')" class="thead" title="{* $lsort_by_email *}">{* $email *}</a></th>
+                                {* /if *}
+                                {* if (! $smarty.post.dialog) *}
+                                <th width="18%"><a href="#" onclick="javascript:sortby('jabatan_name', 'asc')" class="thead" title="{* $lsort_by_position *}">{* $ljabatan *}</a></th>
+                                {* if $referer ne "activities" *}
+                                <th><div class="listmain"><a href="#" onclick="javascript:sortby('user_status', 'asc')" class="thead" title="{* $lsort_by_status *}">{* $status *}</a></div></th>
+                                <th>&nbsp;</th>
+                                <th width="10%">&nbsp;</th>
+                                {* /if *}
+                                {* /if *}
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {* counter start=1 print=false assign="no" *}
+                            {* foreach from=$list item=row *}
+                            <tr{* if $no%2 eq 1 *} class="odd"{* /if *}>
+                            {* if $smarty.post.dialog *}
+                            <td class="odd"><input type="checkbox" name="_npk[]" id="_npk[]" value="{* $row->user_id *}"{* if $smarty.post.ischecked eq "true" *}checked{*/if*}  /></td>
+                            {* /if *}
+                            {* if ! $smarty.post.dialog *}
+                            {* if $row->user_type gt 0 *}
+                            {* if $referer eq "activities" *}
+                            <td class="odd"><a href="{* $site_url *}/activities/detail/{* $row->user_id *}">{* $row->user_npk *}</a></td>
+                            {* else *}
+                            <td class="odd"><a href="{* $site_url *}/user/form/{* $row->user_id *}">{* $row->user_npk *}</a></td>
+                            {* /if *}
+                            {* else *}
+                            <td class="odd">{* $row->user_npk *}</td>
+                            {* /if *}
+                            {* else *}
+                            <td class="odd">{* $row->user_npk *}</td>
+                            {* /if *}
+                            <td class="odd">{* $row->user_name *}</td>
+                            <td class="odd">{* $row->user_email *}</td>
+                            {* if ! $smarty.post.dialog *}
+                            <td class="odd">{* if $referer ne "activities" *}<a href="{* $site_url *}/jabatan/form/{* $row->user_jabatan *}">{* /if *}{* $row->jabatan_name *}{* if $referer ne "activities" *}</a>{* /if *}</td>
+                            {* if $referer ne "activities" *}
+                            {* if $row->user_type ne 0 *}
+                            <td class="odd"><div id="status{* $row->user_id *}"><a href="#" onclick="javascript:chagestatus({* $row->user_id *},{* $row->user_status *})"><img src="{* $base_url *}images/16/{* if  $row->user_status eq 2 *}inactive.png{* else *}active.png{* /if *}" border="0" alt="{* $row->user_status_desc *}" title="{* $row->user_status_desc *}" /></a></div></td>
+                            {* if $row->user_loginerror || $row->isinactive *}
+                            <td class="odd">
+                                {* if $row->user_loginerror *}
+                                <a href="{* $site_url *}/user/reseterrlogin/{* $row->user_id *}">{* $lreset_errorlogin *} ({* $row->user_loginerror *})</a>
+                                {* /if *}
+                                {* if $row->isinactive *}
+                                {* if $row->user_loginerror *}
+                                <br/>
+                                {* /if *}
+                                <a title='{* $lreset_datelogin_tooltips *}'href="{* $site_url *}/user/resetdatelogin/{* $row->user_id *}">{* $lreset_datelogin *} ({* $row->inactive_day *})</a>
+                                {* /if *}
+                            </td>
+                            {* else *}
+                            <td class="odd">&nbsp;</td>
+                            {* /if *}
+                            <td>
+                                {* if !$row->userUsed *}
+                                <a href="{* $site_url *}/user/remove/{* $row->user_id *}" onclick="javascript: return confirm('{* $confirm_delete *}');"><img src="{* $base_url *}images/b_del.gif" width="12" height="12" border="0" title="{* $ldelete *}"/></a>
+                                {* /if*}
+
+                                {* if $row->logged *}
+                                &nbsp;&nbsp;<a href="#" id="linksession" tag="{* $row->user_id *}"><img src="{* $base_url *}images/16/participants.png" border="0" title="{* $ldelete_session *}"/></a>
+                                {* /if *}
+                            </td>
+                            {* else *}
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td>
+                                {* if $row->logged *}
+                                <a href="#" id="linksession" tag="{* $row->user_id *}"><img src="{* $base_url *}images/16/participants.png" border="0" title="{* $ldelete_session *}"/></a>
+                                {* /if *}
+                            </td>
+                            {* /if *}
+                            {* /if *}
+                            {* /if *}
+                            </tr>
+                            {* counter *}
+                            {* /foreach *}
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer clearfix">
+                        <div class="content-paging">{* $paging *}</div>
+                    </div>
+                    <div class="box-footer clearfix">
+                        {* if $smarty.post.dialog *}
+                        {* if $smarty.post.delegetion *}
+                        <input type="button" value=" Add " onclick="javascript: adduser2delegetion()" />
+                        {* else *}
+                        <input type="button" value=" Save " onclick="javascript: adduser2participant()" />
+                        {* /if *}
+                        {* /if *}
+                    </div>
+                </div>
+                <!-- /.box -->
+            </div>
+        </div>
+    </section>
+    <!-- /.content -->
+</div>
+
+{* if $smarty.post.delegetion *}
+<form id="frmtempdialog" name="frmtempdialog" method="post" action="{* $site_url *}{* if $referer eq "activities" *}/user/activities{* else *}/user/showlist{* /if *}">
+{* else *}
+<form id="frmtemp" name="frmtemp" method="post" action="{* $site_url *}{* if $referer eq "activities" *}/user/activities{* else *}/user/showlist{* /if *}">
+{* /if *}
+{* if $smarty.post.dialog *}
+<input type="hidden" id="dialog" name="dialog" value="1"/>
+{* /if *}
+<input type="hidden" id="limit" name="limit" value="{* $limit *}"/>
+<input type="hidden" id="sortby" name="sortby" value="{* $sortby *}"/>
+<input type="hidden" id="orderby" name="orderby" value="{* $orderby *}"/>
+<input type="hidden" id="offset" name="offset" value="{* $offset *}"/>
+<input type="hidden" id="keyword" name="keyword" value="{* $smarty.post.keyword *}"/>
+<input type="hidden" id="searchby" name="searchby" value="{* $smarty.post.searchby *}"/>
+<input type="hidden" id="status" name="status" value="{* $smarty.post.status *}"/>
+<input type="hidden" id="_status" name="_status" value="{* $smarty.post.status *}"/>
+<input type="hidden" id="showtype" name="showtype" value=""/>
+<input type="hidden" id="notadmin" name="notadmin" value="{* $smarty.post.notadmin *}"/>
+{* if $smarty.post.delegetion *}
+<input type="hidden" id="delegetion" name="delegetion" value="1"/>
+<input type="hidden" id="pageid" name="pageid" value="{* $smarty.post.pageid *}"/>
+<input type="hidden" id="ischecked" name="ischecked" value="{* $smarty.post.ischecked *}"/>
+<input type="hidden" id="ischecked" name="ischecked" value="{* $smarty.post.ischecked *}"/>
+<input type="hidden" id="noheader" name="noheader" value="{* $smarty.post.noheader *}"/>
+<input type="hidden" id="funcpage" name="funcpage" value="{* $smarty.post.funcpage *}"/>
+<input type="hidden" id="deltraining" name="deltraining" value="{* $smarty.post.deltraining *}"/>
+<input type="hidden" id="deltopic" name="deltopic" value="{* $smarty.post.deltopic *}"/>
+<input type="hidden" id="jabatan" name="jabatan" value="{* $smarty.post.jabatan *}"/>
+
+
+{* /if *}
+</form>

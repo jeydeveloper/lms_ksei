@@ -1,0 +1,65 @@
+<script>
+	function frmcategory_onchange()
+	{
+		if (! confirm("{* $lconfirm_ildp_category_save *}")) return false;
+		
+		return f_onsubmit("{* $site_url *}/ildpcategory/save/{* $edit *}", "frmcategory", "message", "Saving...",
+			function(data)
+			{
+				$("#message").html("{* $ok_save_category *}");
+				setTimeout('location = "{* $site_url *}/ildpcategory"', {* $flashtime *});
+			}
+		);				
+	}
+	
+</script>
+<h2>{* $ltitle_form *}</h2>
+<form name="frmcategory" id="frmcategory" onsubmit="javascript: return frmcategory_onchange()">
+	<input type='hidden' name="type" id="type" value="{* $type *}">
+<table width="100%" border="0" cellpadding="0" cellspacing="0" class="tb_data">
+	{* if $edit *}
+  <tr>
+    <td>
+      &nbsp;&nbsp; ID</td>
+    <td>:</td>
+    <td>{* $catedit.ildp_category_id *}</td>
+  </tr>
+  {* /if *}
+	<input type="hidden" name="parent" value="0" />
+  <tr>
+    <td width="200">* {* $category_name *}</td>
+    <td width="1">:</td>
+    <td><input type='text' name="name" id="name" class='formdefault' value="{* $catedit.ildp_category_name *}" maxlength='100'></td>
+  </tr>
+  <tr valign='top'>
+    <td>&nbsp;&nbsp; {* $category_desc *}</td>
+    <td>:</td>
+    <td><textarea name="desc" id="textarea" class='textareadefault'>{* $catedit.ildp_category_desc *}</textarea></td>
+  </tr>
+  <tr>
+    <td width="200">* {* $lmax_line *}</td>
+    <td width="1">:</td>
+    <td><input type='text' name="maxline" id="maxline" class='formshort' value="{* $catedit.ildp_category_maxline *}"></td>
+  </tr>
+  <tr>
+    <td width="200">* {* $ltype_area_development *}</td>
+    <td width="1">:</td>
+    <td>
+			<input type='radio' name="typeareadev" id="typeareadev" value="2" {* if $catedit.ildp_category_areadev_type eq '' or $catedit.ildp_category_areadev_type eq 2 *}checked{* /if *}> {* $lfree_text *}
+			<input type='radio' name="typeareadev" id="typeareadev" value="1" {* if $catedit.ildp_category_areadev_type eq 1 *}checked{* /if *}> {* $ldropbox *}
+    </td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td><div id="message"></div></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td><input name="submit" type="submit" value=" Submit " />
+        <input name="reset" type="reset" value=" Reset " onclick="javascript: return confirm('{* $lconfirm_reset_data *}');" /></td>
+  </tr>
+</table>
+
+</form>

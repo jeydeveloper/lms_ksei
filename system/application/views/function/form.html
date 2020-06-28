@@ -1,0 +1,100 @@
+<link rel="stylesheet" href="{* $base_url *}js/autocomplete/jquery.autocomplete.css" type="text/css" />
+<script type="text/javascript" src="{* $base_url *}js/autocomplete/jquery.bgiframe.min.js"></script> 
+<script type="text/javascript" src="{* $base_url *}js/autocomplete/jquery.autocomplete.js"></script>
+<script>
+	function frmfunc_onchange()
+	{
+		return f_onsubmit("{* $site_url *}/func/save/{* $edit *}", "frmfunc", "message", "Saving...",
+			function(data)
+			{
+				$("#message").html("{* $ok_save_func *}");
+				setTimeout('location = "{* $site_url *}/func"', {* $flashtime *});
+			}
+		);				
+	}
+	
+	  $(document).ready(function(){	
+	    	/*$.post("{* $site_url *}/jabatan/getalllist", {},
+	    		function (data)
+	    		{		    		
+	    			if (data.length > 0)
+	    			{
+	    				var datas = data.split("\1");
+	    				$("#jabatan").autocomplete(datas);
+	    			}
+	    		}
+	    	);*/
+
+          var options = {
+
+              url: function(phrase) {
+                  return "{* $site_url *}/jabatan/getalllist";
+              },
+
+              getValue: function(element) {
+                  return element.name;
+              },
+
+              ajaxSettings: {
+                  dataType: "json",
+                  method: "POST",
+                  data: {}
+              },
+
+              preparePostData: function(data) {
+                  data.phrase = $("#example-ajax-post").val();
+                  return data;
+              },
+
+              requestDelay: 200
+          };
+
+          $("#jabatan").easyAutocomplete(options);
+	  });		
+</script>
+
+<h2>{* $ltitle_form*}</h2>
+<form name="frmfunc" id="frmfunc" onsubmit="javascript: return frmfunc_onchange()">
+<table width="100%" border="0" cellpadding="0" cellspacing="0" class="tb_data">
+  <tr>
+    <td width="200">{* if $edit *}
+      ID</td>
+    <td>:</td>
+    <td>{* $funcedit.function_id *}</td>
+  </tr>
+  <tr>
+    <td>{* /if *}
+      * {* $jabatan *}</td>
+    <td width="1">:</td>
+    <td><input type='text' name="jabatan" id="jabatan" class='formdefault' value="{* $funcedit.jabatan_name *}" maxlength='100'></td>
+  </tr>
+  <tr>
+    <td>* {* $function_desc *}</td>
+    <td>:</td>
+    <td><input type='text' name="desc" id="desc" class='formdefault' value="{* $funcedit.function_desc *}" maxlength='100'></td>
+  </tr>
+  <tr>
+    <td>* {* $status *}</td>
+    <td>:</td>
+    <td><select name="select" id="select">
+      <option value="1" {* if $funcedit.function_status eq 1 *}selected{* /if *}>
+      {* $active *}
+      </option>
+      <option value="2" {* if $funcedit.function_status eq 2 *}selected{* /if *}>
+      {* $inactive *}
+      </option>
+    </select></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td><div id="message"></div></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td><input name="submit" type="submit" value=" Submit " />
+        <input name="reset" type="reset" value=" Reset " /></td>
+  </tr>
+</table>
+</form>

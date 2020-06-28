@@ -1,0 +1,101 @@
+<script>
+	function condition_onclick(hist)
+	{
+		if (hist == 1)
+		{
+			$("#dvcondition").show();
+		}
+		else
+		{
+			$("#dvcondition").hide();
+		}
+	}	
+	
+	function frmupdate_onsubmit()
+	{
+		$.post("{* $base_url *}index.php/reminder/updateinfo", $("#frmupdate").serialize(),
+			function(r)
+			{
+				alert(r.message);
+			}
+			, "json"
+		);			
+		
+		return false;	
+	}
+	
+	function removeinfo()
+	{
+		if (! confirm("{* $confirm_delete *}")) return;
+		
+		$.post("{* $base_url *}index.php/reminder/removeinfo", $("#frmupdate").serialize(),
+			function(r)
+			{
+				alert(r.message);
+				dosearch();
+			}
+			, "json"
+		);					
+	}
+	
+	
+	$(document).ready(
+		function()
+		{
+			{* if $row->reminder_condition > 0 *}				
+				condition_onclick(1);
+				$("#ncondition").val({* $row->reminder_condition *});
+			{* else *}
+				condition_onclick({* $row->reminder_condition *});
+			{* /if *}			
+			
+			$("#status{* $row->reminder_status *}").attr('checked', true);			
+		}
+	);
+		
+</script>
+<br />
+<form name="frmupdate" id="frmupdate" onsubmit="javascript: return frmupdate_onsubmit()">
+		<h3>{* $lreminder_info *}</h3>
+		<input type="hidden" id="id" name="id" value="{* $row->reminder_id *}" />
+      <table width="100%" cellpadding="3">
+        <tbody>
+        	{* if $type eq "reminder" *}
+          	<tr class="odd">
+          		<td class="odd" width="20%">{* $lreminder_schedule *}</td>
+          		<td class="odd"><input type='text' name="schedule" id="schedule" class='formshort' maxlength='6' size="5" value="{* $row->reminder_schedule *}"> </td>
+          	</tr>    
+          	<tr>
+          		<td class="odd">{* $lhistory *}</td>
+          		<td class="odd">
+          			<!-- <input type="radio" name="condition" id="condition" value="0" {* if $row->reminder_condition eq 0 *}checked{* /if *} onclick="javascript:condition_onclick(this.value)" />{* $lnever *} -->
+          			<input type="radio" name="condition" id="condition" value="-1" {* if $row->reminder_condition eq -1 *}checked{* /if *} onclick="javascript:condition_onclick(this.value)" />{* $lonce *}
+          			<input type="radio" name="condition" id="condition" value="1" {* if $row->reminder_condition gt 0 *}checked{* /if *} onclick="javascript:condition_onclick(this.value)" />{* $lndays *}
+          			<span id="dvcondition" style="display: none;"><input type='text' name="ncondition" id="ncondition" class='formshort' value="" maxlength='6' size="5"></span>          				
+          		</td>
+          	</tr>
+          	{* else *}      	
+          	<input type='hidden' name="schedule" id="schedule" value="{* $row->reminder_schedule *}">
+          	<input type="hidden" name="condition" id="condition" value="1" />
+          	<input type="hidden" name="ncondition" id="ncondition" value="1" />
+          	{* /if *}
+          	<tr>
+          		<td class="odd">{* $lstatus *}</td>
+          		<td class="odd">
+          			<input type="radio" name="status" id="status1" value="1" />{* $lactive *}
+          			<input type="radio" name="status" id="status2" value="2" />{* $linactive *}
+          		</td>          			
+          	</tr>          	
+          <tr class="odd" id="dvmessage" style="display: none;">
+          	<td class="odd">&nbsp;</td>
+          	<td class="odd"><div id="messageimport"></div></td> 
+          </tr>          
+          <tr class="odd">
+          	<td class="odd">&nbsp;</td>
+          	<td class="odd">
+          		<input type="submit" value="Update" />           		
+          	</td> 
+          </tr>
+        </tbody>
+      </table>
+</form>

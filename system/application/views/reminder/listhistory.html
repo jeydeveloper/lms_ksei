@@ -1,0 +1,42 @@
+      <script>
+      	function histdetail(d, s)
+      	{
+      		$.post("{* $base_url *}index.php/{* $remindertype *}/histdetail", {date: d, status: s, training: {*$trainingid *}},
+      			function (r)
+      			{
+      				$("#histdetail").html(r.result);
+      			}
+      			, "json"
+      		);
+      	}
+      	</script>
+      <table width="100%" cellpadding="3" class="tablelist">
+        <thead>
+          <tr>
+            <th width="30%">{* $lperiod *}</th>
+            <th width="20%">{* $lmail_sent *}</th>
+            <th width="20%">{* $lmail_failed *}</th>            
+            <th>&nbsp;</th>
+          </tr>
+          {* counter start=1 print=false assign="no" *}
+          {* foreach from=$rows item=history *}
+          <tr{* if $no%2 eq 1 *} class="odd"{* /if *}>  
+          	<td>{* $history->log_created_fmt *}</td>          
+          	<td>{* if $history->sent *}<a href="javascript:histdetail('{* $history->log_created_fmt *}', 1)">{* $history->sent *}</a>{* else *}0{* /if *}</td>
+          	<td>{* if $history->failed *}<a href="javascript:histdetail('{* $history->log_created_fmt *}', 2)">{* $history->failed *}</a>{* else *}0{* /if *}</a></td>
+          	<td>&nbsp;</td>
+          </tr>          	
+          	{* counter *}
+          {* /foreach *}
+          
+        </thead>
+        <tbody>
+        </tbody>
+        <tfoot>
+          <tr>
+            	<td colspan="4">{* $paging *}</td>
+          </tr>
+        </tfoot>        
+      </table>
+<br />
+<div id="histdetail"></div>

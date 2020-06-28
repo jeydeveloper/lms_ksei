@@ -1,0 +1,40 @@
+<p>
+<script>
+	function add2cart()
+	{
+		$.post("{* $base_url *}index.php/ildp/add2cart/{* $catalog->training_id *}", {period:  $("#period").val()},
+			function(r)
+			{
+				if (r.error)
+				{
+					alert(r.message);
+					return;
+				}
+				
+				$("#ildpcart").html(r.ncart);
+				getcart();
+				alert(r.message);
+				
+				location = "{* $base_url *}index.php/ildp/topic/{* $catalog->category_id *}";
+			}
+			, "json"
+		);
+	}		
+</script>
+<H3>{* $ltopic*} &quot;<a href='{* $site_url *}/ildp/topic/{* $catalog->category_id *}'>{* $catalog->category_name *}</a>&quot;</H3>
+</p>
+
+
+<H2>{* $ltraining *} &quot;{* $catalog->training_name *}&quot;</H2>
+<br />{* $catalog->training_desc *}
+<form>
+<br />{* $lperiod *}
+<select name="period" id="period">
+	{* foreach from=$months item=month key=vmont *}
+	<option value="{* $vmont *}">{* $month *}</option>
+	{* /foreach *}
+</select>
+<br />
+<br />
+	<input type="button" value=" {* $laddtocart *}  " onclick="javascript:add2cart()" />
+</form>

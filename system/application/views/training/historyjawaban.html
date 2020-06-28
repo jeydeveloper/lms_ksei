@@ -1,0 +1,31 @@
+<section class="content">
+	<div class="row">
+		<div class="col-xs-12">
+			<div id="msg-content" class="alert alert-danger alert-dismissible" style="display: none;">
+				<div id="message"></div>
+			</div>
+			<div class="box">
+				<div class="box-body table-responsive">
+					<h2>{* $ltraining *} &quot;{* $row->training_name *}&quot;</h2>
+					<br />&nbsp;
+					<h3>{* $ldate *} : {* $row->history_exam_datetime *}</h3>
+					<h3>{* $lscore *} : {* $row->history_exam_score_fmt *}</h3>
+					<br />&nbsp;
+					<form id="frmexam" name="frmexam" style="text-align: left;">
+						{* counter start=1 print=false assign="no" *}
+						{* foreach from=$quests item=quest *}
+						{* $no *}. {* $quest->banksoal_question_quest *}
+						<br />
+						{* foreach from=$quest->choices item=choice *}
+						<input type="radio" value="{* $choice->banksoal_answer_id *}" name="answer{* $quest->history_answer_id *}" id="answer{* $quest->history_answer_id *}" {* if $quest->history_answer_answer eq $choice->banksoal_answer_id *}checked{*/if*} />{* $choice->banksoal_answer_order_str *}. {* $choice->banksoal_answer_text *}
+						<br />
+						{* /foreach *}
+						<br />
+						{* counter *}
+						{* /foreach *}
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>

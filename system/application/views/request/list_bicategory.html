@@ -1,0 +1,108 @@
+{* if ! $smarty.post.dialog *}
+      <script>
+      	function chagestatus(id, status)
+      	{
+      		f_onsubmit("{* $site_url *}/request/deletebicategory/" + id + "/" + status, "frmtemp", "status"+id, "Updating...", 
+      			function(data)
+      			{      			
+      				document.frmtemp.submit();
+      			}
+      		);      			
+      	}
+      	
+     	function search_onsubmit()
+      	{
+      		$("#keyword").val($("#_keyword").val());
+      		$("#searchby").val($("#_searchby").val());
+      		
+      		document.frmtemp.submit();
+          return false;
+      	}      	
+
+      	$(document).ready(
+      		function()
+      		{
+      			{* if $smarty.post.searchby *}
+      			$("#_searchby").val('{* $smarty.post.searchby *}');
+      			{* /if *}
+      		}
+      	);        	
+      </script>
+{* /if *}
+     <h2>BI Category</h2>     
+     {* if ! $smarty.post.dialog *}
+     <form method="post" onsubmit="javascript: return search_onsubmit(this);">
+      <p>Berikut ini adalah list BI Category<br />      
+        <br />
+      {* $sort_list_by *} <a href="#" onclick="javascript:sortby('bict_name', 'asc')"{* if $sortby eq 'bict_name' *}class="lite"{* /if *}>{* $name *}</a>{* if $sessmodules.master and ($is_admin eq 1 ) *} | <a href="#" onclick="javascript:sortby('bict_entrydate', 'asc')"{* if $sortby eq 'bict_entrydate' *}class="lite"{* /if *}>ENTRY DATE</a> | <a href="{* $site_url *}/request/formbicategory">{* $date_added *}</a>{* /if *}</p>
+      <p>{* $lsearch_by *}
+      <select name="_searchby" id="_searchby">
+      	<option value="bict_name">{* $name *}</option>
+      </select> 
+      <input type='text' name="_keyword" id="_keyword" class='formdefault' value="{* $smarty.post.keyword *}">
+      <input type='submit' value=" {* $lsearch *} ">
+      </p>     
+      </form>
+      {* else *}
+      	<form method="post" name="frmcatjab" id="frmcatjab">
+      		{* if $smarty.post.reference *}  
+      		<input type="hidden" name="reference" value="{* $smarty.post.reference *}" />
+      		{* /if *}
+      		{* if $smarty.post.training *}  
+      		<input type="hidden" name="training" value="{* $smarty.post.training *}" />
+      		{* /if *}      		
+      {* /if *}      
+      <table width="100%" cellpadding="3" class="tablelist">
+        <thead>
+          <tr>
+          	{* if $smarty.post.dialog *}
+          <th width="5%"><input type="checkbox" name="catjaball" id="catjaball" value="" onclick="javascript:catjaball_onclick(this)" /> </th>
+          {* /if *}
+            <th width="70%"><a href="#" onclick="javascript:sortby('bict_name', 'asc')" class="thead" title="{* $lsort_by_bict_name *} ">Name</a></th>
+            	{* if ! $smarty.post.dialog *}
+	            {* if $sessmodules.topic and ( $is_admin eq 1 ) *}
+	            <th width="10%">&nbsp;</th>
+	            {* /if *}
+		{* /if *}
+          </tr>
+         </thead>
+        <tbody>
+          {* counter start=1 print=false assign="no" *}
+        	{* foreach from=$list item=row *}
+          <tr{* if $no%2 eq 1 *} class="odd"{* /if *}>            
+            {* if ! $smarty.post.dialog *}            
+              <td class="odd"><a href="{* $site_url *}/request/formbicategory/{* $row->bict_id *}">{* $row->bict_name *}</a></td>
+              <td class="odd"><a href="{* $site_url *}/request/deletebicategory/{* $row->bict_id *}" onclick="javascript: return confirm('{* $confirm_delete *}');"><img src="{* $base_url *}images/b_del.gif" width="12" height="12" border="0" /></a></td>
+              {* else *}
+              <td colspan="2" class="odd">empty</td>
+            {* /if *}
+          </tr>           
+          {* counter *}
+          {* /foreach *}
+        </tbody>
+         {* if $smarty.post.dialog *}
+        <tfoot>
+          <tr>
+            	<td{* if $sessmodules.master and ( $is_admin eq 1 ) *} colspan="4"{* /if *}><input type="button" value="Save" onclick="javascript:savecatjab()" /></td>
+          </tr>
+        </tfoot>  
+        {* else *}      
+        <tfoot>
+          <tr>
+            	<td{* if $sessmodules.master and ( $is_admin eq 1 ) *} colspan="4"{* /if *}>{* $paging *}</td>
+          </tr>
+        </tfoot>  
+        {* /if *}
+      </table>
+      {* if $smarty.post.dialog *}
+      </form>
+      {* /if *}
+<br />      
+<form id="frmtemp" name="frmtemp" method="post" action="{* $site_url *}/request/bicategory">
+	<input type="hidden" id="limit" name="limit" value="{* $limit *}" />
+	<input type="hidden" id="sortby" name="sortby" value="{* $sortby *}" />
+	<input type="hidden" id="orderby" name="orderby" value="{* $orderby *}" />
+	<input type="hidden" id="offset" name="offset" value="{* $offset *}" />
+	<input type="hidden" id="keyword" name="keyword" value="{* $smarty.post.keyword *}" />
+	<input type="hidden" id="searchby" name="searchby" value="{* $smarty.post.searchby *}" />	
+</form>

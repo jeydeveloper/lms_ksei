@@ -1,0 +1,314 @@
+<script type="text/javascript" src="{* $base_url *}/js/jquery.blockUI.js"></script>
+
+
+<script>
+	var lasterror = null;
+    
+	function ildpform_onsubmit(status)
+	{
+ 
+		  $.blockUI({ message: '<img src="{* $base_url *}images/anim_wait.gif" /> Please wait ...' });
+	
+			$.post("{* $site_url *}/ildpform/save/"+status, $("#frmildp").serialize(),
+				function(r)
+				{
+					$.unblockUI();	
+					if (r.error)
+					{
+						if (lasterror != null)
+						{
+							$(lasterror).css("background-color", "#ffffff");
+						}
+						
+						$(r.cell).css("background-color", "#ff2200");
+						lasterror = r.cell;
+						
+					  alert(r.message);
+						return;
+					}
+					
+					alert(r.message);
+					page(0, r.ildpformid);
+				}
+				, "json"
+			);
+			
+			return false;
+	}
+	
+	window.onbeforeunload =
+		function() 
+		{
+			return "";
+		}
+		
+		function training_onchange2(cat, no, def)
+		{
+			$.post("{* $site_url *}/ildpdevarea/bytraining", {catalog: cat, def: def},
+				function(r)
+				{
+					$("#dvdevarea"+no).html(r.html);
+				}
+				, "json"
+			);
+		}
+		
+		function training_onchange(id,cat, no, def)
+		{
+			$.post("{* $site_url *}/ildpmethod/bytraining", {detail_id:id, catalog: cat, def: def},
+				function(r)
+				{
+					$("#dvmethod"+no).html(r.html);
+					training_onchange2(cat, no, r.devarea_default);
+				}
+				, "json"
+			);
+		}	
+		
+		$(document).ready(
+			function()
+			{
+				{* assign var="i" value=0 *}
+				{* foreach from=$ildpcatalogs item=catalogs key=categoryname *}
+					{* counter start=0 print=false assign="no" *}
+					{* foreach from=$allmaxlines item=allmaxline *} 
+						{* if $allmaxline lt $catalogs.total and $no < $catalogs.maxline *}
+							{* if $catalogs.drafts and $no lt $catalogs.ndrafts *}
+								//training_onchange({* $catalogs.drafts[$no]->ildp_detail_id *},{* $catalogs.drafts[$no]->ildp_detail_category_id *}, {* $i *}, {* $catalogs.drafts[$no]->ildp_detail_method_id *});
+								//training_onchange2({* $catalogs.drafts[$no]->ildp_detail_category_id *}, {* $i *}, '{* $catalogs.drafts[$no]->ildp_detail_devarea *}');
+							{* /if *}
+
+						{* assign var="i" value=$i+1 *}
+						{* /if *}
+						{* counter *}
+					{* /foreach *}
+				{* /foreach *}
+			}
+		);
+</script>
+<form id="frmildp" name="frmildp" method="post" action="" onsubmit="javascript: return ildpform_onsubmit(1)">
+	<table width="735" border="1" class="tablelist" style="border-collapse:collapse">
+  <thead>
+  <tr>
+    <th width="60">{* $lno *}</th>
+    <!-- <th width="230">{* $lildp_form_header *}</th>-->
+    <th width="280">{* $ldevelopment_area *}</th>
+    <th width="280">{* $llearning_method_dev *}</th>
+    <th >{* $ltimeline *}</th>
+  </tr>
+  </thead>
+		<tbody>
+			{* assign var="i" value=0 *}
+			{* foreach from=$ildpcatalogs item=catalogs key=categoryname *}
+			<tr>
+				<td colspan="5"><b>{* $categoryname *}</b></td>
+			</tr>
+				{* counter start=0 print=false assign="no" *}
+				{* foreach from=$allmaxlines item=allmaxline *} 
+					{* if $allmaxline lt $catalogs.total and $no < $catalogs.maxline *}
+					<input type="hidden" name="categoryid[]" id="categoryid[]" value="{* $catalogs.data[0]->ildp_catalog_category *}" />
+					<input type="hidden" name="isothers[]" id="isothers[]" value="0" />
+					<tr> 
+						<td class="odd">{* $no+1 *}</td>
+						<!-- <td class="odd" id="tdtraining{* $i *}">
+							{* if $catalogs.drafts and $no lt $catalogs.ndrafts *}
+								{* assign var="catselect" value=$catalogs.drafts[$no]->ildp_catalog_id *}								
+							{* else *}
+								{* assign var="catselect" value="" *}
+							{* /if *}
+							
+							{* if $catselect and ($catalogs.drafts[$no]->ildp_status eq 2) and ($catalogs.drafts[$no]->ildp_detail_status eq 1) *}
+								{* assign var="iscanedit" value=1 *}
+								<input type="hidden" name="training[]" id="training[]" value="{* $catselect *}" /> {* $catalogs.drafts[$no]->ildp_catalog_training *}
+							{* else *}							
+								{* assign var="iscanedit" value=0 *}
+							<select name="training[]" id="training[]" class="selectmedium" onchange="javascript:training_onchange(0,this.value, {* $i *})">
+								<option value=""></option>
+							{* foreach from=$catalogs.data item=catalog *}							
+								<option value="{* $catalog->ildp_catalog_id *}"{* if $catalog->ildp_catalog_id eq $catselect*} selected{*/if*}>{* $catalog->ildp_catalog_training *}</option>							
+							{* /foreach *}
+							</select>
+							{* /if *}
+						</td> -->
+						
+						<td class="odd" id="tddevarea{* $i *}">
+							{* if $iscanedit *}
+							<input type="hidden" name="devarea[]" id="devarea[]" value="{* $catalogs.drafts[$no]->ildp_detail_devarea *}" /> {* $catalogs.drafts[$no]->ildp_detail_devarea *}
+							{* elseif $catalogs.data[$no]->ildp_category_areadev_type eq 1 *}
+							<div id="dvdevarea{* $i *}">
+								{* assign var="ildpcategory" value=$catalogs.data[$no]->ildp_catalog_category *}
+								<select class='selectmedium' name="devarea[]" id="devarea[]">
+									<option value=""></option>
+									{* foreach from=$areadevs[$ildpcategory] item=areadev *}
+										<option value="{* $areadev->dev_area_id *}" {* if $catalogs.drafts[$no]->ildp_detail_devarea eq $areadev->dev_area_id *}selected{* /if *} >{* $areadev->dev_area_title *}</option>
+									{* /foreach *}									
+								</select>
+							</div>
+							{* else *}
+							<div id="dvdevarea{* $i *}">
+								<input class='formmedium' type="text" name="devarea[]" id="devarea[]" value="{* $catalogs.drafts[$no]->ildp_detail_devarea *}" />
+							</div>
+							{* /if *}
+						</td>
+						
+						<td class="odd" id="tdmethod{* $i *}">
+							{* if $iscanedit *}
+							<input type="hidden" name="method[]" id="method[]" value="{* $catalogs.drafts[$no]->ildp_detail_method_id *}" /> {* $catalogs.drafts[$no]->ildp_method_name *}
+							{* else *}
+							<div id="dvmethod{* $i *}">
+								{* assign var="ildpcategory" value=$catalogs.data[$no]->ildp_catalog_category *}
+								<select name="method[]" id="method[]"  class="selectmedium" >
+									<option value=""></option>
+									{* foreach from=$methods[$ildpcategory] item=method *}
+										<option value="{* $method->ildp_method_id *}"{* if $method->ildp_method_id eq $catalogs.drafts[$no]->ildp_method_id *} selected{* /if *}>{* $method->ildp_method_name *}</option>
+									{* /foreach *}
+								</select>
+							
+							</div>
+							{* /if *}
+						</td>
+							{* if $iscanedit *}
+							<input type="hidden" name="budget[]" id="budget{* $allmaxline *}" class="formshort" value="{* $catalogs.drafts[$no]->ildp_detail_budget_fmt *}" /> <div  style="text-align: right;">{* $catalogs.drafts[$no]->ildp_detail_budget_fmt *}</div>
+							{* elseif $catalogs.drafts and $no lt $catalogs.ndrafts*}
+							<input type="hidden" name="budget[]" id="budget{* $allmaxline *}" class="formshort" value="{* $catalogs.drafts[$no]->ildp_detail_budget_fmt *}" style="text-align: right;" />
+							{* else *}
+							<input type="hidden" name="budget[]" id="budget{* $allmaxline *}" class="formshort" value="0" />
+							{* /if *}							
+						<td id="tdtimelines{* $i *}">
+							{* if $catalogs.drafts and $no lt $catalogs.ndrafts*}
+								<select class="selectmini"  name="status[]" id="status{* $allmaxline *}">
+									<option value=""></option>
+									{* foreach from=$timeline_config key=timeline_value item=timeline_label*}							
+										<option value="{* $timeline_value *}"{* if $catalogs.drafts[$no]->ildp_detail_timeline eq $timeline_value*} selected{*/if*}>{* $timeline_label *}</option>							
+									{* /foreach *}
+								</select>
+							{* else *}
+								<select class="selectmini"  name="status[]" id="status{* $allmaxline *}">
+									<option value=""></option>
+									{* foreach from=$timeline_config key=timeline_value item=timeline_label*}							
+										<option value="{* $timeline_value *}"{* if $catalogs.drafts[$no]->ildp_detail_timeline eq $timeline_value*} selected{*/if*}>{* $timeline_label *}</option>							
+									{* /foreach *}
+								</select>						
+							{* /if *}														
+						</td>
+					</tr>
+					{* assign var="i" value=$i+1 *}
+					{* /if *}
+					{* counter *}					
+				{* /foreach *}
+			{* /foreach *}
+			{* if $others *}
+				<tr>
+					<td colspan="5"><b>{* $others->ildp_category_name *}</b></td>
+				</tr>			
+				{* counter start=0 print=false assign="no" *}
+				{* foreach from=$otherlines item=otherline *}
+				<input type="hidden" name="categoryid[]" id="categoryid[]" value="{* $others->ildp_catalog_category *}" />
+				<input type="hidden" name="isothers[]" id="isothers[]" value="1" />
+				<tr> 
+					<td class="odd">{* $no+1 *}</td>
+					<!-- <td class="odd" id="tdtraining{* $i *}">
+						{* if $otherline.draft *}
+							{* if $otherline.draft->ildp_status and ($otherline.draft->ildp_detail_status eq 1) *}
+							<input type="hidden" name="training[]" id="trainingother{$otherline.no}" class="formmedium" value="{* $otherline.draft->ildp_catalog_training *}" />{* $otherline.draft->ildp_catalog_training *}
+							{* else *}
+							<input type="text" name="training[]" id="trainingother{$otherline.no}" class="formmedium" value="{* $otherline.draft->ildp_catalog_training *}" />
+							{* /if *}						
+						{* else *}
+						<input type="text" name="training[]" id="trainingother{$otherline.no}" class="formmedium" value="" />
+						{* /if *}
+					</td>-->	
+					
+					<td class="odd" id="tddevarea{* $i *}">
+						{* if $otherline.draft->ildp_status and ($otherline.draft->ildp_detail_status eq 1) *}
+						<input type="hidden" name="devarea[]" id="devarea[]" value="{* $otherline.draft->ildp_detail_devarea *}" />{* $otherline.draft->ildp_detail_devarea *}
+						{* else *}
+							<input class='formmedium' type="text" name="devarea[]" id="devarea[]" value="{* $otherline.draft->ildp_detail_devarea *}" />
+						{* /if *}
+					</td>
+						
+						
+					<td class="odd" id="tdmethod{* $i *}">
+						{* if $otherline.draft->ildp_status and ($otherline.draft->ildp_detail_status eq 1) *}
+						<input type="hidden" name="method[]" id="method[]" value="{* $otherline.draft->ildp_method_id *}" />{* $otherline.draft->ildp_method_name *}
+						{* else *}
+						<select name="method[]" id="method[]" class="selectmedium">
+							<option value=""></option>
+							{* foreach from=$methodsothers item=method *}
+							<option value="{* $method->ildp_method_id *}"{* if $method->ildp_method_id eq $otherline.draft->ildp_method_id *} selected{* /if *}>{* $method->ildp_method_name *}</option>
+							{* /foreach *}
+						</select>
+						{* /if *}
+					</td>
+						{* if $otherline.draft *}
+							{* if $otherline.draft->ildp_status and ($otherline.draft->ildp_detail_status eq 1) *}
+							<input type="hidden" name="budget[]" id="budget{* $allmaxline *}" class="formshort" value="{* $otherline.draft->ildp_detail_budget_fmt *}" /><div  style="text-align: right;">{* $otherline.draft->ildp_detail_budget_fmt *}</div>
+							{* else *}
+							<input type="hidden" name="budget[]" id="budget{* $allmaxline *}" class="formshort" value="{* $otherline.draft->ildp_detail_budget_fmt *}" style="text-align: right;" />
+							{* /if *}						
+						{* else *}
+						<input type="hidden" name="budget[]" id="budget{* $allmaxline *}" class="formshort" value="0" />
+						{* /if *}
+						<td id="tdtimelines_other{* $i *}">
+						{* if $otherline.draft *}
+							{* if $otherline.draft->ildp_status and ($otherline.draft->ildp_detail_status eq 1) *}
+								<select class="selectmini"  name="status[]" id="statusothers{* $allmaxline *}">
+									<option value=""></option>
+									{* foreach from=$timeline_config key=timeline_value item=timeline_label*}							
+										<option value="{* $timeline_value *}"{* if $otherline.draft->ildp_detail_timeline eq $timeline*} selected{*/if*}>{* $timeline_label *}</option>							
+									{* /foreach *}
+								</select>
+							{* else *}
+								<select class="selectmini"  name="status[]" id="statusothers{* $allmaxline *}">
+									<option value=""></option>
+									{* foreach from=$timeline_config key=timeline_value item=timeline_label*}							
+										<option value="{* $timeline_value *}"{* if $otherline.draft->ildp_detail_timeline eq $timeline_value*} selected{*/if*}>{* $timeline_label *}</option>							
+									{* /foreach *}
+								</select>							
+							{* /if *}
+						{* else *}
+								<select class="selectmini"  name="status[]" id="statusothers{* $allmaxline *}">
+									<option value=""></option>
+									{* foreach from=$timeline_config key=timeline_value item=timeline_label*}							
+										<option value="{* $timeline_value *}">{* $timeline_label *}</option>							
+									{* /foreach *}
+								</select>						
+						{* /if *}														
+						</td>
+
+				</tr>
+				{* counter *}
+				{* assign var="i" value=$i+1 *}
+				{* /foreach *}
+			{* /if *}
+			
+			
+			
+			<tr height='20px'>
+				<td colspan="5"><b>{* $lcareer_aspiration|upper *}</b></td>
+			</tr>
+			<tr> 
+				<td class="odd" colspan='2'>
+					<b>{* $lshort_term *}</b>:<br/>
+					<input class='formmedium' type="text" name="short_term" id="short_term" value="{* $rows[0]->ildp_form_short_term *}" />
+				</td>
+				<td class="odd" colspan='2'>
+					<b>{* $llong_term *}</b>: <br/>
+					<input class='formmedium' type="text" name="long_term" id="long_term" value="{* $rows[0]->ildp_form_long_term *}" />
+				</td>
+			</tr>
+			{* if $shortterm or $longterm *}
+			<tr>
+				<td class="odd" colspan='2'>{* $shortterm *}</td>
+				<td class="odd" colspan='2'>{* $longterm *}</td>
+			</tr>
+			{* /if *}
+		</tbody>
+	</table>
+	<br />
+	<input type="submit" value="{* $lstart_approval *}" />
+	{* if ! $ishasapprove *}
+	<input type="button" class="formbutton" value="{* $lsave_form *}" onclick="javascript: ildpform_onsubmit(0)" /> 
+	{* /if *}
+	<input type="button" value="{* $lcancel *}" onclick="javascript: page()" />
+</form>

@@ -1,0 +1,51 @@
+      <script>
+      	<!--
+		$(document).ready(
+			function()
+			{						
+			}
+		);  
+		
+		function loadunitsoaldetail(id)
+		{
+			{* foreach from=$list item=row *}
+			$("#banksoalunit1{* $row->banksoal_unit_id *}").css("background-color", "#ffffff");
+			$("#banksoalunit2{* $row->banksoal_unit_id *}").css("background-color", "#ffffff");
+			{* /foreach *}
+			
+			$.post("{* $site_url *}/banksoal/unitsoaldetail/", {id: id, readonly: 1},
+				function (data)
+				{
+					$("#banksoalunit1"+id).css("background-color", "#cecece");
+					$("#banksoalunit2"+id).css("background-color", "#cecece");
+					$("#dvunitsoaldetail").html(data);		
+				}
+			);
+		}      			
+      	-->
+      </script>
+      <h2>{* $lunit_soal *}</h2>
+      <table width="100%" cellpadding="3" class="tablelist">
+        <thead>
+          <tr>
+            <th width="60%">{* $lunit_soal_name *}</th>            
+            <th>&nbsp;</th>
+          </tr>
+         </thead>
+         <tbody>
+          {* counter start=1 print=false assign="no" *}
+          {* foreach from=$list item=row *}
+          <tr{* if $no%2 eq 1 *} class="odd"{* /if *}>
+            <td class="odd" id="banksoalunit1{* $row->banksoal_unit_id *}"><a href="javascript:loadunitsoaldetail({* $row->banksoal_unit_id *})">{* $row->banksoal_unit_name *}</a></td>
+            <td id="banksoalunit2{* $row->banksoal_unit_id *}"><a href="javascript:unitsoalsetting({* $row->banksoal_unit_id *}, 1, 0,'{* $row->banksoal_unit_name *}' )">{* $ldefault_setting *}</a> | <a href="javascript:unitsoalsetting({* $row->banksoal_unit_id *}, 2, 0,'{* $row->banksoal_unit_name *}' )">{* $ljabatan_setting *}</a></td>            	
+          </tr>          	
+          	{* counter *}
+          {* /foreach *}                          
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="2" height="3">&nbsp;</td>
+          </tr>         
+        </tfoot>
+      </table>
+     <div id="dvunitsoaldetail"></div>     

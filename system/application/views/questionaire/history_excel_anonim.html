@@ -1,0 +1,34 @@
+<table width="100%" cellpadding="3" border="1">
+  <thead>
+    <tr>
+      <th width="5%">No</th>
+      <th width="20%">Nama</th>
+      <th width="10%">Tanggal Pengisian</th>
+      {* if $col_history *}
+      {* foreach from=$col_history.no_urut item=row key=key *}
+      <th>{* $row *} ({* $col_history.soal.$key *})</th>
+      {* /foreach *}
+      {* /if *}
+    </tr>
+  </thead>
+  <tbody>
+    {* counter start=1 print=false assign="no" *}
+    {* foreach from=$row_history item=row *}
+    <tr{* if $no%2 eq 1 *} class="odd"{* /if *}>
+      <td class="odd">{* $no *}</td>
+      <td class="odd">Anonim</td>
+      <td class="odd">{* $row.tanggalPengisian *}</td>
+
+      {* if $col_history *}
+      {* foreach from=$col_history.no_urut item=row2 key=key *}
+      {* assign var="x" value=$row.jawaban.$key *}
+      {* assign var="y" value=$x-1 *}
+      <td>{* $col_history.optional.$key.$y *}</td>
+      {* /foreach *}
+      {* /if *}
+
+    </tr>
+    {* counter *}
+    {* /foreach *}
+  </tbody>
+</table>

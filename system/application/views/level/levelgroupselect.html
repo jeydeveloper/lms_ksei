@@ -1,0 +1,6 @@
+    	<select name="levelgroup[]" id="levelgroup{* $nth *}" class='formdefault' onchange="javascript:group1_onchange(this, {* $nth *})">
+    	<option value="">--- {* $rowlevel->level_name *} ---</option>
+    	{* foreach from=$rows item=row *}
+    	<option value="{* $row->level_group_id *}" {* if $def eq $row->level_group_id *}selected{* /if *}>{* $row->level_group_name *}</option>
+    	{* /foreach *}
+    	</select>

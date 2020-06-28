@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>NCCLP2</title>
+	<!-- Tell the browser to be responsive to screen width -->
+	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+	<!-- Bootstrap 3.3.7 -->
+	<link rel="stylesheet" href="{*$base_url*}assets/bower_components/bootstrap/dist/css/bootstrap.min.css">
+	<!-- Font Awesome -->
+	<link rel="stylesheet" href="{*$base_url*}assets/bower_components/font-awesome/css/font-awesome.min.css">
+	<!-- Ionicons -->
+	<link rel="stylesheet" href="{*$base_url*}assets/bower_components/Ionicons/css/ionicons.min.css">
+	<!-- Theme style -->
+	<link rel="stylesheet" href="{*$base_url*}assets/css/AdminLTE.min.css">
+	<!-- AdminLTE Skins. Choose a skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
+	<link rel="stylesheet" href="{*$base_url*}assets/css/skins/_all-skins.min.css">
+
+	<!-- bootstrap datepicker -->
+	<link rel="stylesheet" href="{*$base_url*}assets/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
+
+	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--[if lt IE 9]>
+	<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+	<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	<![endif]-->
+
+	<!-- jQuery 3 -->
+	<script src="{*$base_url*}assets/bower_components/jquery/dist/jquery.min.js"></script>
+
+	<!-- Google Font -->
+	<link rel="stylesheet"
+		  href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+
+	<style>
+		#active a {
+			color: #0000ff !important;
+			font-weight: bold;
+		}
+		#message font{color: #fff !important;}
+		.skin-blue .sidebar-menu>li.active>a {
+			border-left-color: #F7B002;
+		}
+		.mg-btm-10 {
+			margin-bottom: 10px;
+		}
+		.content-paging form {
+			display: inline-block;
+		}
+		.content-paging {
+			padding: 10px;
+			background-color: #DCDCDC;
+		}
+		.skin-blue .main-header .navbar .sidebar-toggle:hover{
+			background-color:#1d81d1;
+			color: #ffffff !important;
+		}
+		.main-header .logo{
+			padding: 0 15px 0 5px;
+		}
+		.navbar-toggle .icon-bar {
+			background-color: #888;
+		}
+		.breadcrumb{
+			display: none;
+		}
+	</style>
+
+	<style>
+		.box-me {
+			height: 248px;
+			margin-right: -15px;
+			margin-left: -15px;
+			overflow: hidden;
+		}
+		.row {
+			margin-right: 0;
+			margin-left: 0;
+			border-bottom: solid 1px #EAEDF0;
+		}
+		.responsive {
+			width: 100%;
+		}
+		h1,h2,h3{
+			margin: 0;
+			color: #ffffff;
+			line-height: 60px;
+		}
+		h1{
+			font-size: 45px;
+		}
+		.arrow-left {
+			width: 0;
+			height: 0;
+			border-top: 15px solid transparent;
+			border-bottom: 15px solid transparent;
+			border-right: 15px solid #ffffff;
+			position: absolute;
+			top: 50%;
+			right: 0;
+			margin-top: -15px;
+		}
+		.arrow-right {
+			width: 0;
+			height: 0;
+			border-top: 15px solid transparent;
+			border-bottom: 15px solid transparent;
+			border-left: 15px solid #ffffff;
+			position: absolute;
+			top: 50%;
+			left: 0;
+			margin-top: -15px;
+		}
+		.box-me .row {
+			border-bottom: 0;
+		}
+		.main-header .logo {
+			color: #ffffff;
+		}
+	</style>
+
+	<link rel="stylesheet" href="{*$base_url*}css/custom.css">
+</head>
+<body class="hold-transition fixed sidebar-mini" style="background-color: #ecf0f5;">
+
+{* if $sessmodules.trainee and ! $sess.asadmin *}
+{* if ($page eq "training" or $page eq "certificate") and $subpage eq "historydetail" *}
+{* assign var="isprofile" value=true *}
+{* elseif ($page eq "user" and ($subpage eq "info" or $subpage eq "changepass" or $subpage eq "editinfo")) or ($page eq "training" and $subpage eq "history" and ! $sess.asadmin) or ($page eq "certificate" and $subpage eq "history" and ! $sess.asadmin) or ($page eq "resources" and (! $sess.asadmin and ($subpage eq "history" or $subpage eq "historydetail"))) *}
+{* assign var="isprofile" value=true *}
+{* else *}
+{* assign var="isprofile" value=false *}
+{* /if *}
+{* elseif ($page eq "user" and ($subpage eq "info" or $subpage eq "changepass" or $subpage eq "editinfo")) or ($page eq "training" and $subpage eq "history" and ! $sess.asadmin) or ($page eq "certificate" and $subpage eq "history" and ! $sess.asadmin) or ($page eq "resources" and (! $sess.asadmin and ($subpage eq "history" or $subpage eq "historydetail"))) *}
+{* assign var="isprofile" value=true *}
+{* else *}
+{* assign var="isprofile" value=false *}
+{* /if *}
+
+{* if $sessmodules.trainee and ! $sess.asadmin *}
+{* if ($page eq "training" or $page eq "certificate") and $subpage eq "historydetail" *}
+{* assign var="istraining" value=false *}
+{* elseif ($page eq "topic" and $subpage ne "category") or ($page eq "training" and $subpage ne "history") or ($page eq "certificate" and $subpage ne "history") or $page eq "banksoal" or ($page eq "resources" and $subpage ne "history" and $subpage ne "historydetail") *}
+{* assign var="istraining" value=true *}
+{* else *}
+{* assign var="istraining" value=false *}
+{* /if *}
+{* elseif $page eq "topic" or $page eq "training" or $page eq "certificate" or $page eq "banksoal" or $page eq "resources" or $page eq "classroom" or ($page eq "import" and $subpage eq "topic_traning") or ($page eq "user" and $subpage eq "activities") or ($page eq "activities") *}
+{* assign var="istraining" value=true *}
+{* else *}
+{* assign var="istraining" value=false *}
+{* /if *}
+
+<div class="wrapper" style="margin-top: 65px;background-color: #fff;">
+
+	<header class="main-header">
+		<!-- Logo -->
+		{* if !$website_logo *}
+			{* if !$website_title *}
+			<a href="{*$base_url*}" class="logo" style="background-color: #fff;text-align: left;padding: 0;">
+				<img style="height: 50px;vertical-align: initial;" src="{*$base_url*}assets/img/logo-company.png" srcset="{*$base_url*}assets/img/logo-company@2x.png 2x,
+	         {*$base_url*}assets/img/logo-company@3x.png 3x">
+			</a>
+			{* else *}
+			<a href="{*$base_url*}" class="logo" style="background-color: #fff;text-align: left;">
+				<img height="30px" src="{*$base_url*}assets/img/logo-company.png" srcset="{*$base_url*}assets/img/logo-company@2x.png 2x,
+	         {*$base_url*}assets/img/logo-company@3x.png 3x"> <span style="font-size: 16px;">NCC LMS</span>
+			</a>
+			{* /if *}
+		{* else *}
+			{* if !$website_title *}
+			<a href="{*$base_url*}" class="logo" style="background-color: #fff;text-align: left;padding: 0;">
+				<img style="height: 50px;vertical-align: initial;" src="{* $website_logo *}">
+			</a>
+			{* else *}
+			<a href="{*$base_url*}" class="logo" style="background-color: #fff;text-align: left;">
+				<img height="30px" src="{* $website_logo *}"> <span style="font-size: 16px;">{* $website_title *}</span>
+			</a>
+			{* /if *}
+		{* /if *}
+		<!-- Header Navbar: style can be found in header.less -->
+		<nav class="navbar navbar-static-top" style="background-color: #ffffff;">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" style="border-color: #ddd;">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+			</div>
+
+			<!-- Sidebar toggle button-->
+			<!--<a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button" style="color: #9d9fa2;">-->
+			<a href="#" class="sidebar-toggle" role="button" style="color: #9d9fa2;display: none;">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</a>
+
+			<div class="navbar-custom-menu collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+				<ul class="nav navbar-nav" style="font-size: 12px;">
+					{* if $sess *}
+					<li><a href="{* $base_url *}" id="current" style="color: #9d9fa2;text-transform: uppercase;">{* $home *}</a></li>
+					<li{* if $isprofile or (($page eq "ildpform" and ! $sess.asadmin) or $page eq "ildpapproval" or $page eq "ildpapprovalhist" or $page eq "ildphist") *} id="active"{*/if*}><a href="{* $site_url *}/user/info" style="color: #9d9fa2;text-transform: uppercase;">{* $your_profile *}</a></li>
+					{* if $sessmodules.trainee and ! $sess.asadmin *}
+					<li{* if $page eq "topic" and $subpage eq "category" *} id="active"{*/if*}><a href="{* $site_url *}/topic/category" style="color: #9d9fa2;text-transform: uppercase;">{* $lcategory1 *}</a></li>
+					<li{* if $istraining or ($page eq "ildp" and ($subpage ne "myform" and $subpage ne "approval") ) *} id="active"{*/if*}><a href="{* $site_url *}/topic/" style="color: #9d9fa2;text-transform: uppercase;">{* $llearning_topics *}</a></li>
+					<!--<li{* if ($page eq "request" and ($subpage eq "training" or $subpage eq "formtraining" or $subpage eq "approval")) *} id="active"{*/if*}><a href="{* $site_url *}/request/training" style="color: #9d9fa2;text-transform: uppercase;">Request Training</a></li>-->
+					{* else *}
+					{* if $sess.user_type eq 0 or $sessmodules.category or $sessmodules.topic or $sessmodules.training or $sessmodules.certificate or $sessmodules.classroom or $sessmodules.resources or $ishavedelegetion *}
+					{* if $sess.user_type eq 0 or $sessmodules.category *}
+					<li{* if $istraining or ($page eq "user" and $subpage eq "activities") or ($page eq "activities") *} id="active"{*/if*}><a href="{* $site_url *}/topic/category" style="color: #9d9fa2;text-transform: uppercase;">{* $llearning_admin *}</a></li>
+					{* elseif $sessmodules.topic *}
+					<li{* if $istraining *} id="active"{*/if*}><a href="{* $site_url *}/topic/" style="color: #9d9fa2;text-transform: uppercase;">{* $llearning_admin *}</a></li>
+					{* elseif $sessmodules.training or $ishavedelegetion  *}
+					<li{* if $istraining *} id="active"{*/if*}><a href="{* $site_url *}/training/showlist" style="color: #9d9fa2;text-transform: uppercase;">{* $llearning_admin *}</a></li>
+					{* elseif $sessmodules.certificate *}
+					<li{* if $istraining  *} id="active"{*/if*}><a href="{* $site_url *}/certificate" style="color: #9d9fa2;text-transform: uppercase;">{* $llearning_admin *}</a></li>
+					{* elseif $sessmodules.classroom *}
+					<li{* if $istraining *} id="active"{*/if*}><a href="{* $site_url *}/classroom" style="color: #9d9fa2;text-transform: uppercase;">{* $llearning_admin *}</a></li>
+					{* elseif $sessmodules.resources *}
+					<li{* if $istraining *} id="active"{*/if*}><a href="{* $site_url *}/resources" style="color: #9d9fa2;text-transform: uppercase;">{* $llearning_admin *}</a></li>
+					{* /if *}
+					{* /if *}
+					{* /if *}
+					{* if $sessmodules.ildpadmin and $sess.asadmin and $showildp eq 1 *}
+					<li{* if $page eq "ildp" or $page eq "ildpcatalog" or $page eq "ildpmethod" or $page eq "hrrm" or $page eq "hrld" or $page eq "ildpcategory" or $page eq "ildpregperiod" or $page eq "ildpreport" or $page eq "ildpqueue" or ($page eq "ildpform" and $sess.asadmin) or ($page eq "ildpformimport")  *} id="active"{*/if*}><a href="{* $site_url *}/ildpcatalog/" style="color: #9d9fa2;text-transform: uppercase;">{* $lildp_admin *}</a></li>
+					{* /if *}
+					{* if $sess.asadmin *}
+					{* if $sess.user_type eq 0 or $sessmodules.user or $sessmodules.right *}
+					<li{* if ($page eq "user" and $subpage eq "showlist") or $page eq "reminder" or $page eq "level" or $page eq "jabatan" or $page eq "func" or $page eq "right" *} id="active"{*/if*}><a href="{* $site_url *}/user/showlist/" style="color: #9d9fa2;text-transform: uppercase;">{* $luser_admin *}</a></li>
+
+					<li{* if ($page eq "user" and $subpage eq "admin_news") *} id="active"{*/if*}><a href="{* $site_url *}/user/admin_news/" style="color: #9d9fa2;text-transform: uppercase;">{* $ladmin_news *}</a></li>
+					{* /if *}
+					{* if $sess.user_type eq 0 or $sessmodules.master or $sessmodules.right *}
+					{* if $sessmodules.master *}
+					<li{* if $page eq "reminder" or $page eq "generalsetting" or $page eq "lokasi" or ($page eq "import" and $subpage eq "masterdata")  *} id="active"{*/if*}><a href="{* $site_url *}/generalsetting/" style="color: #9d9fa2;text-transform: uppercase;">{* $lsettings *}</a></li>
+					{* else *}
+					<li{* if $page eq "reminder" or $page eq "generalsetting" or $page eq "lokasi" or ($page eq "import" and $subpage eq "masterdata")  *} id="active"{*/if*}><a href="{* $site_url *}/generalsetting/" style="color: #9d9fa2;text-transform: uppercase;">{* $lsettings *}</a></li>
+					{* /if *}
+					{* /if *}
+					{* /if *}
+					{* if $sess.asadmin and $sessmodules.trainee *}
+					<li><a href="{* $site_url *}/user/astrainee" style="color: #9d9fa2;text-transform: uppercase;">{* $ltrainee_menu *}</a></li>
+					{* /if *}
+					{* if $sessmodules.trainee and ! $sess.asadmin and $sessmodulesadmin *}
+					<li><a href="{* $site_url *}/user/asadmin" style="color: #9d9fa2;text-transform: uppercase;">{* $ladmin_menu *}</a></li>
+					{* /if *}
+					{* if $sess.asadmin and $sessmodules.report *}
+					<li{* if $page eq "report"  *} id="active"{*/if*}><a href="{* $site_url *}/report/" style="color: #9d9fa2;text-transform: uppercase;">{* $lreport *}</a></li>
+					{* /if *}
+					<li><a href="{* $site_url *}/user/logout" style="color: #9d9fa2;text-transform: uppercase;">{* $logout *}</a></li>
+					{* /if *}
+				</ul>
+			</div>
+		</nav>
+	</header>
+
+	<div class="wrapper">
+		<div style="margin-top: 5px;">&nbsp;</div>
+	{* foreach from=$splitList key=k item=row *}
+	{* if ($k % 2) == 1 *}
+	<div class="row">
+		{* foreach from=$row item=row2 *}
+		<div class="col-md-3">
+			<div class="box-me">
+				<div class="row">
+					<div class="col-xs-12" style="padding: 25px;">
+						<p style="color: #A8B4BF;">BY ADMIN | {* $row2->entrydate *}</p>
+						<p style="color: #2D475C;font-weight: bold;font-size: 16px;">{* $row2->news_desc *}</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="box-me">
+				<img class="responsive" src="{* $row2->url_image *}" alt="">
+				<div class="arrow-right"></div>
+			</div>
+		</div>
+		{* /foreach *}
+	</div>
+	{* else *}
+	<div class="row">
+		{* foreach from=$row item=row2 *}
+		<div class="col-md-3">
+			<div class="box-me">
+				<img class="responsive" src="{* $row2->url_image *}" alt="">
+				<div class="arrow-left"></div>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="box-me">
+				<div class="row">
+					<div class="col-xs-12" style="padding: 25px;">
+						<p style="color: #A8B4BF;">BY ADMIN | {* $row2->entrydate *}</p>
+						<p style="color: #2D475C;font-weight: bold;font-size: 16px;">{* $row2->news_desc *}</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		{* /foreach *}
+	</div>
+	{* /if *}
+	{* /foreach *}
+	</div>
+
+	<footer class="main-footer">
+		<div class="pull-right hidden-xs">
+			Powered by NCC. Rev. 2.75
+		</div>
+		&copy; Copyright 2010 - 2018 Netpolitan. All rights reserved.
+	</footer>
+
+</div>
+<!-- ./wrapper -->
+
+<!-- Bootstrap 3.3.7 -->
+<script src="{*$base_url*}assets/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<!-- Slimscroll -->
+<script src="{*$base_url*}assets/bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+<!-- FastClick -->
+<script src="{*$base_url*}assets/bower_components/fastclick/lib/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="{*$base_url*}assets/js/adminlte.min.js"></script>
+<!-- bootstrap datepicker -->
+<script src="{*$base_url*}assets/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script>
+    $.fn.datepicker.defaults.autoclose = true;
+</script>
+<script src="{*$base_url*}assets/js/demo.js"></script>
+<script src="{*$base_url*}js/common.js"></script>
+</body>
+</html>

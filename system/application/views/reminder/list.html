@@ -1,0 +1,33 @@
+      <table width="100%" cellpadding="3" class="tablelist">
+        <thead>
+          <tr>
+            <th width="20%"><a href="#" onclick="javascript:sortby('user_npk')" class="thead">{* $lnpk *}</a></th>
+            <th><a href="#" onclick="javascript:sortby('user_email')" class="thead">{* $lemail *}</a></th>            
+            <th width="20%">{* $lstatus *}</th>            
+            <th width="10%">&nbsp;</th>
+          </tr>
+          {* counter start=1 print=false assign="no" *}
+          {* foreach from=$rows item=row *}
+          <tr{* if $no%2 eq 1 *} class="odd"{* /if *}>  
+          	<td>{* $row->user_npk *}</td>          
+          	<td>{* $row->email *}</td>
+          	<td>{* $row->status *}</td>
+          	{* if $row->reminderuser_status eq 1 *}
+          	<td><a href="javascript:remove({* $row->reminderuser_id *})"><img src="{* $base_url *}images/16/delete.png" border="0"></a></td>
+          	{* else *}
+          	<td><a href="javascript:restore({* $row->reminderuser_id *})"><img src="{* $base_url *}images/16/active.png" border="0"></a></td>
+          	{* /if *}          	
+          </tr>          	
+          	{* counter *}
+          {* /foreach *}
+          
+        </thead>
+        <tbody>
+        </tbody>
+        <tfoot>
+          <tr>
+            	<td colspan="4">{* $paging *}</td>
+          </tr>
+        </tfoot>        
+      </table>
+<br />

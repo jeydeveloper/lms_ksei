@@ -1,0 +1,32 @@
+{*if $groups *}
+	{*if $selectid eq "dir"*}
+	<select style="width:350px" name="{*$selectid*}" id="{*$selectid*}" onchange="javascript:dir_onchange('dvgrp', 'grp', this.value)">
+		<option value="0">--- {* $all_directorat *} ---</option>
+		
+	{*elseif $selectid eq "grp"*}
+	<select style="width:350px" name="{*$selectid*}" id="{*$selectid*}" onchange="javascript:dir_onchange('dvdept', 'dept', this.value)">
+		<option value="0">--- {* $all_group *} ---</option>
+	{*elseif $selectid eq "dept"*}
+	<select style="width:350px"  name="{*$selectid*}" id="{*$selectid*}" onchange="javascript:dir_onchange('dvunit', 'unit', this.value)">	
+		<option value="0">--- {* $all_department *} ---</option>
+	{*else*}
+	<select style="width:350px"  name="{*$selectid*}" id="{*$selectid*}" >	
+		<option value="0">--- {* $all_unit*} ---</option>
+	{*/if*}
+		{* foreach from=$groups item=group *}
+		<option value="{* $group->level_group_id *}">{* $group->level_group_name *}</option>
+		{* /foreach *}		
+	</select>
+{*else*}
+	{*if $selectid eq "grp"*}
+	<select style="width:350px"  name="{*$selectid*}" id="{*$selectid*}" onchange="javascript:dir_onchange('dvdept', 'dept', this.value)">
+		<option value="0">--- {* $all_group *} ---</option>
+	{*elseif $selectid eq "dept"*}
+	<select style="width:350px"  name="{*$selectid*}" id="{*$selectid*}" onchange="javascript:dir_onchange('dvunit', 'unit', this.value)">	
+		<option value="0">--- {* $all_department *} ---</option>
+	{*else*}
+		<select style="width:350px"  name="{*$selectid*}" id="{*$selectid*}">	
+			<option value="0">--- {* $all_unit *} ---</option>
+	{*/if*}
+	</select>
+{*/if *}

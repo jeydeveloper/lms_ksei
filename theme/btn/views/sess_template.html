@@ -1,0 +1,177 @@
+{* if ! $smarty.post.noheader *}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>{* $website_title *}</title>
+<style type="text/css" media="screen">@import url({* $theme_url *});</style>
+<script type="text/javascript" src="{*$base_url*}js/jquery-ui-1.7.2.custom/development-bundle/jquery-1.3.2.js"></script>
+<script type="text/javascript" src="{*$base_url*}js/common.js"></script>
+</head>
+
+<body>
+{* /if *}
+<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">
+{* if ! $smarty.post.dialog *}
+  <tr>
+    <td height="1">
+	<!-- Logos and Corporate Identity -->
+	<div id="logo" style="background-image: url({* $website_logo *});">
+    <br />{* $website_title *}&nbsp;&nbsp; </div>
+	<!-- Main Navigation -->
+	
+	{* if $sessmodules.trainee and ! $sess.asadmin *}
+		{* if ($page eq "training" or $page eq "certificate") and $subpage eq "historydetail" *}
+			{* assign var="isprofile" value=true *}
+		{* elseif ($page eq "user" and ($subpage eq "info" or $subpage eq "changepass" or $subpage eq "editinfo")) or ($page eq "training" and $subpage eq "history" and ! $sess.asadmin) or ($page eq "certificate" and $subpage eq "history" and ! $sess.asadmin) or ($page eq "resources" and (! $sess.asadmin and ($subpage eq "history" or $subpage eq "historydetail"))) *}
+			{* assign var="isprofile" value=true *}
+		{* else *}
+			{* assign var="isprofile" value=false *}
+		{* /if *}
+	{* elseif ($page eq "user" and ($subpage eq "info" or $subpage eq "changepass" or $subpage eq "editinfo")) or ($page eq "training" and $subpage eq "history" and ! $sess.asadmin) or ($page eq "certificate" and $subpage eq "history" and ! $sess.asadmin) or ($page eq "resources" and (! $sess.asadmin and ($subpage eq "history" or $subpage eq "historydetail"))) *}
+		{* assign var="isprofile" value=true *}
+	{* else *}
+		{* assign var="isprofile" value=false *}
+	{* /if *}
+	
+	{* if $sessmodules.trainee and ! $sess.asadmin *}
+		{* if ($page eq "training" or $page eq "certificate") and $subpage eq "historydetail" *}
+			{* assign var="istraining" value=false *}
+		{* elseif ($page eq "topic" and $subpage ne "category") or ($page eq "training" and $subpage ne "history") or ($page eq "certificate" and $subpage ne "history") or $page eq "banksoal" or ($page eq "resources" and $subpage ne "history" and $subpage ne "historydetail") *}
+			{* assign var="istraining" value=true *}
+		{* else *}
+			{* assign var="istraining" value=false *}
+		{* /if *}
+	{* elseif $page eq "topic" or $page eq "training" or $page eq "certificate" or $page eq "banksoal" or $page eq "resources" or $page eq "classroom" or ($page eq "import" and $subpage eq "topic_traning") or ($page eq user and $subpage eq "activities") or ($page eq "activities") *}
+		{* assign var="istraining" value=true *}
+	{* else *}
+		{* assign var="istraining" value=false *}	
+	{* /if *}	
+	
+	<div id="navbg">
+	<div id="navcontainer">
+	 {* if $win ne "popup" *}
+	  <ul id="navlist">
+	  	{* if $sess *}	  	
+		<li><a href="{* $base_url *}" id="current">{* $home *}</a></li>
+		<li{* if $isprofile or (($page eq "ildpform" and ! $sess.asadmin) or $page eq "ildpapproval" or $page eq "ildpapprovalhist" or $page eq "ildphist") *} id="active"{*/if*}><a href="{* $site_url *}/user/info">{* $your_profile *}</a></li>
+		{* if $sessmodules.trainee and ! $sess.asadmin *}
+			<li{* if $page eq "topic" and $subpage eq "category" *} id="active"{*/if*}><a href="{* $site_url *}/topic/category">{* $lcategory1 *}</a></li>
+			<li{* if $istraining or ($page eq "ildp" and ($subpage ne "myform" and $subpage ne "approval") ) *} id="active"{*/if*}><a href="{* $site_url *}/topic/">{* $llearning_topics *}</a></li>		
+		{* else *}
+		{* if $sess.user_type eq 0 or $sessmodules.category or $sessmodules.topic or $sessmodules.training or $sessmodules.certificate or $sessmodules.classroom or $sessmodules.resources or $ishavedelegetion *}
+			{* if $sess.user_type eq 0 or $sessmodules.category *}			
+				<li{* if $istraining or ($page eq "user" and $subpage eq "activities") or ($page eq "activities") *} id="active"{*/if*}><a href="{* $site_url *}/topic/category">{* $llearning_admin *}</a></li>
+			{* elseif $sessmodules.topic *}			
+				<li{* if $istraining *} id="active"{*/if*}><a href="{* $site_url *}/topic/">{* $llearning_admin *}</a></li>
+			{* elseif $sessmodules.training or $ishavedelegetion  *}			
+				<li{* if $istraining *} id="active"{*/if*}><a href="{* $site_url *}/training/showlist">{* $llearning_admin *}</a></li>
+			{* elseif $sessmodules.certificate *}
+				<li{* if $istraining  *} id="active"{*/if*}><a href="{* $site_url *}/certificate">{* $llearning_admin *}</a></li>
+			{* elseif $sessmodules.classroom *}
+				<li{* if $istraining *} id="active"{*/if*}><a href="{* $site_url *}/classroom">{* $llearning_admin *}</a></li>
+			{* elseif $sessmodules.resources *}
+				<li{* if $istraining *} id="active"{*/if*}><a href="{* $site_url *}/resources">{* $llearning_admin *}</a></li>				
+			{* /if *}
+		{* /if *}		
+		{* /if *}
+		{* if $sessmodules.ildpadmin and $sess.asadmin and $showildp eq 1 *}
+			<li{* if $page eq "ildp" or $page eq "ildpcatalog" or $page eq "ildpmethod" or $page eq "hrrm" or $page eq "hrld" or $page eq "ildpcategory" or $page eq "ildpregperiod" or $page eq "ildpreport" or $page eq "ildpqueue" or ($page eq "ildpform" and $sess.asadmin) or ($page eq "ildpformimport")  *} id="active"{*/if*}><a href="{* $site_url *}/ildpcatalog/">{* $lildp_admin *}</a></li>
+		{* /if *}
+		{* if $sess.asadmin *}
+			{* if $sess.user_type eq 0 or $sessmodules.user *}
+			<li{* if $page eq "user" and ($subpage eq "showlist" or $subpage eq "form" or $subpage eq "changepass1" or $subpage eq "import") *} id="active"{*/if*}><a href="{* $site_url *}/user/showlist">{* $luser_admin *}</a></li>
+			{* /if *}
+			{* if $sess.user_type eq 0 or $sessmodules.master or $sessmodules.right *}
+				{* if $sessmodules.master *}
+					<li{* if $page eq "reminder" or $page eq "level" or $page eq "jabatan" or $page eq "func" or $page eq "right" or $page eq "generalsetting" or $page eq "lokasi" or ($page eq "import" and $subpage eq "masterdata")  *} id="active"{*/if*}><a href="{* $site_url *}/level/">{* $lsettings *}</a></li>						
+				{* elseif $sessmodules.right *}
+					<li{* if $page eq "reminder" or $page eq "level" or $page eq "jabatan" or $page eq "func" or $page eq "right" or $page eq "generalsetting" or $page eq "lokasi" or ($page eq "import" and $subpage eq "masterdata")  *} id="active"{*/if*}><a href="{* $site_url *}/right/">{* $lsettings *}</a></li>
+				{* else *}
+					<li{* if $page eq "reminder" or $page eq "level" or $page eq "jabatan" or $page eq "func" or $page eq "right" or $page eq "generalsetting" or $page eq "lokasi" or ($page eq "import" and $subpage eq "masterdata")  *} id="active"{*/if*}><a href="{* $site_url *}/level/">{* $lsettings *}</a></li>						
+				{* /if *}
+			{* /if *}
+		{* /if *}
+		{* if $sess.asadmin and $sessmodules.trainee *}
+			<li><a href="{* $site_url *}/user/astrainee">{* $ltrainee_menu *}</a></li>
+		{* /if *}		
+		{* if $sessmodules.trainee and ! $sess.asadmin and $sessmodulesadmin *}
+			<li><a href="{* $site_url *}/user/asadmin">{* $ladmin_menu *}</a></li>
+		{* /if *}		
+		{* if $sess.asadmin and $sessmodules.report *}
+			<li{* if $page eq "report"  *} id="active"{*/if*}><a href="{* $site_url *}/report/">{* $lreport *}</a></li>
+		{* /if *}		
+		<li><a href="{* $site_url *}/user/logout">{* $logout *}</a></li>
+		{* /if *}
+	  </ul>	 
+	   
+	   {* if $show_changelang *}
+		  {* if $lang eq "id" *}
+		  	<!--<img src="{* $base_url *}images/b_id.gif"  border="0" />--><b>IND</b>
+		  {* else *}
+		  	<a href="#" onclick="javascript:setlang('{* $site_url *}/home/setlang', '{* $current_url *}', 'id')"><!--<img src="{* $base_url *}images/b_id.gif" border="0" />-->IND</a>
+		  {* /if *}
+		  
+		  	<img src="{* $base_url *}images/b_flag.gif" width="9" height="16" border="0" />
+		  {* if $lang eq "en" *}
+		  	<b><!--<img src="{* $base_url *}images/b_en.gif"  border="0" />-->ENG</b>	  
+		  {* else *}	  
+		  	<a href="#" onclick="javascript:setlang('{* $site_url *}/home/setlang', '{* $current_url *}', 'en')"><!--<img src="{* $base_url *}images/b_en.gif"  border="0" />-->ENG</a>
+		  {* /if *}
+		{* /if *}
+	 {* /if *}
+&nbsp;&nbsp;&nbsp;&nbsp;	</div>
+    </div>
+	{* if $sess *}
+    <!-- LOGIN Name / Active Account -->    
+    <div id="login"><span class="lite"><a href="{* $site_url *}/user/info" title="account settings"><strong>{* $sess.user_first_name *} {* $sess.user_last_name *} </strong>({* $lnpk *}: {* $sess.user_npk *})</a></span>
+    </div>
+    {* /if *}
+	</td>
+  </tr>
+  {* /if *}
+  <tr>
+    <td valign="top"><table width="100%" border="0" cellpadding="0" cellspacing="0">
+      <tr>
+      	{* if ! $smarty.post.dialog and $win ne "popup" *}
+        <td width="1" valign="top">   
+    <table width="100%" border="0" cellpadding="0" cellspacing="0"><tr><td width="1"><img src="{* $base_url *}images/tb_tl_2.png" width="10" height="10" /></td><td class="tb_l_t"><img src="{* $base_url *}images/spacer.gif" width="10" height="10" /></td></tr>
+      <tr>
+        <td class="tb_l_l">&nbsp;</td>
+        <td>
+		<!-- Left Content -->
+    <div id="leftnav">
+    {* if $left_content *}{* include file=$left_content *}{* /if *}    </div>		</td>
+      </tr>
+      <tr>
+        <td><img src="{* $base_url *}images/tb_bl_2.png" width="10" height="10" /></td>
+        <td class="tb_l_b"><img src="{* $base_url *}images/spacer.gif" width="10" height="10" /></td>
+      </tr>
+    </table>	</td>
+    {* /if *}
+	<td width="1"><img src="{* $base_url *}images/spacer.gif" width="30" height="10" /></td>
+        <td valign="top" class="tb">		
+<!-- Main Content -->
+    <div id="main">
+    {* if $main_content *}{* include file=$main_content *}{* /if *}    </div>		</td>
+      </tr>
+    </table></td>
+  </tr>
+  {* if ! $smarty.post.dialog *}
+  <tr>
+    <td height="1">
+	<div class="lite" id="copy">
+    {* $app_revision *}
+    <br />
+  &copy; Copyright {* $strYear *} {* $strCompany *}. All rights reserved. </div>
+	</td>
+  </tr>
+  {* /if *}
+</table>
+{* if ! $smarty.post.noheader *}
+<div id="container">  
+    
+</div>
+</body>
+</html>
+{* /if *}

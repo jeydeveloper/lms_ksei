@@ -1,0 +1,5 @@
+<select name="address[]"  class='formshort'>
+	{* foreach from=$rowlokasies item=lokasi *}
+	<option value="{* $lokasi->lokasi_alamat *}"{* if $lokasi->lokasi_alamat|strtoupper eq $smarty.post.address|strtoupper *} selected{* /if *}>{* $lokasi->lokasi_alamat *}</option>
+	{* /foreach *}
+</select>

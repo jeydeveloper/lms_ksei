@@ -1,0 +1,247 @@
+<script>
+	function showcatjabatan(cat)
+	{
+		$.post("{* $site_url *}/jabatan/catjabatan", {searchby: "category_name", keyword: cat, dialog: 1, limit: 0{* if $isresources *}, reference:{* $row->reference_id *}{* else *}, training:{* $training->training_id *}{* /if *}},
+			function (data)
+			{			
+				$("#dialogcontent").html(data);	
+				$("#dialoguser").dialog('option', 'title', '{* $lcatjabatan*}');
+				$("#dialoguser").dialog("open");
+				checkcatjaball();					
+			}
+		);	
+	}
+	
+	function showjabatan(jabatan)
+	{		
+		$.post("{* $site_url *}/jabatan/", {searchby: "jabatan_name", keyword: jabatan, dialog: 1, limit: 0{* if $isresources *}, reference:{* $row->reference_id *}{* else *}, training:{* $training->training_id *}{* /if *}},
+			function (data)
+			{			
+				$("#dialogcontent").html(data);	
+				$("#dialoguser").dialog('option', 'title', '{* $ljabatan*}');
+				$("#dialoguser").dialog("open");
+				jabatan_click(true);								
+			}
+		);		
+	}
+	
+	function showgroups(level, keyword)
+	{
+		$.post("{* $site_url *}/level/group", {level: level, keyword: keyword, dialog: 1, limit: 0{* if $isresources *}, reference:{* $row->reference_id *}{* else *}, training:{* $training->training_id *}{* /if *}},
+			function (data)
+			{			
+				$("#dialogcontent").html(data);	
+				$("#dialoguser").dialog('option', 'title', '{* $lgroup_list*}');
+				$("#dialoguser").dialog("open");
+				group_click(true);
+			}
+		);		
+	}
+	
+	function search()
+	{
+		var by = $("#searchby").val();
+		var kw = $("#keyword").val();
+		
+		if (by == "catjabatan")
+		{
+			showcatjabatan(kw);
+		}
+		else
+		if (by == "jabatan")
+		{
+			showjabatan(kw);
+		}
+		else
+		{
+			showgroups(by, kw);
+		}
+	}
+
+	function catjaball_onclick(elmt)
+	{
+		$("INPUT[name='catjab[]']").attr("checked", elmt.checked);
+	}
+	
+	function savecatjab()
+	{	
+		$.post("{* $site_url *}/jabatan/{* if $isresources *}addparticipantresourcesbycategoryjabatan{*else*}addparticipanttrainingbycategoryjabatan{*/if*}", $("#frmcatjab").serialize(),
+			function(r)
+			{
+				$("#dialoguser").dialog("close");
+				alert(r.message);
+      				{* if $isresources *}
+      				location = "{* $site_url *}/resources/participant/{* $row->reference_id *}";
+      				{* else *}
+      				showSubContent();
+      				{* /if *} 				
+			}
+			, "json"
+		);
+	}
+	
+	function catjab_onclick(elmt)
+	{
+		$.post("{* $site_url *}/jabatan/getallchild/"+elmt.value, {},
+			function (r)
+			{
+				for(var i=0; i < r.childs.length; i++)
+				{
+					$("INPUT[name='catjab[]'][value='"+r.childs[i]+"']").attr("checked", elmt.checked);
+				}
+				
+				if (! elmt.checked)
+				{
+					$("INPUT[name='catjaball']").attr("checked", false);	
+				}
+				else
+				{
+					checkcatjaball();
+				}				
+			}
+			, "json"
+		);		
+
+	}
+	
+	function checkcatjaball()
+	{
+		for(var i=0; i < document.frmcatjab.elements.length; i++)
+		{
+			if (document.frmcatjab.elements[i].name == "catjab[]")
+			{
+				if (! document.frmcatjab.elements[i].checked)
+				{
+					$("INPUT[name='catjaball']").attr("checked", false);
+					return;
+				}
+			}
+		}
+		
+		$("INPUT[name='catjaball']").attr("checked", true);
+	}
+
+      	function jabatanall_onclick(elmt)
+      	{
+      		$("INPUT[name='jabatan[]']").attr("checked", elmt.checked);
+      	}
+      	
+      	function groupall_onclick(elmt)
+      	{
+      		$("INPUT[name='group[]']").attr("checked", elmt.checked);
+      	}
+	
+      	function jabatan_click(val)
+      	{
+      		if (val)
+      		{
+      			for(var i=0; i < document.frmjabatan.elements.length; i++)
+      			{
+      				if (document.frmjabatan.elements[i].name == "jabatan[]")
+      				{
+      					if (! document.frmjabatan.elements[i].checked)
+      					{
+      						$("INPUT[name='jabatanall']").attr("checked", false);
+      						return;
+      					}
+      				}
+      			}
+      			
+      			$("INPUT[name='jabatanall']").attr("checked", true);
+      		}
+      		else
+      		{
+      			$("INPUT[name='jabatanall']").attr("checked", false);
+      		}
+      	}
+      	
+      	function group_click(val)
+      	{
+      		if (val)
+      		{
+      			for(var i=0; i < document.frmgroup.elements.length; i++)
+      			{
+      				if (document.frmgroup.elements[i].name == "group[]")
+      				{
+      					if (! document.frmgroup.elements[i].checked)
+      					{
+      						$("INPUT[name='groupall']").attr("checked", false);
+      						return;
+      					}
+      				}
+      			}
+      			
+      			$("INPUT[name='groupall']").attr("checked", true);
+      		}
+      		else
+      		{
+      			$("INPUT[name='groupall']").attr("checked", false);
+      		}
+      	}
+      	
+      	
+      	function addparticipantbyjabatan()
+      	{
+      		$.post("{* $site_url *}/{* if $isresources *}resources{* else *}training{* /if *}/addparticipantbyjabatan", $("#frmjabatan").serialize(),
+      			function(data)
+      			{
+      				if (data.err > 0)
+      				{
+      					$("#messageaddparticipant").html(data.errmsg);
+      					return;
+      				}
+      				
+      				$("#dialoguser").dialog("close");
+      				alert(data.message);
+      				{* if $isresources *}
+      				location = "{* $site_url *}/resources/participant/{* $row->reference_id *}";
+      				{* else *}
+      				showSubContent();
+      				{* /if *}      				
+      			}  
+      			, "json"    			
+      		);
+      	}
+      	
+      	function addparticipantbygroup()
+      	{
+      		$.post("{* $site_url *}/{* if $isresources *}resources{* else *}training{* /if *}/addparticipantbygroup", $("#frmgroup").serialize(),
+      			function(data)
+      			{
+      				if (data.err > 0)
+      				{
+      					$("#messageaddparticipant").html(data.errmsg);
+      					return;
+      				}
+      				
+      				$("#dialoguser").dialog("close");
+      				alert(data.message);
+      				{* if $isresources *}
+      				location = "{* $site_url *}/resources/participant/{* $row->reference_id *}";
+      				{* else *}
+      				showSubContent();
+      				{* /if *}      				
+      			}  
+      			, "json"    			
+      		);
+      	}      	
+</script>
+<table class="table" id="tbltrainingimport">
+	<tr>
+		<td width="10%">{* $lsearch_by *}</td>
+		<td>
+			<select name="searchby" id="searchby">
+			      	{* foreach from=$levels item=level *}
+			      	<option value="level{* $level->level_nth *}">{* $level->level_name *}</option>
+			      	{* /foreach *}
+			      	<option value="catjabatan">{* $lcatjabatan *}</option>
+			      	<option value="jabatan">{* $ljabatan *}</option>
+		      	</select> 
+		      	<input type='text' name="keyword" id="keyword" class='formdefault' value="">		
+		</td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><input type="button" value=" {* $lsearch *}" onclick="javascript:search()" />
+	</tr>	
+</table>

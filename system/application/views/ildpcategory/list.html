@@ -1,0 +1,72 @@
+      <script>
+      	function chagestatus(id, status)
+      	{
+			if (! confirm("{* $lconfirm_change_status *}")) return;
+			
+      		f_onsubmit("{* $site_url *}/ildpcategory/changestatus/" + id + "/" + status, "frmtemp", "status"+id, "Updating...", 
+      			function(data)
+      			{      			
+      				document.frmtemp.submit();
+      			}
+      		);      			
+      	}
+      	
+     	function search()
+      	{
+      		$("#keyword").val($("#_keyword").val());
+      		$("#searchby").val($("#_searchby").val());
+      		
+      		document.frmtemp.submit();
+      	}      	
+
+      	$(document).ready(
+      		function()
+      		{
+      			{* if $smarty.post.searchby *}
+      			$("#_searchby").val('{* $smarty.post.searchby *}');
+      			{* /if *}
+      		}
+      	);        	
+      </script>
+     <h2>{* $lildp_category_list *}</h2>
+      <p>{* $lildp_header_list_category *}<br />
+        <br />
+      {* $sort_list_by *} <a href="#" onclick="javascript:sortby('ildp_category_name', 'asc')"{* if $sortby eq 'ildp_category_name' *}class="lite"{* /if *}>{* $name *}</a>{* if $sessmodules.ildpadmin *} | <a href="#" onclick="javascript:sortby('ildp_category_status', 'asc')"{* if $sortby eq 'category_status' *}class="lite"{* /if *}>{* $status *}</a> | <a href="{* $site_url *}/ildpcategory/form">{* $date_added *}</a> {* /if *}</p>
+      	<form onsubmit="javascript:search(); return false;">
+      <p>{* $lsearch_by *}
+      <select name="_searchby" id="_searchby">
+      	<option value="category_name">{* $name *}</option>
+      </select> 
+      <input type='text' name="_keyword" id="_keyword" class='formdefault' value="{* $smarty.post.keyword *}">
+      <input type='submit' value=" {* $lsearch *} ">      
+      </p>       
+  </form>
+      <table width="100%" cellpadding="3" class="tablelist">
+        <thead>
+          <tr>
+            <th width="50%"><a href="#" onclick="javascript:sortby('ildp_category_name', 'asc')" class="thead" title="sort topics by code">{* $category_name *}</a></th>
+            <th width="9%">{* $lmax_line *}</th>
+            <th width="25%">{* $ltype_area_development *}</th>
+            <th><div class="listmain"><a href="#" onclick="javascript:sortby('ildp_category_status', 'asc')" class="thead" title="sort by topic STATUS">{* $status *}</a></div></th>
+            <th width="10%">&nbsp;</th>
+            <th width="10%">&nbsp;</th>
+          </tr>
+         </thead>
+        <tbody>
+        	{* $tree_html *}
+        </tbody>
+        <tfoot>
+          <tr>
+            	<td{* if $sess.asadmin *} colspan="6"{* /if *}>{* $paging *}</td>
+          </tr>
+        </tfoot>        
+      </table>
+<br />      
+<form id="frmtemp" name="frmtemp" method="post" action="{* $site_url *}/ildpcategory">
+	<input type="hidden" id="limit" name="limit" value="{* $limit *}" />
+	<input type="hidden" id="sortby" name="sortby" value="{* $sortby *}" />
+	<input type="hidden" id="orderby" name="orderby" value="{* $orderby *}" />
+	<input type="hidden" id="offset" name="offset" value="{* $offset *}" />
+	<input type="hidden" id="keyword" name="keyword" value="{* $smarty.post.keyword *}" />
+	<input type="hidden" id="searchby" name="searchby" value="{* $smarty.post.searchby *}" />	
+</form>

@@ -1,0 +1,39 @@
+<script>
+	function setErrorMessage(err)
+	{
+		$("#messagesoal").html(err);
+	}
+	
+	function frmimport_onsubmit()
+	{
+		$("#messagesoal").html("");
+		return true;
+	}
+	
+	function setSuccess()
+	{
+		loadunitsoal({* $banksoal->banksoal_id *});
+		$("#dialog").dialog('close');		
+	}
+</script>
+<div id="dialog" title="{* $ladd_unitsoal *}"> 
+	<form id="frmimport" name="frmimpot" method="post" enctype="multipart/form-data" action="{* $site_url *}/banksoal/unitsoalimport/{* $banksoal->banksoal_id *}" target="iframe_banksoal" onsubmit="javascript: return frmimport_onsubmit()" />
+		<input type="hidden" name="unitsoalid" id="unitsoalid" value="" />
+	<table class="table">
+			<tr id="trunitsoalname">
+				<td width="30%">{* $lunit_soal_name *}</td>
+				<td><input type='text' name="unitsoalname" id="unitsoalname" class='formdefault' value=""></td>
+			</tr>
+			<tr>
+				<td>{* $lfile *}</td>
+				<td><input type='file' name="file" id="file class='formdefault' value=""></td>
+			</tr>
+			<tfoot>		
+			<tr>
+				<td colspan="2"><div id="messagesoal"></div><input type="submit" value=" Import " /></td>
+			</tr>
+			</tfoot>
+		</table>
+	</form>	
+</div> 
+<iframe id="iframe_banksoal" name="iframe_banksoal" src="" style="width:0px;height:0px;border:1px solid #fff;"></iframe>

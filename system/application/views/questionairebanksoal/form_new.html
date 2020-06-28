@@ -1,0 +1,180 @@
+<style type="text/css">
+  .no_urut{display: block;}
+  .soal{border-bottom: solid 1px;padding-bottom: 10px;padding-top: 10px;}
+  #tambah_soal{margin-top: 10px;}
+</style>
+
+<form action="" method="post" enctype="multipart/form-data">
+  <table width="100%">
+    <tbody>
+      <tr>
+        <td>
+          <h2>Form New</h2>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label><input type="checkbox" name="is_import" id="is_import" value="1"> Import File</label>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <table width="100%" border="0" cellpadding="0" cellspacing="0" class="tb_data">
+            <tbody>
+              {* if $err_msg *}
+              <tr>
+                <td><div style="border:solid 1px red;padding:0 10px;">{* $err_msg *}</div></td>
+              </tr>
+              {* /if *}
+            </tbody>
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <table width="100%" border="0" cellpadding="0" cellspacing="0" class="tb_data">
+            <tbody>
+              <tr>
+                <td width="200">Nama Bank Soal</td>
+                <td width="1">:</td>
+                <td>
+                  <input name="qsbs_name" value="" class="formdefault" required>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+      <tr id="non_import_file" class="input_type">
+        <td>
+          <table width="100%" border="0" cellpadding="0" cellspacing="0" class="tb_data">
+            <tbody>
+              <tr style="vertical-align: top;">
+                <td width="200">Detail Soal</td>
+                <td width="1">:</td>
+                <td>
+                  <button id="tambah_soal">Tambah Soal</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+      <tr id="import_file" class="input_type" style="display:none;">
+        <td>
+          <table width="100%" border="0" cellpadding="0" cellspacing="0" class="tb_data">
+            <tbody>
+              <tr>
+                <td width="200">File Upload</td>
+                <td width="1">:</td>
+                <td>
+                  <input type="file" name="fileupload" class="formdefault"><br/><a href="{* $base_url *}import/questionaire/banksoal.xls" target="_blank">(Download format bank soal questionaire)</a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <table width="100%" border="0" cellpadding="0" cellspacing="0" class="tb_data">
+            <tbody>
+              <tr>
+                <td width="200">&nbsp;</td>
+                <td width="1">&nbsp;</td>
+                <td>
+                  <input type="submit" value="Submit">
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</form>
+
+<div style="display:none;">
+  <div id="template_soal">
+    <span class="no_urut">1</span>
+    <textarea rows="5" placeholder="Nama Soal" name="bsdt_question[]" class="formdefault"></textarea>
+    <div>
+      <div class="opsi">
+        <input placeholder="Nama Opsi" name="bsdt_option_0[]" value="" class="formdefault input_opsi" style="margin-top: 10px;">
+      </div>
+      <button class="tambah_opsi" style="margin-left: 240px;margin-top: 10px;margin-bottom: 10px;">Tambah Opsi</button>
+    </div> [<a class="delete_soal" href="#">DELETE SOAL</a>]
+  </div>
+  <div id="template_opsi">
+    <input placeholder="Nama Opsi" name="bsdt_option_0[]" value="" class="formdefault input_opsi" style="margin-top: 10px;"><br>
+  </div>
+</div>
+
+<script type="text/javascript">
+  $(function(){
+    var re_generate_soal = function(){
+      $('.soal').each(function(idx, val){
+        var me = $(this);
+        var name_input_opsi = 'bsdt_option_'+idx+'[]';
+        me.find('.input_opsi').attr('name', name_input_opsi);
+        me.find('.no_urut').text((idx+1));
+      });
+    };
+
+    $('#is_import').click(function(){
+      $('.input_type').hide();
+      if($(this).is(':checked')) {
+        $('#import_file').show();
+      } else {
+        $('#non_import_file').show();
+      }
+    });
+
+    var length_soal = function() {
+      return $('.soal').length;
+    };
+
+    var add_soal = function(){
+      var cln = $('#template_soal').clone();
+      cln.removeAttr('id');
+      cln.addClass('soal');
+      cln.insertBefore('#tambah_soal');
+    };
+
+    $('.tambah_opsi').live('click', function(e){
+      e.preventDefault();
+      var me = $(this);
+      var cln = $('#template_opsi').clone();
+      cln.removeAttr('id');
+      cln.addClass('opsi');
+
+      var name_input_opsi = 'bsdt_option_'+$('.tambah_opsi').index(this)+'[]';
+      cln.find('.input_opsi').attr('name', name_input_opsi);
+
+      cln.insertBefore(me);
+    });
+
+    $('#tambah_soal').live('click', function(e){
+      e.preventDefault();
+      var me = $(this);
+      var cln = $('#template_soal').clone();
+      cln.removeAttr('id');
+      cln.addClass('soal');
+
+      var name_input_opsi = 'bsdt_option_'+length_soal()+'[]';
+      cln.find('.input_opsi').attr('name', name_input_opsi);
+
+      cln.insertBefore(me);
+
+      re_generate_soal();
+    });
+
+    $('.delete_soal').live('click', function(){
+      var prt = $(this).closest('.soal');
+      prt.remove();
+      re_generate_soal();
+    });
+
+    add_soal();
+  })
+</script>

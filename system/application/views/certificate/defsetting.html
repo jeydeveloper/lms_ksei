@@ -1,0 +1,64 @@
+<script>
+	function submitdefsetting()
+	{
+		$("#messagedefsetting").html("saving...");
+		$.post("{* $site_url *}/certificate/savedefsetting", {trainingid: $("#intrainingid").val(), unitid: $("#inunitid").val(), jmlsoal: $("#injmlsoal").val(), mudah: $("#inmudah").val(), sedang: $("#insedang").val(), sulit: $("#insulit").val(){* if $tipe eq 2 *}, jabatan: $("#injabatan").val(){* /if *}},
+			function (data)
+			{		
+				var datas = data.split("\1");;
+				if (parseInt(datas[0]) > 0)
+				{
+					$("#messagedefsetting").html(datas[1]);
+					return false;
+				}			
+				
+				alert("{* $lok_update_defsetting *}");
+				$("#dialog").dialog("close");
+			}
+		);		
+	}
+	
+	function injabatan_onchange()
+	{
+		unitsoalsetting($("#inunitid").val(), 2, $("#injabatan").val());
+	}
+</script>
+	
+	<input type="hidden" name="inunitid" id="inunitid" value="" />
+	<input type="hidden" name="intrainingid" id="intrainingid" value="{* $intrainingid *}" />	
+	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="tablepop">
+		{* if $tipe eq 2 *}
+		<tr>
+			<td align='left'>{* $ljabatan *}</td>
+			<td align='left'>
+					<select name="injabatan" id="injabatan" onchange="javascript:injabatan_onchange()" style='width:350'>
+						{* foreach from=$rows item=row *}
+						<option value="{* $row->jabatan_name *}" {* if $jabatanid eq  $row->jabatan_name*}selected{* /if *}>{* $row->jabatan_name *}</option>
+						{* /foreach *}
+					</select>
+			</td>
+		</tr>		
+		{* /if *}
+		<tr>
+			<td width="40%" align='left'>{* $ljumlah_soal *}</td>
+			<td align='left'><input type='text' name="injmlsoal" id="injmlsoal" class='formnumber' value="{* $injmlsoal *}"></td>
+		</tr>
+		<tr>
+			<td width="20%" align='left'>{* $lmudah *}</td>
+			<td align='left'><input type='text' name="inmudah" id="inmudah" class='formnumber' value="{* $inmudah *}"> %</td>
+		</tr>
+
+		<tr>
+			<td width="20%" align='left'>{* $lsedang *}</td>
+			<td align='left'><input type='text' name="insedang" id="insedang" class='formnumber' value="{* $insedang *}"> %</td>
+		</tr>
+
+		<tr>
+			<td width="20%" align='left'>{* $lsulit *}</td>
+			<td align='left'><input type='text' name="insulit" id="insulit" class='formnumber' value="{* $insulit *}"> %</td>
+		</tr>
+		
+		<tr>
+			<td colspan="2"><div id="messagedefsetting"></div><input type="button" value=" Save " onclick="javascript:submitdefsetting()" /></td>
+		</tr>
+	</table>

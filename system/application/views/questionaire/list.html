@@ -1,0 +1,91 @@
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <h2>Questionaire List</h2>
+    <ol class="breadcrumb">
+      <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+      <li><a href="#">Questionaire</a></li>
+      <li class="active">Showlist</li>
+    </ol>
+  </section>
+
+  <!-- Main content -->
+  <section class="content">
+    <div class="row">
+      <div class="col-xs-12">
+        <div id="msg-content" class="alert alert-danger alert-dismissible" style="display: none;">
+          <div id="message"></div>
+        </div>
+        <div class="box">
+          <div class="box-body table-responsive">
+            <p>Berikut adalah daftar dari questionaire di Learning Management System:</p>
+            <div class="mg-btm-10">
+              Urutkan berdasarkan <a onclick="javascript:sortby('qstr_name', 'asc')" href="#">Nama</a> | <a href="{* $site_url *}/questionaire/add_new">Tambah data</a>
+            </div>
+            <div class="mg-btm-10">
+              <form method="post" action="">
+                <div class="row">
+                  <div class="col-xs-3">
+                    Cari berdasarkan
+                  </div>
+                  <div class="col-xs-3">
+                    <select class="form-control" name="searchby" id="searchby">
+                      <option value="qstr_name">NAME</option>
+                    </select>
+                  </div>
+                  <div class="col-xs-3">
+                    <input class="form-control" type='text' name="keyword" id="keyword" class='formdefault' value="{* $smarty.post.keyword *}">
+                  </div>
+                  <div class="col-xs-3">
+                    <input class="btn btn-primary" type='submit' value=" Cari ">
+                  </div>
+                </div>
+              </form>
+            </div>
+            <hr>
+            <table class="table table-hover table-striped">
+              <thead>
+              <tr>
+                <th width="70%"><a href="#" class="thead">Nama</a></th>
+                <th width="70%"><a href="#" class="thead">Bank Soal</a></th>
+                <th width="70%"><a href="#" class="thead">Disabled</a></th>
+                <th width="10%">&nbsp;</th>
+                <th width="10%">&nbsp;</th>
+              </tr>
+              </thead>
+              <tbody>
+              {* counter start=1 print=false assign="no" *}
+              {* foreach from=$list item=row *}
+              {* assign var="x" value=$row->qstr_id *}
+              <tr{* if $no%2 eq 1 *} class="odd"{* /if *}>
+              <td class="odd"><a href="{* $site_url *}/questionaire/edit/{* $row->qstr_id *}">{* $row->qstr_name *}</a></td>
+              <td class="odd">{* $row->qsbs_name *}</td>
+              <td class="odd">{* if $row->qstr_disabled *}&#10004;{* else *}-{* /if *}</td>
+              <td class="odd">{* if !$history.$x *}<a href="{* $site_url *}/questionaire/delete/{* $row->qstr_id *}" onclick="javascript: return confirm('Apakah Anda yakin untuk menghapus data?');"><img src="{* $base_url *}images/b_del.gif" width="12" height="12" border="0"></a>{* /if *}</td>
+              <td class="odd">{* if $history.$x *}<a href="{* $site_url *}/questionaire/history/{* $row->qstr_id *}">Report</a>{* /if *}</td>
+              </tr>
+              {* counter *}
+              {* /foreach *}
+              </tbody>
+            </table>
+          </div>
+          <!-- /.box-body -->
+          <div class="box-footer clearfix">
+            <div class="content-paging">{* $paging *}</div>
+          </div>
+        </div>
+        <!-- /.box -->
+      </div>
+    </div>
+  </section>
+  <!-- /.content -->
+</div>
+
+<form id="frmtemp" name="frmtemp" method="post" action="{* $site_url *}/questionaire">
+  <input type="hidden" id="limit" name="limit" value="{* $limit *}" />
+  <input type="hidden" id="sortby" name="sortby" value="{* $sortby *}" />
+  <input type="hidden" id="orderby" name="orderby" value="{* $orderby *}" />
+  <input type="hidden" id="offset" name="offset" value="{* $offset *}" />
+  <input type="hidden" id="keyword" name="keyword" value="{* $smarty.post.keyword *}" />
+  <input type="hidden" id="searchby" name="searchby" value="{* $smarty.post.searchby *}" /> 
+</form>

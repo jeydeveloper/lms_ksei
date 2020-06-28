@@ -1,0 +1,316 @@
+<script>
+	function frmtraining_onsubmit()
+	{
+        $("#msg-content").removeClass('alert-danger').removeClass('alert-success').hide();
+		$("#message").html("saving...");
+		return true;
+	}
+
+	function category_onchange()
+	{
+		$("#topic_div").html("Loading...");
+
+		$.post("{* $site_url *}/topic/getparent", {cat: $("#cat").val(), isshowroot: 'no', selectname: 'topic', parent: '{* if $training *}{* $training->training_topic *}{* else *}{* $smarty.post.topic *}{* /if *}'},
+			function (data)
+			{
+				$("#topic_div").html(data);
+			}
+		);
+	}
+
+	$(document).ready(function(){
+		category_onchange();
+
+		{* if $training *}
+			{* if $extdata *}
+			$("#lastdate").val({* $extdata->lastdate *});
+			{* /if *}
+
+		matery_type_onclick({* $training->training_material_type *});
+		id_training_date = 0;
+		{* counter start=0 print=false assign="no" *}
+		{* foreach from=$training->time item=data *}
+		{* if $data->training_time_parent *}
+		addTrainingTime('{* $data->training_time_date1_fmt *}', '{* $data->training_time_date2_fmt *}', '{* $data->training_time_period *}', {* $no *}, {* $data->training_time_parent *});
+		{* else *}
+		addTrainingTime('{* $data->training_time_date1_fmt *}', '{* $data->training_time_date2_fmt *}', '{* $data->training_time_period *}', {* $no *}, 0);
+		id_training_date++;
+		{* /if *}
+		{* counter *}
+		{* /foreach *}
+		{* else *}
+		matery_type_onclick(1);
+		addTrainingTime("", "", "", id_training_date);
+		{* /if *}
+
+		{* foreach from=$lokasitrainings item=lokasitraining *}
+			$.post("{* $site_url *}/lokasi/addressselectbox", {city: '{* $lokasitraining->lokasi_kota *}', address: '{* $lokasitraining->lokasi_alamat *}'},
+				function(data)
+				{
+					$("#lokasi{* $lokasitraining->training_lokasi_id *}").html(data);
+				}
+			);
+		{* /foreach *}
+
+	});
+
+	function matery_type_onclick(val)
+	{
+		if (val == 1)
+		{
+			$("#lokasi_materionline_div").show();
+			$("#lokasi_materioffline_div").hide();
+		}
+		else
+		{
+			$("#lokasi_materionline_div").hide();
+			$("#lokasi_materioffline_div").show();
+		}
+
+	}
+	function addTrainingTime(t1, t2, p, lastid, parentid)
+	{
+		if (! t1) t1 = "";
+		if (! t2) t2 = "";
+		if (! p) p = "";
+
+		$.post("{* $site_url *}/{* $pageid *}/formdate", {lastid: lastid, trainingdate1: t1, trainingdate2: t2, period: p, parentid: parentid},
+			function(data)
+			{
+				var newtr = $('<tr>'+data+'</tr>');
+				newtr.attr("id", "trainingdate_"+lastid);
+				if (lastid == 0)
+				{
+					$("#_trainingdate").after(newtr)
+				}
+				else
+				{
+					$("#trainingdate_"+(lastid-1)).after(newtr);
+				}
+
+				id_training_date = lastid + 1;
+
+				$("#trainingdate"+lastid+"_1").datepicker({format: 'dd/mm/yyyy',startDate: '01/01/1900', changeMonth: true, changeYear: true});
+				$("#trainingdate"+lastid+"_2").datepicker({format: 'dd/mm/yyyy',startDate: '01/01/1900', changeMonth: true, changeYear: true});
+			}
+		);
+	}
+
+	function setErrorMessage(err)
+	{
+		$("#message").html(err);
+        $("#msg-content").addClass('alert-danger').show();
+	}
+
+	function setSuccess(msg, loc)
+	{
+		alert(msg);
+		$("#message").html(msg);
+		setTimeout('location = "' + loc + '"', {* $flashtime *});
+        $("#msg-content").addClass('alert-success').show();
+	}
+
+	function lokasi_onchange(elmt, id)
+	{
+			$.post("{* $site_url *}/lokasi/addressselectbox", {city: elmt.value, address: ''},
+				function(data)
+				{
+					$("#lokasi"+id).html(data);
+				}
+			);
+	}
+
+	function openmaterial(materi)
+	{
+		window.open("{* $base_url *}material/"+materi+"/", "win{* $unique *}", "width=800; height=600");
+	}
+
+	var id_training_date = 0;
+</script><div class="content-wrapper">
+	<!-- Content Header (Page header) -->
+	<section class="content-header">
+		<h1>
+            {* if $pageid eq "training" *}{* $lcreate_course *}{* elseif $pageid eq "certificate" *}{* $lcreate_certificate *}{* else *}{* $lclassroom_update *}{* /if *}
+		</h1>
+		<ol class="breadcrumb">
+			<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+			<li><a href="#">{* if $pageid eq "training" *}{* $lcreate_course *}{* elseif $pageid eq "certificate" *}{* $lcreate_certificate *}{* else *}{* $lclassroom_update *}{* /if *}</a></li>
+			<li class="active">Form</li>
+		</ol>
+	</section>
+
+	<!-- Main content -->
+	<section class="content">
+		<div class="row">
+			<div class="col-xs-12">
+                <form name="frmtraining" method="post" id="frmtraining" enctype="multipart/form-data" action="{* $site_url *}/{* $pageid *}/save/{* $training->training_id *}" target="iframe_training" onsubmit="javascript: return frmtraining_onsubmit()">
+					<div class="box">
+						<div class="box-body table-responsive no-padding">
+							<div class="box-body">
+                                <table class="table">
+									<tr>
+										<td width="15%">&nbsp;&nbsp;{* $category *}</td>
+										<td>
+											<select name="cat" id="cat" style="width: 320px;" onchange="javascript: category_onchange()">
+												{* $tree *}
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<td>&nbsp;&nbsp;{* $topic *}</td>
+										<td>
+				<span id="topic_div">
+					<select name="topic" id="topic" style="width: 320px;">
+						<option value="0">-- {* $topic *} --</option>
+					</select>
+				</span>
+										</td>
+									</tr>
+									{* if $pageid ne "classroom" *}
+									<tr>
+										<td>* {* $ltraining_code *}</td>
+										<td><input type='text' name="code" id="code" class='formshort' value="{* if $training *}{* $training->training_code *}{* else *}{* $smarty.post.code *}{* /if *}" maxlength='100' {* if $training *}readonly{* /if *}> </td>
+									</tr>
+									{* /if *}
+									<tr>
+										<td>* {* if $pageid eq "training" *}{* $training_name *}{* elseif $pageid eq "certificate" *}{* $certificate_name *}{* else *}{* $lclassroom *}{* /if *}</td>
+										<td><input type='text' name="name" id="name" class='formdefault' value="{* if $training *}{* $training->training_name *}{* else *}{* $smarty.post.name *}{* /if *}" maxlength='100'> </td>
+									</tr>
+									{* if $pageid ne "classroom" *}
+									<tr valign='top'>
+										<td valign="top">&nbsp;&nbsp;{* $description *}</td>
+										<td><textarea name="desc" id="desc" class='textareadefault'>{* if $training *}{* $training->training_desc *}{* else *}{* $smarty.post.desc *}{* /if *}</textarea></td>
+									</tr>
+									{* /if *}
+									{* if $pageid ne "certificate" *}
+									<tr>
+										<td width="13%">&nbsp;&nbsp; {* $lduration *}</td>
+										<td>
+											<input type='text' name="dhour" id="dhour" value="{* if $training->training_duration_hour*}{* $training->training_duration_hour *}{* /if *}" class='formnumber' > {* $lhour *} :
+											<input type='text' name="dminute" id="dminute" value="{* if $training->training_duration_minute*}{* $training->training_duration_minute *}{* /if *}" class='formnumber' > {* $lminute *}
+										</td>
+									</tr>
+									{* /if *}
+									{* if $pageid eq "classroom" *}
+									<tr>
+										<td width="13%">&nbsp;&nbsp; {* $lbatch *}</td>
+										<td>
+											<input type='text' name="batch" id="batch" value="{* if $training->training_banksoal*}{* $training->training_banksoal *}{* /if *}" class='formnumber' >
+										</td>
+									</tr>
+									<tr>
+										<td width="13%">&nbsp;&nbsp; {* $ltraining_type *}</td>
+										<td>
+											<input type='text' name="authorname2" id="authorname2" value="{* $training->training_author_lastname *}" class='formdefault' >
+										</td>
+									</tr>
+									{* /if *}
+									<tr>
+										<td>&nbsp;&nbsp; {* $lcost *}</td>
+										<td><input type='text' name="cost" id="cost" class='formshort' value="{* if $training and $training->training_cost gt 0 *}{* $training->training_cost *}{* else *}{* $smarty.post.cost *}{* /if *}" maxlength='12'> </td>
+									</tr>
+
+									{* if $pageid eq "training" *}
+									<tr>
+										<td valign="top">* {* $materi_location *}</td>
+										<td>
+											<input type="radio" name="materi_type" value="1" onclick='javascript:matery_type_onclick(1)' {* if $training->training_material_type ne 2 *}checked{* /if *}>&nbsp;Online
+											<input type="radio" name="materi_type" value="2" onclick='javascript:matery_type_onclick(2)'{* if $training->training_material_type eq 2 *}checked{* /if *}>&nbsp;Offline
+											<div id='lokasi_materionline_div' style="display: none;">
+												<input type='file' name="materionline" id="materionline" class='formdefault' value="">
+												{* if $training->training_material_type eq 1 and  $training->training_material *}
+												<br /><a href="javascript:openmaterial('{* $training->training_material *}')">{* $training->training_material *}</a>
+												{* /if *}
+											</div>
+											<div id='lokasi_materioffline_div' style="display: none;"><input type='text' name="materioffline" id="materioffline" class='formdefault' value="{* if $training->training_material *}{* $training->training_material *}{* /if *}"> ex. '/MATERIAL/TRN-00001' </div>
+										</td>
+									</tr>
+									{* /if *}
+									{* if $pageid ne "classroom" *}
+									<tr>
+										<td valign="top">{* $lcertificate_template *}</td>
+										<td>
+											<input type="file" name="certtpl" value="" class='formdefault' />
+											{* if $training->training_cert_tpl *}
+											<br /><a href="{* $base_url *}uploads/tmpl/{* $training->training_id *}/{* $training->training_cert_tpl *}" target="_blank">{* $training->training_cert_tpl  *}</a>
+											{* /if *}
+										</td>
+									</tr>
+									<tr>
+										<td valign="top" colspan="2"><b>{* if $pageid eq "training" *}{* $training_time *}{* else *} * {* $lcertificate_time *}{* /if *}</b></td>
+									</tr>
+									{* /if *}
+									<tr id="_trainingdate" style="display: none;"></tr>
+									{* if $pageid ne "classroom" *}
+									<tr>
+										<td valign="top">&nbsp;</td>
+										<td valign="top"><input type="button" value=" {* $ladd_training_time *} " onclick="javascript:addTrainingTime('', '', '', id_training_date, 0)" /></td>
+									</tr>
+									<tr>
+										<td valign="top">{* $lrefreshment *}</td>
+										<td>
+											<input maxlength='2' type='text' name="refreshment" id="refreshment" class='formshort' value="{* if $training *}{* $training->training_refreshment *}{* elseif $smarty.post.refreshment *}{* $smarty.post.refreshment *}{* /if *}" > {* $lmonth *}
+										</td>
+									</tr>
+									<tr>
+										<td valign="top" colspan="2"><b>{* $author *}</b></td>
+									</tr>
+									<tr>
+										<td valign="top">{* $first_name *}</td>
+										<td><input maxlength='100' type='text' name="authorname1" id="authorname1" class='formdefault' value="{* if $training *}{* $training->training_author_firstname *}{* elseif $smarty.post.authorname1 *}{* $smarty.post.authorname1 *}{* else *}{* $sess.user_first_name *}{* /if *}" ></td>
+									</tr>
+									<tr>
+										<td valign="top">{* $last_name *}</td>
+										<td><input maxlength='100' type='text' name="authorname2" id="authorname2" class='formdefault' value="{* if $training *}{* $training->training_author_lastname *}{* elseif $smarty.post.authorname2 *}{* $smarty.post.authorname2 *}{* else *}{* $sess.user_last_name *}{* /if *}" > </td>
+									</tr>
+									<tr>
+										<td valign="top">{* $initial *}</td>
+										<td><input maxlength='100' type='text' name="initial" id="initial" class='formdefault' value="{* if $training *}{* $training->training_author_inital *}{* else *}{* $smarty.post.initial *}{* /if *}" ></td>
+									</tr>
+									<tr>
+										<td valign="top">{* $email *}</td>
+										<td><input maxlength='100' type='text' name="email" id="email" class='formdefault' value="{* if $training *}{* $training->training_author_email *}{* elseif $smarty.post.email *}{* $smarty.post.email *}{* else *}{* $sess.user_email *}{* /if *}" ></td>
+									</tr>
+									{* else *}
+									<tr>
+										<td valign="top">{* $lvendor_name *}</td>
+										<td><input maxlength='100' type='text' name="authorname1" id="authorname1" class='formdefault' value="{* if $training *}{* $training->training_author_firstname *}{* elseif $smarty.post.authorname1 *}{* $smarty.post.authorname1 *}{* else *}{* $sess.user_first_name *}{* /if *}" ></td>
+									</tr>
+									{* /if *}
+									{* if $pageid eq "classroom" *}
+									<tr>
+										<td valign="top">{* $llokasi *}</td>
+										<td>
+											{* foreach from=$lokasitrainings item=lokasitraining *}
+											<select name="city[]"  class='formshort' onchange="javascript: lokasi_onchange(this, {* $lokasitraining->training_lokasi_id *})">
+												{* foreach from=$rowlokasies item=lokasi *}
+												<option value="{* $lokasi->lokasi_kota *}"{* if $lokasi->lokasi_kota|strtoupper eq $lokasitraining->lokasi_kota|strtoupper *} selected{* /if *}>{* $lokasi->lokasi_kota *}</option>
+												{* /foreach *}
+											</select>
+											<span id="lokasi{* $lokasitraining->training_lokasi_id *}"></span>
+											{* /foreach *}
+										</td>
+									</tr>
+									{* /if *}
+									<tr>
+										<td valign="top">&nbsp;</td>
+										<td valign="top"><input type="submit" value=" Save " /></td>
+									</tr>
+									<tr>
+										<td valign="top" colspan="2">
+											<div id="msg-content" class="alert alert-danger alert-dismissible" style="display: none;">
+												<div id="message"></div>
+											</div>
+										</td>
+									</tr>
+								</table>
+							</div>
+						</div>
+						<!-- /.box -->
+					</div>
+				</form>
+			</div>
+	</section>
+	<!-- /.content -->
+</div>
+<iframe id="iframe_training" name="iframe_training" src="" style="display: none;width:600px;height:500px;border:1px solid #000000;"></iframe>

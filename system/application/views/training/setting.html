@@ -1,0 +1,222 @@
+<!--<link rel="stylesheet" href="{*$base_url*}js/autocomplete/jquery.autocomplete.css" type="text/css" />
+<script type="text/javascript" src="{*$base_url*}js/autocomplete/jquery.bgiframe.min.js"></script> 
+<script type="text/javascript" src="{*$base_url*}js/autocomplete/jquery.autocomplete.js"></script>-->
+
+<link rel="stylesheet" href="{* $base_url *}js/autocomplete3/easy-autocomplete.min.css" type="text/css" />
+<script type="text/javascript" src="{* $base_url *}js/autocomplete3/jquery.easy-autocomplete.min.js"></script>
+
+<!--<link type="text/css" href="{*$base_url*}js/jquery-ui-1.7.2.custom/development-bundle/themes/base/ui.all.css" rel="stylesheet" />
+	<script type="text/javascript" src="{*$base_url*}js/jquery-ui-1.7.2.custom/development-bundle/external/bgiframe/jquery.bgiframe.js"></script> 
+	<script type="text/javascript" src="{*$base_url*}js/jquery-ui-1.7.2.custom/development-bundle/ui/ui.core.js"></script> 
+	<script type="text/javascript" src="{*$base_url*}js/jquery-ui-1.7.2.custom/development-bundle/ui/ui.draggable.js"></script> 
+	<script type="text/javascript" src="{*$base_url*}js/jquery-ui-1.7.2.custom/development-bundle/ui/ui.resizable.js"></script> 
+	<script type="text/javascript" src="{*$base_url*}js/jquery-ui-1.7.2.custom/development-bundle/ui/ui.dialog.js"></script>-->
+	<script>
+		$(document).ready(
+			function()
+			{							
+			    	$.post("{* $site_url *}/banksoal/getlist", {type: 2},
+			    		function (data)
+			    		{
+			    			/*var datas = data.split("\1");
+			    			$("#bank_soal").autocomplete(datas);*/
+			    			
+			    			{* if $training->training_banksoal *}
+			    			$("#bank_soal").val("{* $training->banksoal_name *}");
+			    			{* /if *}				    			
+			    		}
+			    	);
+
+                var options = {
+
+                    url: function(phrase) {
+                        return "{* $site_url *}/banksoal/getlist";
+                    },
+
+                    getValue: function(element) {
+                        return element.name;
+                    },
+
+                    ajaxSettings: {
+                        dataType: "json",
+                        method: "POST",
+                        data: {
+                            type: 2
+                        }
+                    },
+
+                    preparePostData: function(data) {
+                        data.phrase = $("#example-ajax-post").val();
+                        return data;
+                    },
+
+                    requestDelay: 200
+                };
+
+                $("#bank_soal").easyAutocomplete(options);
+
+				/*$("#dialog").dialog(
+					{ 
+					autoOpen: false 
+					,modal: true
+					,width: 400
+					}
+				)*/
+				
+				setupEditor();			    	
+			}
+		);
+		
+		function unitsoalsetting(unitid, tipe, jab,titre)
+		{
+			$.post("{* $site_url *}/certificate/defaultsetting", {unitid: unitid, tipe: tipe, jabatan: jab, trainingid: {* $training->training_id *}, defjml: $("#jmlsoal").val(), defmudah: $("#bobotmudah").val(), defsedang: $("#bobotsedang").val(), defsulit: $("#bobotsulit").val()},
+				function(data)
+				{
+				    /*
+					var title = $( "#dialog" ).dialog( "option", "title" );
+					$( "#dialog" ).dialog( "option", "title", titre );
+
+					$("#dialog").dialog(
+						{ 
+						title: titre
+						}
+					) 		
+					$("#dialog").html(data);
+					$("#dialog").dialog("open");
+					*/
+
+                    $("#dialogcontent").html(data);
+                    $('#modal-default').modal('show');
+					
+					$("#inunitid").val(unitid);
+					
+					if ($("#injmlsoal").val() < 0) $("#injmlsoal").val($("#jmlsoal").val());
+					if ($("#inmudah").val() < 0) $("#inmudah").val($("#bobotmudah").val());
+					if ($("#insedang").val() < 0) $("#insedang").val($("#bobotsedang").val());
+					if ($("#insulit").val() < 0) $("#insulit").val($("#bobotsulit").val());
+				}
+			);						
+		}
+
+		function saveSetting()
+		{			
+		
+			$("#_rule").val(tinyMCE.get("content").getContent());
+			
+			f_onsubmit("{* $site_url *}/certificate/savesetting", "frmtraining", "message", "Saving...",
+				function(data)
+				{	
+					$("#message").html("{* $ok_update_setting *}");
+					
+				}
+			);	
+			
+			return false;			
+		}
+		
+		function bank_soal_onchange()
+		{
+			$.post("{* $site_url *}/certificate/loadunitsoal", {banksoal: $("#bank_soal").val()},
+				function(data)
+				{
+					$("#dvbanksoalunit").html(data);
+				}
+			);				
+		}
+		
+	</script>
+	<input type="hidden" name="_rule" id="_rule" value="" />	
+	<table id="tbltrainingtime" width="100%" cellpadding="3" cellspacing="3" border="0">
+		<tr>
+			<td width="13%">{* $ljumlah_soal *}</td>
+			<td><input type='text' name="nosoal" id="nosoal" value="{* $training->training_total_question *}" class='formnumber' value="" ></td>
+		</tr>	
+		<tr>
+			<td width="13%">{* $lduration *}</td>
+			<td>
+				<input type='text' name="dhour" id="dhour" value="{* if $training->training_duration_hour*}{* $training->training_duration_hour *}{* /if *}" class='formnumber' value="" > {* $lhour *} : 
+				<input type='text' name="dminute" id="dminute" value="{* if $training->training_duration_minute*}{* $training->training_duration_minute *}{* /if *}" class='formnumber' value="" > {* $lminute *}
+			</td>
+		</tr>
+		<tr>
+			<td>{* $lduration_per_soal *}</td>
+			<td><input type='text' name="dpersoal" id="dpersoal" value="{* $training->training_durationperquestion *}" class='formnumber' value="" > {* $lsecond *}</td>
+		</tr>
+		
+		<tr>
+			<td>{* $ltraining_pass *}</td>
+			<td><input type='text' name="pass" id="pass" value="{* $training->training_pass *}" class='formnumber' value="" ></td>
+		</tr>
+		<tr>
+			<td>{* $ltraining_max *}</td>
+			<td><input type='text' name="certificatemax" id="certificatemax" value="{* $training->training_max *}" class='formnumber' value="" > {* $lunlimit *}</td>
+		</tr>
+		<tr>
+				<td colspan="2"><h2>{* $ldefault_setting *}</h2></td>
+		</tr>		
+		<tr>
+			<td>{* $ljumlah_soal *}</td>
+			<td><input type='text' name="jmlsoal" id="jmlsoal" value="{* $training->training_setting_jmlsoal *}" class='formnumber' value="" > </td>
+		</tr>
+		<tr>
+			<td>{* $lmudah *}</td>
+			<td><input type='text' name="bobotmudah" id="bobotmudah" value="{* $training->training_setting_bobotmudah *}" class='formnumber' value="" > %</td>
+		</tr>
+		<tr>
+			<td>{* $lsedang *}</td>
+			<td><input type='text' name="bobotsedang" id="bobotsedang" value="{* $training->training_setting_bobotsedang *}" class='formnumber' value="" > %</td>
+		</tr>
+		<tr>
+			<td>{* $lsulit *}</td>
+			<td><input type='text' name="bobotsulit" id="bobotsulit" value="{* $training->training_setting_bobotsulit *}" class='formnumber' value="" > %</td>
+		</tr>								
+		
+		<tr>
+			<td>{* $lbank_soal *}</td>
+			<td>
+				<input type='text' name="bank_soal" id="bank_soal" value="{* $exam_bank_soal *}" class='formdefault' value="" >
+				<input type="button" name="btnsetting" value=" setting " onclick="javascript:bank_soal_onchange()" />
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2"><div id="dvbanksoalunit"></div></td>
+		</tr>			
+		<tr>
+				<td colspan="2"><h2>{* $lexam_rule *}</h2></td>
+		</tr>
+		<tr>
+				<td colspan="2">
+					<textarea id="content" name="content" style="width:100%" rows="35" cols="20">{* if $training->training_intro *}{* $training->training_intro *}{* else *}{* $defaultintro *}{* /if *}</textarea>
+				</td>
+		</tr>		
+		<tr>
+			<td valign="top">&nbsp;</td>
+			<td valign="top"><div id="message"></div><input type="button" value=" Save Setting " onclick="javascript:saveSetting()" /></td>
+		</tr>	
+	</table>
+	<div id="dvunitsoaldetail"></div>
+	<div id="dialog" title="{* $ledit_soal *}" style="display: none;"> 
+	</div>
+
+<div class="modal fade" id="modal-default">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<form id="frmexportype">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title">History NPK</h4>
+				</div>
+				<div class="modal-body text-center">
+					<div id="dialogcontent"></div>
+				</div>
+				<!--<div class="modal-footer">
+					<button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+				</div>-->
+			</form>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->

@@ -1,0 +1,99 @@
+<script>
+	$(document).ready(
+		function()
+		{
+			page(0);
+			searchby_onchange();
+		}
+	);	
+	
+	function page(n)
+	{
+		if (! n) n = 0;
+		
+		var url = "{* $base_url *}index.php/hrld/search/" + n;
+		$.post(url, $("#frmsearch").serialize(),
+			function(r)
+			{
+				$("#list").html(r.html);
+			}
+			, "json"
+		);
+	}
+	
+	function sortby(field)
+	{
+		if ($("#sortby").val() == field)
+		{
+			if ($("#orderby").val() == "asc")
+			{
+				$("#orderby").val("desc");
+			}
+			else
+			{
+				$("#orderby").val("asc");
+			}
+		}
+		else
+		{
+			$("#orderby").val("asc");
+		}
+		
+		$("#sortby").val(field);	
+		page(0);	
+	}
+	
+	function changelimit(elmt)
+	{
+		$("#limit").val(elmt.value);
+		page(0);
+		
+	}
+	
+	function searchby_onchange()
+	{
+		var seacrhby = $("#searchby").val();
+		$("#keyword").hide();
+		$("#cat").hide();
+		
+		switch(seacrhby)
+		{
+			case "cat":
+				$("#cat").show();
+			break;
+			default:
+				$("#keyword").show();
+		}
+	}
+	
+</script>
+<h2>{* $lhrld_setting *}</h2>
+
+{* if $sess.asadmin *}
+<p><em>{* $lheader_lhrld_setting_list *}</em><br />
+        <br />        
+{* $lsort_list_by *} <a href="#" onclick="javascript:sortby('user_npk')"{* if $sortby eq 'user_npk' *}class="lite"{* /if *}>NPK</a>
+ | <a href="#" onclick="javascript:sortby('category_name')"{* if $sortby eq 'category_name' *}class="lite"{* /if *}>{* $lcategory *}</a>
+ | <a href="{* $base_url *}index.php/hrld/form">{* $ldata_added *}</a>
+{* /if *}
+
+<form id="frmsearch" onsubmit="javascript:page(0); return false;">
+	<input type="hidden" id="topicid" name="topicid" value="{* $topicid *}" />
+	<input type="hidden" id="limit" name="limit" value="{* $limit *}" />
+	<input type="hidden" id="sortby" name="sortby" value="user_npk" />
+	<input type="hidden" id="orderby" name="orderby" value="asc" />
+      <p>{* $lsearch_by *}
+      <select name="searchby" id="searchby" onchange="javascript:searchby_onchange()">
+      	<option value="npk">{* $lnpk *}</option>
+      	<option value="cat">{* $lcategory *}</option>
+      </select> 
+      <input type='text' name="keyword" id="keyword" class='formdefault' value="">
+      	<select name="cat" id="cat" style="display: none;">
+      		{* foreach from=$cats item=cat *}
+      		<option value="{* $cat->category_id *}">{* $cat->category_name *}</option>
+      		{* /foreach *}
+    	</select>
+      <input type='submit' value=" {* $lsearch *} ">
+      </p>
+</form>  
+<div id="list"></div>

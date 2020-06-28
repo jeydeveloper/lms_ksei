@@ -1,0 +1,108 @@
+<script>
+	$(document).ready(
+		function()
+		{
+			page();
+		}
+	);	
+	
+	function page(act, formid)
+	{
+		if (! act) act = "view";
+		if (! formid) formid = "{* $formid *}";
+		
+		$("#wait").show();
+		
+		{* if $searchurl *}
+		var url = "{* $searchurl *}";
+		{* else *}
+		var url = "{* $base_url *}index.php/ildpform/search/" + act + "/" + formid;
+		{* /if *}
+		$.post(url, $("#frmsearch").serialize(),
+			function(r)
+			{
+				$("#wait").hide();
+				$("#list").html(r.html);
+			}
+			, "json"
+		);
+	}
+	
+	function sortby(field)
+	{
+		if ($("#sortby").val() == field)
+		{
+			if ($("#orderby").val() == "asc")
+			{
+				$("#orderby").val("desc");
+			}
+			else
+			{
+				$("#orderby").val("asc");
+			}
+		}
+		else
+		{
+			$("#orderby").val("asc");
+		}
+		
+		$("#sortby").val(field);	
+		page();	
+	}
+	
+	function changelimit(elmt)
+	{
+		$("#limit").val(elmt.value);
+		page();
+		
+	}
+
+</script>
+
+<h2>{* $lildp_form_title *}</h2>
+<div id="wait" style="display: none;"><img src="{* $base_url *}images/anim_wait.gif" border="0" /></div>
+<table width="775" border="0">
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td width="73">{* $lnpk *}</td>
+    <td width="10">:</td>
+    <td width="200">{* $trainee.user_npk *}</td>
+    <td width="72">{* $ldirectorat *}</td>
+    <td width="11">:</td>
+    <td width="229" >{* $groups[0]->level_group_name *}</td>
+  </tr>
+  <tr>
+    <td>{* $lname *}</td>
+    <td>:</td>
+    <td>{* $trainee.user_first_name *} {* $trainee.user_last_name *}</td>
+    <td>{* $lgroup *}</td>
+    <td>:</td>
+    <td valign='top' rowspan='2'>{* $groups[1]->level_group_name *}</td>
+  </tr>
+  <tr>
+    <td>{* $ljob_title *}</td>
+    <td>:</td>
+    <td colspan="4">{* $job->jabatan_name *}</td>
+    </tr>
+    {* if $trainee.user_grade_code le 50 && $trainee.user_grade_code gt 0 *}
+  <tr>
+    <td>{* $lgrade *}</td>
+    <td>:</td>
+    <td colspan="4">{* if $grade->grade_description *}{* $grade->grade_description *}{* else *}{* $grade->grade_code *}{* /if *}</td>
+    </tr>
+    {* /if *}
+    <tr>
+    <td>{* $lildp_period *}</td>
+    <td>:</td>
+    <td colspan="4">{* $ildpperiod *}</td>
+    </tr>
+</table>
+<br />
+<div id="list"></div>

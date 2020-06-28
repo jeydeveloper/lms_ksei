@@ -1,0 +1,456 @@
+<link type="text/css" href="{*$base_url*}js/jquery-ui-1.7.2.custom/css/smoothness/jquery-ui.css" rel="stylesheet" />
+<link type="text/css" href="{*$base_url*}js/jquery-ui-1.7.2.custom/css/smoothness/ui.datepicker.css" rel="stylesheet" />
+<script type="text/javascript" src="{*$base_url*}js/jquery-ui-1.7.2.custom/development-bundle/ui/ui.core.js"></script>
+<script type="text/javascript" src="{*$base_url*}js/jquery-ui-1.7.2.custom/development-bundle/ui/ui.datepicker.js"></script>
+
+<style type="text/css">
+input[type="text"],textarea{width: 100%;}
+input.datex{width: inherit;}
+h1{margin: 0;padding: 0;}
+p{padding: 5px 10px;}
+.error_form{border: solid 1px; background: red;color:#fff;}
+td{vertical-align: top;}
+.search_wrap{margin-top: 10px;}
+.search_wrap select{width: 300px;height: 180px;}
+.search_wrap_content{display: inline-block;vertical-align:top;min-width: 100px;text-align: center;}
+.delete_row_schedule{display: none;}
+.delete_row_biaya_lain{display: none;}
+.delete_row_attachment{display: none;}
+a:hover{cursor: pointer;}
+.wrapFileImg{display:inline-block;margin-right:10px;vertical-align: top;padding: 5px;border: solid 1px;margin-bottom: 10px;}
+.wrapFileImg a{vertical-align: top;}
+</style>
+
+<form id="frm_submit" action="{* $site_url *}/request/formtraining_edit" method="post" enctype="multipart/form-data">
+	<input type="hidden" name="hd_request_id" value="{* $hd_request_id *}">
+    {* if $error_form *}
+    <p class="error_form">{* $request_inputerror *} : {* $error_form *}</p>
+    {* /if *}
+	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="tb_data">
+		<tr>
+			<td colspan="3">
+				<h1>{* $request_newproposaltraining *}</h1>
+			</td>
+		</tr>
+		<tr>
+			<td width="200">Request No</td>
+			<td width="1">:</td>
+			<td>
+				{* if $is_admin eq 1 *}
+				<a href="{* $site_url *}/request/formtraining_edit_setting/{* $hd_request_id *}">{* $frm.rqtr_request_no *}</a>
+				{* else *}
+				<span>{* $frm.rqtr_request_no *}</span>
+				{* /if *}
+			</td>
+		</tr>
+		<tr>
+			<td width="200">Request Training Code</td>
+			<td width="1">:</td>
+			<td>
+				<input type="text" name="rqtr_request_code" id="rqtr_request_code" value="{* $frm.rqtr_request_code *}">
+			</td>
+		</tr>
+		<tr>
+			<td width="200">Request User</td>
+			<td width="1">:</td>
+			<td>
+				{* $frm.rqtr_entryuser *}
+			</td>
+		</tr>
+		<tr>
+			<td width="200">Request Date</td>
+			<td width="1">:</td>
+			<td>
+				{* $frm.rqtr_entrytime *}
+			</td>
+		</tr>
+		<tr>
+			<td width="200">{* $request_trainingtype *}</td>
+			<td width="1">:</td>
+			<td>
+				<label><input type="radio" name="training_type" id="training_type" value="1" checked>{* $request_pelatihaninhouse *}</label>
+				<label><input type="radio" name="training_type" id="training_type" value="2" {* if $frm.rqtr_type eq 2 *}checked{* /if *}>{* $request_pelatihaneksternal *}</label>
+				<label><input type="radio" name="training_type" id="training_type" value="3" {* if $frm.rqtr_type eq 3 *}checked{* /if *} >{* $request_onthejobtraining *}</label>
+			</td>
+		</tr>
+
+		{* if $user_type eq 0 *}
+		<tr>
+			<td width="200">Jenis Pendidikan</td>
+			<td width="1">:</td>
+			<td>
+				<select name="rqtr_jepd_id" require>
+					<option value="">--- Pilih ---</option>
+				{* foreach from=$data_jenispendidikan item=row *}
+					<option value="{* $row.jepd_id *}" {* if $frm.rqtr_jepd_id eq $row.jepd_id *}selected{* /if *}>{* $row.jepd_name *}</option>
+				{* /foreach *}
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td width="200">BI Category</td>
+			<td width="1">:</td>
+			<td>
+				<select name="rqtr_bict_id" require>
+					<option value="">--- Pilih ---</option>
+				{* foreach from=$data_bicategory item=row *}
+					<option value="{* $row.bict_id *}" {* if $frm.rqtr_bict_id eq $row.bict_id *}selected{* /if *}>{* $row.bict_name *}</option>
+				{* /foreach *}
+				</select>
+			</td>
+		</tr>
+		{* /if *}
+
+		<tr>
+			<td width="200">{* $request_penyelenggara *}</td>
+			<td width="1">:</td>
+			<td>
+				<input type="text" name="penyelenggara" id="penyelenggara" value="{* $frm.rqtr_penyelenggara *}">
+			</td>
+		</tr>
+		<tr>
+			<td width="200">{* $request_tema *}</td>
+			<td width="1">:</td>
+			<td>
+				<input type="text" name="tema" id="tema" value="{* $frm.rqtr_tema *}" required>
+			</td>
+		</tr>
+		<tr>
+			<td width="200">{* $request_judul *}</td>
+			<td width="1">:</td>
+			<td>
+				<input type="text" name="judul" id="judul" value="{* $frm.rqtr_judul *}" required>
+			</td>
+		</tr>
+		<tr>
+			<td width="200" style="vertical-align:top;">{* $request_waktu *} / {* $request_tanggal *}</td>
+			<td width="1" style="vertical-align:top;">:</td>
+			<td>
+				{* if !empty($frm.rqtr_schedule.tanggal) *}
+				{* counter start=0 print=false assign="no" *}
+				{* foreach from=$frm.rqtr_schedule.tanggal item=row *}
+				<div class="wrapDate" style="margin-bottom: 10px;">
+					<input class="datex" type="text" name="request_schedule[tanggal][]" id="tanggal" value="{* $row *}" placeholder="{* $request_tanggal *}" required> From : <input class="datex" type="text" name="request_schedule[waktu_awal][]" value="{* $frm.rqtr_schedule.waktu_awal[$no] *}" placeholder="{* $request_waktu *}"> To : <input class="datex" type="text" name="request_schedule[waktu_akhir][]" value="{* $frm.rqtr_schedule.waktu_akhir[$no] *}" placeholder="{* $request_waktu *}"> <a class="delete_row_schedule" href="#" style="{* if $no ne 0 *}display:initial;{* /if *}">( X )</a>
+				</div>
+				{* counter *}
+				{* /foreach *}
+				{* else *}
+				<div class="wrapDate" style="margin-bottom: 10px;">
+					<input class="datex" type="text" name="request_schedule[tanggal][]" id="tanggal" value="{* $frm.tanggal *}" placeholder="{* $request_tanggal *}" required> From : <input class="datex" type="text" name="request_schedule[waktu_awal][]" value="{* $frm.waktu *}" placeholder="{* $request_waktu *}"> To : <input class="datex" type="text" name="request_schedule[waktu_akhir][]" value="{* $frm.waktu *}" placeholder="{* $request_waktu *}"> <a class="delete_row_schedule" href="#">( X )</a>
+				</div>
+				{* /if *}
+				<a hred="#" id="addNewDate">ADD NEW</a>
+			</td>
+		</tr>
+		<tr>
+			<td width="200">{* $request_tempat *}</td>
+			<td width="1">:</td>
+			<td>
+				<input type="text" name="tempat" id="tempat" value="{* $frm.rqtr_tempat *}">
+			</td>
+		</tr>
+		<tr>
+			<td width="200">{* $request_pembicara *}</td>
+			<td width="1">:</td>
+			<td>
+				<input type="text" name="pembicara" id="pembicara" value="{* $frm.rqtr_pembicara *}">
+			</td>
+		</tr>
+		<tr>
+			<td width="200">{* $request_datapeserta *}</td>
+			<td width="1">:</td>
+			<td>
+				<input type="text" name="user_keyword" id="user_keyword" style="width: 215px;" placeholder="Nama or NPK or Jabatan or Divisi"> <button id="btn_search">Search</button>
+				<div class="search_wrap">
+					<div class="search_wrap_content">
+						<select name="user_search[]" id="user_search" size="10" multiple></select>
+					</div>
+					<div class="search_wrap_content">
+						<div class="search_wrap_button">
+							<button id="btn_in">&gt;&gt;</button>
+							<br /><br />
+							<button id="btn_out">&lt;&lt;</button>
+						</div>
+					</div>
+					<div class="search_wrap_content">
+						<select name="user_selected[]" id="user_selected" size="10" multiple>
+							{* foreach from=$frm.participant_detail item=row *}
+							<option value="{* $row.id *}" selected>{* $row.name *}</option>
+							{* /foreach *}
+						</select>
+					</div>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td width="200">{* $request_tujuanpelatihan *}</td>
+			<td width="1">:</td>
+			<td>
+				<textarea name="tujuan_pelatihan" id="tujuan_pelatihan">{* $frm.rqtr_tujuan_pelatihan *}</textarea>
+			</td>
+		</tr>
+		<tr>
+			<td width="200">{* $request_rekomendasidirectsupervisor *}</td>
+			<td width="1">:</td>
+			<td>
+				<textarea name="rekomendasi_supervisor" id="rekomendasi_supervisor">{* $frm.rqtr_rekomendasi_supervisor *}</textarea>
+			</td>
+		</tr>
+		<tr>
+			<td width="200">Training Cost</td>
+			<td width="1">:</td>
+			<td>
+				<div style="margin-bottom: 10px;">
+					<label>Biaya instruktur :</label>
+					<input class="training_cost numberformat" type="text" name="biaya_program" id="biaya_program" value="{* $frm.rqtr_biaya_program *}">
+					<label>Biaya Akomodasi :</label>
+					<input class="training_cost numberformat" type="text" name="akomodasi" id="biaya_akomodasi" value="{* $frm.rqtr_akomodasi *}">
+					<label>Biaya Transportasi :</label>
+					<input class="training_cost numberformat" type="text" name="transportasi" id="biaya_transportasi" value="{* $frm.rqtr_transportasi *}">
+					<label>Biaya Konsumsi :</label>
+					<input class="training_cost numberformat" type="text" name="uang_makan" id="biaya_uang_makan" value="{* $frm.rqtr_uang_makan *}">
+				</div>
+
+				{* if !empty($frm.rqtr_biaya_lain.nama_biaya) *}
+				{* counter start=0 print=false assign="no" *}
+				{* foreach from=$frm.rqtr_biaya_lain.nama_biaya item=row *}
+				<div class="wrapBiayaLain" style="margin-bottom: 10px;">
+					<input class="datex" type="text" name="biaya_lain[nama_biaya][]" value="{* $row *}" placeholder="Nama Biaya Lain"> <input class="datex training_cost numberformat" type="text" name="biaya_lain[jumlah_biaya][]" value="{* $frm.rqtr_biaya_lain.jumlah_biaya[$no] *}" placeholder="Jumlah Biaya Lain"> <a class="delete_row_biaya_lain" href="#" style="{* if $no ne 0 *}display:initial;{* /if *}">( X )</a>
+				</div>
+				{* counter *}
+				{* /foreach *}
+				{* else *}
+				<div class="wrapBiayaLain" style="margin-bottom: 10px;">
+					<input class="datex" type="text" name="biaya_lain[nama_biaya][]" placeholder="Nama Biaya Lain"> <input class="datex training_cost numberformat" type="text" name="biaya_lain[jumlah_biaya][]" placeholder="Jumlah Biaya Lain"> <a class="delete_row_biaya_lain" href="#">( X )</a>
+				</div>
+				{* /if *}
+
+				<div style="margin-bottom: 10px;">
+					<a hred="#" id="addNewBiayaLain">ADD NEW</a>
+				</div>
+
+				<label>Total :</label>
+				<input type="text" name="biaya_total" id="biaya_total" value="{* $frm.rqtr_jumlah *}" disabled>
+			</td>
+		</tr>
+		<tr>
+			<td width="200">{* $request_rekomendasiprogramdevelopment *}</td>
+			<td width="1">:</td>
+			<td>
+				<textarea name="rekomendasi_development" id="rekomendasi_development">{* $frm.rqtr_rekomendasi_development *}</textarea>
+			</td>
+		</tr>
+		<tr>
+			<td width="200">Attachment</td>
+			<td width="1">:</td>
+			<td>
+				{* if !empty($frm.rqtr_attachment_alter) *}
+				{* counter start=0 print=false assign="no" *}
+				{* foreach from=$frm.rqtr_attachment_alter item=row *}
+				<div class="wrapFileImg">
+					{* if $row.is_pdf eq 1 *}
+					<a href="{* $base_url *}uploads/request_training/{* $row.file_name *}" target="_blank">File Name : {* $row.file_name *}</a> <a class="delete_row_attachment_img" href="#" style="{* if $no ne 0 *}display:initial;{* /if *}">( X )</a>
+					{* else *}
+					<a href="{* $base_url *}uploads/request_training/{* $row.file_name *}" target="_blank"><img width="150px" height="150px;" src="{* $base_url *}uploads/request_training/{* $row.file_name *}"></a> <a class="delete_row_attachment_img" href="#" style="{* if $no ne 0 *}display:initial;{* /if *}">( X )</a>
+					{* /if *}
+					<input type="hidden" name="userfile_exists[]" value="{* $row.file_name *}">
+				</div>
+				{* counter *}
+				{* /foreach *}
+				<div class="wrapFile" style="margin-bottom: 10px;margin-top: 10px;">
+					<input type="file" name="userfile[]"> <a class="delete_row_attachment" href="#">( X )</a>
+				</div>
+				{* else *}
+				<div class="wrapFile" style="margin-bottom: 10px;">
+					<input type="file" name="userfile[]"> <a class="delete_row_attachment" href="#">( X )</a>
+				</div>
+				{* /if *}
+				<a hred="#" id="addNewAttachment">ADD ATTACHMENT</a>
+			</td>
+		</tr>
+		<tr>
+			<td width="200">{* $request_statusapproval *}</td>
+			<td width="1">:</td>
+			<td>
+				{* foreach from=$userid_approval item=row *}
+				<label><input type="checkbox" name="status_approval" id="status_approval" value="{* $row.trap_id *}" {* if $row.trap_status_approval eq 1 *}checked{* /if *} disabled> {* if $row.trap_status_approval eq 1 *}{* $row.user_first_name *}{* /if *} [Jabatan : {* $row.jabatan_name *}]</label><br>
+				<textarea name="trap_reason_approval" id="trap_reason_approval" disabled>{* $row.trap_reason_approval *}</textarea><br>
+				{* /foreach *}
+
+				{* if ($user_type eq 0 and $frm.rqtr_status_admin_approval eq 1) *}
+				<br/>
+				<label><input type="checkbox" name="rqtr_status_admin_approval" id="rqtr_status_admin_approval" value="1" {* if $frm.rqtr_status_admin_approval eq 1 *}checked{* /if *} disabled>Admin Approval</label><br>
+				<textarea name="rqtr_reason_admin_approval" id="rqtr_reason_admin_approval" disabled>{* $frm.rqtr_reason_admin_approval *}</textarea><br>
+				{* /if *}
+			</td>
+		</tr>
+		<tr>
+			<td colspan="3" style="text-align:right;">
+				<input type="submit" name="btn_submit" value="Submit">
+			</td>
+		</tr>
+	</table>
+</form>
+
+<script type="text/javascript">
+var calculate = function() {
+	var biaya_total = 0;
+	$('.training_cost').each(function(idx, val){
+		var me = $(this);
+		var jumlah = me.val() || 0;
+		if(jumlah > 0) jumlah = jumlah.replace(/\D/g, "");
+		biaya_total += parseInt(jumlah);
+	});
+
+	if(biaya_total > 0) {
+		biaya_total = biaya_total.toString().replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ".");
+	}
+
+	$('#biaya_total').val(biaya_total);
+};
+
+var change_format_number = function(){
+	$('.training_cost').each(function(idx, val){
+		var me = $(this);
+		var jumlah = me.val() || 0;
+		if(jumlah > 0) jumlah = jumlah.toString().replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ".");
+		me.val(jumlah);
+	});
+
+	var biaya_total = $('#biaya_total').val();
+	if(biaya_total > 0) biaya_total = biaya_total.toString().replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ".");
+	$('#biaya_total').val(biaya_total);
+};
+</script>
+
+<script type="text/javascript">
+$(function(){
+	$("#tanggal").datepicker({dateFormat: 'yy-mm-dd', changeMonth: true, changeYear: true});
+	var cnt = $('.wrapDate').length;
+	$('#addNewDate').click(function(e){
+		e.preventDefault();
+		var cnt = $('.wrapDate').length;
+		var tmp = $('.wrapDate:eq(0)').clone();
+		tmp.find('#tanggal').removeClass('hasDatepicker').attr('id', 'tanggal_'+(cnt+1));
+		tmp.insertBefore(this);
+		tmp.find('.delete_row_schedule').show();
+		tmp.find('input').val('');
+		$("#tanggal_"+(cnt+1)).datepicker({dateFormat: 'yy-mm-dd', changeMonth: true, changeYear: true});
+
+	})
+
+	$('#addNewAttachment').click(function(e){
+		e.preventDefault();
+		var cnt = $('.wrapFile').length;
+		var tmp = $('.wrapFile:eq(0)').clone();
+		tmp.insertBefore(this);
+		tmp.find('.delete_row_attachment').show();
+		tmp.find('input').val('').show();
+	})
+
+	var format_number = function(th) {
+		th = th || $('body');
+		th.find('.numberformat').keyup(function(event) {
+
+		  // skip for arrow keys
+		  if(event.which >= 37 && event.which <= 40){
+		    event.preventDefault();
+		  }
+
+		  var nilai = $(this).val();
+		  nilai = nilai.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ".");
+		  $(this).val(nilai);
+		});
+	};
+
+	$('#addNewBiayaLain').click(function(e){
+		e.preventDefault();
+		var cnt = $('.wrapBiayaLain').length;
+		var tmp = $('.wrapBiayaLain:eq(0)').clone();
+		tmp.insertBefore(this);
+		tmp.find('.delete_row_biaya_lain').show();
+		tmp.find('input').val('');
+
+		format_number(tmp);
+
+		$('.training_cost').blur(function(){
+			calculate();
+		})
+	})
+
+	change_format_number();
+	format_number();
+});
+</script>
+
+<script type="text/javascript">
+	$(function(){
+		$('#btn_in').click(function(e){
+			e.preventDefault();
+			var el = $('#user_search option:selected');
+			$('#user_selected').append(el);
+		});
+		$('#btn_out').click(function(e){
+			e.preventDefault();
+			var el = $('#user_selected option:selected');
+			$('#user_search').append(el);
+		});
+
+		$('.training_cost').blur(function(){
+			calculate();
+		})
+
+		$('#btn_search').click(function(e){
+			e.preventDefault();
+			var user_keyword = $('#user_keyword').val() || '';
+
+			if(user_keyword == '') {
+				$('#user_search').empty()
+				return true;
+			}
+			
+			$.ajax({
+				url : '{* $site_url *}/request/do_search_user',
+				type: 'POST',
+				data: {user_keyword: user_keyword},
+				dataType : 'json',
+				success : function(data){
+					var tmp = '';
+					var detail = data.detail || {};
+					if(Object.keys(detail).length > 0) {
+						$.each(detail, function(idx, val){
+							tmp += '<option value="'+val.id+'">';
+							tmp += val.label;
+							tmp += '</option>';
+						});
+					}
+					$('#user_search').empty().append(tmp);
+				}
+			});
+		});
+		$('.delete_row_schedule').live('click', function(e){
+			e.preventDefault();
+			var me = $(this);
+			me.closest('.wrapDate').remove();
+		});
+		$('#frm_submit').submit(function(){
+			$('#user_selected option').attr('selected', true);
+		});
+		$('.delete_row_attachment').live('click', function(e){
+			e.preventDefault();
+			var me = $(this);
+			me.closest('.wrapFile').remove();
+		});
+		$('.delete_row_attachment_img').live('click', function(e){
+			e.preventDefault();
+			var me = $(this);
+			me.closest('.wrapFileImg').remove();
+		});
+		$('.delete_row_biaya_lain').live('click', function(e){
+			e.preventDefault();
+			var me = $(this);
+			me.closest('.wrapBiayaLain').remove();
+			calculate();
+		});
+	});
+</script>

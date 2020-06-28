@@ -1,0 +1,261 @@
+
+<script type="text/javascript" src="{*$base_url*}js/jquery-1.7.1.min.js"></script>
+<link type="text/css" href="{*$base_url*}js/jquery-ui-1.7.2.custom/css/smoothness/jquery-ui.css" rel="stylesheet" />
+<link type="text/css" href="{*$base_url*}js/jquery-ui-1.7.2.custom/css/smoothness/ui.datepicker.css" rel="stylesheet" />
+<script type="text/javascript" src="{*$base_url*}js/jquery-ui-1.7.2.custom/development-bundle/ui/ui.core.js"></script>
+<script type="text/javascript" src="{*$base_url*}js/jquery-ui-1.7.2.custom/development-bundle/ui/ui.datepicker.js"></script>
+<script>  
+  var mygroups = new Array();
+  
+    $(document).ready(
+      function()
+      {
+      {* foreach from=$mygroups item=mygroup *}
+        mygroups.push({* $mygroup->level_group_id *});
+      {* /foreach *}
+      
+        {* if $edit *}    
+          $('#joindate').datepicker({dateFormat: 'dd/mm/yy',startDate: '01/01/1900', changeMonth: true, changeYear: true}).val('{* $user.user_join_date_fmt *}').trigger('change');
+          $('#birthdate').datepicker({dateFormat: 'dd/mm/yy',startDate: '01/01/1900', changeMonth: true, changeYear: true, yearRange: "1940:2000"}).val('{* $user.user_birthdate_fmt *}').trigger('change');          
+          $('#lastlogindate').datepicker({dateFormat: 'dd/mm/yy',startDate: '01/01/1900', changeMonth: true, changeYear: true}).val('{* $user.user_lastlogin_date_fmt *}').trigger('change');
+                              
+          city_onchange({* $user.user_location *});
+          $("#atasan").val('{* $user.user_npk_atasan *}');
+          $("#grade").val('{* $user.user_grade_code *}');                   
+        {* else *}
+          $('#joindate').datepicker({dateFormat: 'dd/mm/yy',startDate: '01/01/1900', changeMonth: true, changeYear: true});
+          $('#birthdate').datepicker({dateFormat: 'dd/mm/yy',startDate: '01/01/1900', changeMonth: true, changeYear: true, yearRange: "1940:2000"});
+          $('#lastlogindate').datepicker({dateFormat: 'dd/mm/yy',startDate: '01/01/1900', changeMonth: true, changeYear: true});
+          
+          
+          city_onchange(0);
+        {* /if *}               
+        loadgroup(0, 1, true);
+      }
+    );
+  
+  
+  function loadgroup(parent, level, isinit)
+  {
+    if (parent.length == 0)
+    {
+      {* foreach from=$levels item=level *}
+        if ({* $level->level_nth *} > level)
+        {
+          $("#level{* $level->level_nth *} option[value!='']").remove();
+        }
+      {* /foreach *}
+      return;
+    }   
+    
+    $.post("{* $site_url *}/user/group/"+parent, {},
+      function(r)
+      {       
+        for(var i=0; i < r.groups.length; i++)
+        {
+          if (i == 0)
+          {
+            {* foreach from=$levels item=level *}
+              if ({* $level->level_nth *} >= r.groups[i].level_group_nth)
+              {
+                $("#level{* $level->level_nth *} option[value!='']").remove();
+              }
+            {* /foreach *}          
+          }
+          $("#level"+r.groups[i].level_group_nth).append($('<option></option>').val(r.groups[i].level_group_id).html(r.groups[i].level_group_name));
+        }
+        
+        if (! isinit) return;
+        
+        if ((r.groups.length > 0) && (mygroups.length > 0))
+        {
+          if (r.groups[0].level_group_nth <= mygroups.length)
+          {
+            $("#level"+r.groups[0].level_group_nth).val(mygroups[r.groups[0].level_group_nth-1]);
+            loadgroup(mygroups[r.groups[0].level_group_nth-1], r.groups[0].level_group_nth+1, isinit);
+          }
+          else
+          {
+            loadjabatan(mygroups[mygroups.length-1]);
+          }         
+        }
+        else
+        if (mygroups.length > 0)
+        {
+          loadjabatan(mygroups[mygroups.length-1]);
+        }
+      }
+      , "json"
+    );
+  }
+  
+  function frmuser_onsubmit()
+  {
+    return f_onsubmit("{* $site_url *}/register/do_save/{* $edit *}", "frmuser", "message", "Updating...",
+      function(data)
+      {
+        {* if $edit *}
+          $("#message").html("{* $ok_update_user *}");
+          {* if $fromlist *}
+          setTimeout('location = "{* $site_url *}/user/info"', {* $flashtime *});
+          {* /if *}       
+        {* else *}
+        $("#message").html("{* $ok_add_user *}");
+        setTimeout('location = "{* $site_url *}/user/info"', {* $flashtime *});
+        {* /if *}
+      }
+    );    
+  }
+  
+  function city_onchange(id)
+  {
+    $.post("{* $site_url *}/user/showlokasi", {city: $("#city").val(), def: id},
+      function(data)
+      {
+        $("#dvlokasi").html(data);
+      }
+    );
+  } 
+  
+  function level_onchange(level)
+  {
+    var parent = $("#level"+level).val();
+    loadgroup(parent, level, false);
+    loadjabatan(parent);
+  }     
+  
+  function loadjabatan(groupid)
+  {
+    $.post("{* $site_url *}/user/jabatan/"+groupid, {},
+      function(r)
+      {
+        $("#jabatan option[value!='']").remove();
+        for(var i=0; i < r.jabatans.length; i++)
+        {
+          $("#jabatan").append($('<option></option>').val(r.jabatans[i].jabatan_id).html(r.jabatans[i].jabatan_name));
+        }
+        
+        $("#jabatan").val({* $user.user_jabatan *});
+        //loadfunction();
+      }
+      , "json"
+    );
+  }
+
+  function loadfunction()
+  {
+    $.post("{* $site_url *}/user/func/"+$("#jabatan").val(), {},
+      function(r)
+      {
+        $("#function option[value!='']").remove();
+        for(var i=0; i < r.functions.length; i++)
+        {
+          $("#function").append($('<option></option>').val(r.functions[i].function_id).html(r.functions[i].function_desc));
+        }
+        
+        $("#function").val({* $user.user_function *});
+      }
+      , "json"
+    );
+  }
+  
+</script>
+<form name="frmuser" id="frmuser" onsubmit="javascript: return frmuser_onsubmit()">
+<table width="100%">
+  <tr>
+    <td><h2>Register</h2></td>
+  </tr>
+  <tr>
+    <td>
+    <table width="100%" border="0" cellpadding="0" cellspacing="0" class="tb_data">
+      <tr>
+        <td>* {* if ! $hide_famaly_field *}{* $first_name *}{* else *}{* $lname *}{* /if *}</td>
+        <td width="1">:</td>
+        <td><input type='text' name="firstname" id="firstname" class='formdefault' value="{* $user.user_first_name *}" maxlength='100'></td>
+      </tr>
+      <tr>
+        <td>* {* $password *}</td>
+        <td width="1">:</td>
+        <td><input type='password' name="password" id="password" class='formshort' value="" maxlength='100'></td>
+      </tr>
+      <tr>
+        <td>* {* $confirm_password *}</td>
+        <td>:</td>
+        <td><input type='password' name="cpassword" id="cpassword" class='formshort' value="" maxlength='100'></td>
+      </tr>
+      <tr>
+        <td>* {* $email *}</td>
+        <td>:</td>
+        <td><input type='text' name="email" id="email" class='formdefault' value="{* $user.user_email *}" maxlength='100'></td>
+      </tr>
+      <tr>
+        <td>&nbsp;&nbsp;{* $birthdate *}</td>
+        <td>:</td>
+        <td><input type='text' name="birthdate" id="birthdate" class='formshort date-pick' value="" maxlength='10'/>
+      </tr>
+      <tr>
+        <td>* {* $city *}</td>
+        <td>:</td>
+        <td>
+          <select name="city" id="city" class='formdefault' onchange="javascript:city_onchange(0)">
+            <option value="">--- {* $city *} ---</option>
+            {* foreach from=$cities item=city *}
+            <option value="{* $city->lokasi_kota *}"{* if $user.lokasi_kota|upper eq $city->lokasi_kota|upper *} selected{* /if *}>{* $city->lokasi_kota *}</option>
+            {* /foreach *}
+          </select>
+        </td>
+      </tr>
+      <!--tr>
+        <td>* {* $user_type *}</td>
+        <td>:</td>
+        <td><select name="type" id="type" class='selectmedium'>
+          {* foreach from=$usertypes item=type *}
+            <option value="{* $type->right_id *}" {* if $type->right_id eq $user.user_type *}selected{* /if *}>{* $type->right_name *}</option>
+          {* /foreach *}          
+        </select></td>
+      </tr-->
+      <tr>
+        <td>{* $employee_type *}</td>
+        <td>:</td>
+        <td><select name="emp" id="emp" class='selectmedium'>
+          
+{* foreach from=$workstatuses item=workstatus key=idx *}
+
+          <option value="{* $idx *}" {* if $user.user_emp eq $idx *}selected{* /if *}>
+          {* $workstatus *}
+          </option>
+          
+{* /foreach *}
+
+        </select>
+  </td>
+      </tr>
+      <tr>
+        <td>Telpon</td>
+        <td>:</td>
+        <td><input type='text' name="user_telp" id="user_telp" class='formdefault' value="{* $user.user_telp *}" maxlength='100'></td>
+      </tr>
+      <tr>
+        <td>Captca</td>
+        <td>:</td>
+        <td>
+          <img src="{* $img_captca *}"><br/>
+          <input type='text' name="user_captca" id="user_captca" class='formdefault' value="" maxlength='100'>
+        </td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+        <td><div id="message"></div></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+        <td><input type="submit" value=" Submit " />
+<input type="reset" value=" Reset " /></td>
+      </tr>
+    </table></td>
+  </tr>
+</table>
+
+</form>

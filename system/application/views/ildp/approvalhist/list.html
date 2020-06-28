@@ -1,0 +1,68 @@
+<script>
+	function fcheckall()
+	{
+		$("input[id='users[]']").attr("checked", $("#checkall").attr("checked"));
+	}
+	
+	function checkone()
+	{
+		var n = $("input[id='users[]']:checked").length;
+		$("#checkall").attr("checked", n == {* $nuser *});
+	}
+	
+	function frmreset_onsubmit()
+	{
+		if (! confirm("{* $lconfirm_ildp_reset *}")) 
+		{
+			return false;
+		}	
+				
+		$("#waitaction").show();
+		$("#submitbtn").hide();
+		
+		$.post("{* $base_url *}index.php/ildp/resetform/0", $("#frmreset").serialize(),
+			function(r)
+			{				
+				$("#waitaction").hide();
+				$("#submitbtn").show();				
+				
+				if (r.error)
+				{
+					alert(r.message);
+					return;
+				}
+				
+				alert(r.message);
+				location = r.redirect;
+			}
+			, "json"
+		);
+		return false;
+	}
+	</script>
+	<table width="100%" cellpadding="3" class="tablelist"> 
+		<thead> 
+			<tr> 
+				<th width="100">{* $lnpk *}</th> 
+				<th>{* $lname *}</th> 
+				<th width="140">{* $ldate *}</th> 
+				<th width="400">{* $lstatus *}</th> 
+			</tr>
+		</thead>
+		<tbody>
+			{* foreach from=$rows item=row *}		
+			<tr>
+				<td><a href="{* $site_url *}/ildp/myformdetailhist/{* $row->order_id *}">{* $row->order_user_npk *}<a/></td>
+				<td>{* $row->order_user_first_name *} {* $row->order_user_last_name *}</td> 
+				<td>{* $row->order_date_fmt *}</td>
+				<td>{* $row->last_status *}</td>
+			</tr>
+			{* /foreach *}	
+		</tbody>	
+		<tfoot>
+			<tr>
+				<td colspan="4">{* $paging *}</td>
+			</tr>
+		</tfoot>
+		</thead>
+	</table>

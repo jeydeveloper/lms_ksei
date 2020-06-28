@@ -1,0 +1,844 @@
+<script type="text/javascript" src="{* $base_url *}js/tiny_mce/tiny_mce.js"></script>
+<script>
+    tinyMCE.init(
+        {
+            mode: "textareas",
+            theme: "advanced",
+            plugins: "safari,pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template",
+            theme_advanced_buttons1: "save,newdocument,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,styleselect,formatselect,fontselect,fontsizeselect",
+            theme_advanced_buttons2: "cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,image,cleanup,help,code,|,insertdate,inserttime,preview,|,forecolor,backcolor",
+            //theme_advanced_buttons3 : "tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,charmap,emotions,iespell,media,advhr,|,print,|,ltr,rtl,|,fullscreen",
+            //theme_advanced_buttons4 : "insertlayer,moveforward,movebackward,absolute,|,styleprops,|,cite,abbr,acronym,del,ins,attribs,|,visualchars,nonbreaking,template,pagebreak",
+            theme_advanced_toolbar_location: "top",
+            theme_advanced_toolbar_align: "left",
+            theme_advanced_statusbar_location: "bottom",
+            theme_advanced_resizing: true
+        }
+    );
+</script>
+
+<style type="text/css">
+    .search_wrap {
+        margin-top: 10px;
+    }
+
+    .search_wrap select {
+        width: 450px;
+        height: 160px;
+    }
+
+    .search_wrap_content {
+        display: inline-block;
+        vertical-align: top;
+        min-width: 100px;
+        text-align: center;
+    }
+</style>
+
+<script type="text/javascript" src="{*$base_url*}js/datetimepicker.js"></script>
+<script>
+    function frmsetting_onchange() {
+
+        $("#message").html("Saving...");
+        return true;
+    }
+
+    function setErrorMessage(err) {
+        $("#message").html(err);
+    }
+
+    function setSuccess(msg) {
+        $("#message").html(msg);
+        setTimeout('location = "{* $site_url *}/generalsetting"', {* $flashtime *})
+        ;
+    }
+
+    function addresourcetype() {
+        $("#resourcetype" + itype).show();
+        itype++;
+    }
+
+    var itype = {* $nresourcetype *}
+    ;
+</script>
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            {* $general_settings *}
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li><a href="#">{* $general_settings *}</a></li>
+            <li class="active">Form</li>
+        </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-xs-12">
+                <div id="msg-content" class="alert alert-danger alert-dismissible" style="display: none;">
+                    <div id="message"></div>
+                </div>
+                <form class="form-horizontal" method="post" action="{* $site_url *}/generalsetting/save/"
+                      enctype="multipart/form-data" name="frmsetting" id="frmsetting"
+                      onsubmit="javascript: return frmsetting_onchange()" target="iframe_setting">
+                    <div class="box">
+                        <div class="box-body table-responsive no-padding">
+                            <div class="box-body">
+                                <fieldset>
+                                    <legend>{* $general_settings *}</legend>
+                                    <table class="table">
+                                        <tr>
+                                            <td style="border: 0 !important;"><table class="table">
+                                                <tr>
+                                                    <td  width='25%'>{* $ldefaultlanguange *}</td>
+                                                    <td width="1">:</td>
+                                                    <td  width='40%'>
+                                                        <select name="defaultlang" id="defaultlang" class='formshort'>
+                                                            <option value="id"{* if $defaultlang eq "id" *}selected{* /if *}>{* $lndonesia *}</option>
+                                                            <option value="en"{* if $defaultlang eq "en" *}selected{* /if *}>{* $lenglish *}</option>
+                                                        </select>
+                                                    </td>
+                                                    <td >{* $ldefaultlanguange_description *}</td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td  width='25%'>{* $lenablechangelanguange *}</td>
+                                                    <td width="1">:</td>
+                                                    <td  width='40%'>
+                                                        <input type='radio' name="changelang" id="changelang" value="1" {* if $setting.changelang eq 1 *}checked{* /if *}> {* $lyes *}
+                                                        <input type='radio' name="changelang" id="changelang" value="0" {* if $setting.changelang ne 1 *}checked{* /if *}> {* $lno *}
+                                                    </td>
+                                                    <td >&nbsp;</td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>{* $lwebsitetitle *}</td>
+                                                    <td width="1">:</td>
+                                                    <td><input type='text' name="websitetitle" id="websitetitle" class='formdefault' value="{* if $setting.websitetitle *}{* $setting.websitetitle *}{* /if *}"></td>
+                                                    <td >{* $lwebsitetitle_description *}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>{* $lwebsitelogo *}</td>
+                                                    <td width="1">:</td>
+                                                    <td><input type='file' name="websitelogo" id="websitelogo" class='formdefault' value=""></td>
+                                                    <td >{* $lwebsitelogo_description *}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>&nbsp;</td>
+                                                    <td colspan="3">&nbsp;{* $websitelogo *}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Login word 1</td>
+                                                    <td width="1">:</td>
+                                                    <td><input type='text' name="websiteloginword1" id="websiteloginword1" class='formdefault' value="{* if $setting.websiteloginword1 *}{* $setting.websiteloginword1 *}{* /if *}"></td>
+                                                    <td >Login word 1</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Login word 2</td>
+                                                    <td width="1">:</td>
+                                                    <td><input type='text' name="websiteloginword2" id="websiteloginword2" class='formdefault' value="{* if $setting.websiteloginword2 *}{* $setting.websiteloginword2 *}{* /if *}"></td>
+                                                    <td >Login word 2</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Page Login Image</td>
+                                                    <td width="1">:</td>
+                                                    <td><input type='file' name="pageloginimage" id="pageloginimage" class='formdefault' value=""></td>
+                                                    <td >Page login image</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>&nbsp;</td>
+                                                    <td colspan="3">&nbsp;{* $pageloginimage *}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>{* $lconcurent_user *}</td>
+                                                    <td width="1">:</td>
+                                                    <td><input type='text' name="concurrentuser" id="concurrentuser" class='formnumber' value="{* $setting.concurrentuser *}"></td>
+                                                    <td >{* $lconcurent_user_description *}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>{* $lrecordperpage *}</td>
+                                                    <td width="1">:</td>
+                                                    <td>
+                                                        <select name='recordperpage' id='recordperpage'>
+                                                            <option value='10' {* if $setting.recordperpage == 10 *} selected {*/if*} >10</option>
+                                                            <option value='20' {* if $setting.recordperpage == 20 *} selected {*/if*} >20</option>
+                                                            <option value='30' {* if $setting.recordperpage == 30 *} selected {*/if*} >30</option>
+                                                            <option value='40' {* if $setting.recordperpage == 40 *} selected {*/if*} >40</option>
+                                                            <option value='50' {* if $setting.recordperpage == 50 *} selected {*/if*} >50</option>
+                                                            <option value='100' {* if $setting.recordperpage == 100 *} selected {*/if*}  >100</option>
+                                                        </select>
+                                                    </td>
+                                                    <td >{* $lrecordperpage_description *}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td  width='25%'>{* $lshowildp *}</td>
+                                                    <td width="1">:</td>
+                                                    <td  width='40%'>
+                                                        <input type='radio' name="showildp" id="showildp" value="1" {* if $setting.showildp eq 1 *}checked{* /if *}> {* $lyes *}
+                                                        <input type='radio' name="showildp" id="showildp" value="0" {* if $setting.showildp ne 1 *}checked{* /if *}> {* $lno *}
+                                                    </td>
+                                                    <td >&nbsp;</td>
+                                                </tr>
+                                                <tr>
+                                                    <td  width='25%'>{* $llogin_by_email *}</td>
+                                                    <td width="1">:</td>
+                                                    <td  width='40%'>
+                                                        <input type='radio' name="loginbyemail" id="loginbyemail" value="1" {* if $setting.loginbyemail eq 1 *}checked{* /if *}> {* $lyes *}
+                                                        <input type='radio' name="loginbyemail" id="loginbyemail" value="0" {* if $setting.loginbyemail ne 1 *}checked{* /if *}> {* $lno *}
+                                                    </td>
+                                                    <td >&nbsp;</td>
+                                                </tr>
+
+                                            </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </fieldset>
+                            </div>
+
+                        </div>
+                        <!-- /.box -->
+                    </div>
+                    <div class="box">
+                        <div class="box-body table-responsive no-padding">
+                            <div class="box-body">
+                                <fieldset>
+                                    <legend>{* $lsession *}</legend>
+                                    <table class="table">
+                                        <tr>
+                                            <td style="border: 0 !important;"><table class="table">
+                                                <tr>
+                                                    <td  width='25%'>{* $lsession_idle_time *}</td>
+                                                    <td width="1">:</td>
+                                                    <td  width='40%'><input type='text' name="sessiontimeout" id="sessiontimeout" class='formnumber' value="{* if $setting.sessiontimeout ge 0 *}{* $setting.sessiontimeout *}{* else *}{* $sessiontimeout *}{* /if *}"></td>
+                                                    <td >{* $lsession_idle_time_description *}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td >{* $linactive_period *}</td>
+                                                    <td width="1">:</td>
+                                                    <td width="50"><input type='text' name="inactiveperiod" id="inactiveperiod" class='formnumber' value="{* $setting.inactiveperiod *}"></td>
+                                                    <td >{* $linactive_period_description *}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td >{* $lmultiple_login *}</td>
+                                                    <td width="1">:</td>
+                                                    <td width="50"><input type='radio' name="multiplelogin" id="multiplelogin" value="1"{* if $setting.multiplelogin eq "" or $setting.multiplelogin eq 1 *} checked{* /if *}> {* $lyes *} <input type='radio' name="multiplelogin" id="multiplelogin"  value="2"{* if $setting.multiplelogin eq 2 *} checked{* /if *}> {* $lno *}</td>
+                                                    <td >{* $lmultiple_login_description *}</td>
+                                                </tr>
+
+                                            </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </fieldset>
+                            </div>
+
+                        </div>
+                        <!-- /.box -->
+                    </div>
+                    <div class="box">
+                        <div class="box-body table-responsive no-padding">
+                            <div class="box-body">
+                                <fieldset>
+                                    <legend>{* $lpassword_setting *}</legend>
+
+                                    <table class="table">
+                                        <tr>
+                                            <td style="border: 0 !important;"><table class="table">
+
+                                                <tr>
+                                                    <td width='25%'>{* $lsetting_expiredpassword *}</td>
+                                                    <td width="1">:</td>
+                                                    <td  width='40%'><input type='text' name="expiredpassword" id="expiredpassword" class='formnumber' value="{* $setting.expiredpassword *}"></td>
+                                                    <td >{* $lexpired_password_description *}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>{* $lsetting_minpasswordlength *}</td>
+                                                    <td width="1">:</td>
+                                                    <td><input type='text' name="minpasslen" id="minpasslen" class='formnumber' value="{* $setting.minpasslen *}"></td>
+                                                    <td >{* $lsetting_minpasswordlength_description *}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>{* $lsetting_maxpasswordlength *}</td>
+                                                    <td width="1">:</td>
+                                                    <td><input type='text' name="maxpasslen" id="maxpasslen" class='formnumber' value="{* $setting.maxpasslen *}"></td>
+                                                    <td >{* $lsetting_maxpasswordlength_description *}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>{* $lsetting_passwordchar *}</td>
+                                                    <td width="1">:</td>
+                                                    <td>
+                                                        <input type='radio' name="passchar" id="passchar" value="alphanumeric" {* if $setting.passchar eq "alphanumeric" *}checked{* /if *}> {* $lsetting_passchar_alphanumeric *}
+                                                        <input type='radio' name="passchar" id="passchar" value="free" {* if $setting.passchar ne "alphanumeric" *}checked{* /if *}> {* $lsetting_passchar_free *}
+                                                    </td>
+                                                    <td >{* $lsetting_passwordchar_description *}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>{* $lmaxchangepassword *}</td>
+                                                    <td width="1">:</td>
+                                                    <td><input type='text' name="maxchangepassword" id="maxchangepassword" class='formnumber' value="{* $setting.maxchangepassword *}"></td>
+                                                    <td >{* $lmaxchangepassworddescription *}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>{* $lpasschange1st *}</td>
+                                                    <td>:</td>
+                                                    <td>
+                                                        <input type="radio" name="changepass1st" id="changepass1st" value="1"{* if $setting.changepass1st eq 1 *} checked{* /if *}> {* $lyes *}
+                                                        <input type="radio" name="changepass1st" id="changepass1st" value="0"{* if $setting.changepass1st ne 1 *} checked{* /if *}> {* $lno *}
+                                                    </td>
+                                                    <td >{* $lpasschange1stdescription *}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>{* $lsetting_errorlogin *}</td>
+                                                    <td width="1">:</td>
+                                                    <td><input type='text' name="errorlogin" id="errorlogin" class='formnumber' value="{* $setting.errorlogin *}"></td>
+                                                    <td >{* $lerror_login_description *}</td>
+                                                </tr>
+                                            </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </fieldset>
+                            </div>
+
+                        </div>
+                        <!-- /.box -->
+                    </div>
+                    <div class="box">
+                        <div class="box-body table-responsive no-padding">
+                            <div class="box-body">
+                                <fieldset>
+                                    <legend>{* $ltraining_setting *}</legend>
+                                    <table class="table">
+                                        <tr>
+                                            <td width="25%">{* $lmaximumtaken *}</td>
+                                            <td width="1%">:</td>
+                                            <td width='40%'><input type='text' name="maxtaken" id="maxtaken" class='formnumber' value="{* $setting.maxtaken *}"></td>
+                                            <td >{* $lmaximumtakendescription *}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{* $lshow_materi_history *}</td>
+                                            <td>:</td>
+                                            <td>
+                                                <!-- showmaterihist -->
+                                                <input type="radio" name="personalreportmateri" id="personalreportmateri" value="1"{* if $setting.personalreportmateri eq 1 *} checked{* /if *}> {* $lyes *}
+                                                <input type="radio" name="personalreportmateri" id="personalreportmateri" value="0"{* if $setting.personalreportmateri ne 1 *} checked{* /if *}> {* $lno *}
+                                            </td>
+                                            <td >{* $lshow_materi_history_description *}</td>
+                                        </tr>
+                                        <tr>
+                                            <td >{* $ltraining_template_print *}</td>
+                                            <td >:</td>
+                                            <td>
+                                                <input type='file' name="trainingtpl" id="trainingtpl" class='formnumber' value="">
+                                                {* if $setting.trainingtpl *}<br /><a href="{* $base_url *}uploads/tmpl/{* $setting.trainingtpl *}" target="_blank">{* $setting.trainingtpl *}</a>{* /if *}
+                                            </td>
+                                            <td >{* $ltraining_template_print_desc *}</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>{* $lshow_print_certificate *}</td>
+                                            <td>:</td>
+                                            <td>
+                                                <input type="radio" name="showtrainingprint" id="showtrainingprint" value="1"{* if $setting.showtrainingprint eq 1 *} checked{* /if *}> {* $lyes *}
+                                                <input type="radio" name="showtrainingprint" id="showtrainingprint" value="0"{* if $setting.showtrainingprint ne 1 *} checked{* /if *}> {* $lno *}
+                                            </td>
+                                            <td >{* $lshow_print_certificate_training_desc *}</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>{* $lshow_min_lulus *}</td>
+                                            <td>:</td>
+                                            <td>
+                                                <input type="radio" name="showtrainingminlulus" id="showtrainingminlulus" value="1"{* if $setting.showtrainingminlulus eq 1 *} checked{* /if *}> {* $lyes *}
+                                                <input type="radio" name="showtrainingminlulus" id="showtrainingminlulus" value="0"{* if $setting.showtrainingminlulus ne 1 *} checked{* /if *}> {* $lno *}
+                                            </td>
+                                            <td >{* $lshow_min_lulus_training_desc *}</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>Tampilkan Soal satu-satu (single questioner)</td>
+                                            <td>:</td>
+                                            <td>
+                                                <input type="radio" name="showtrainingquestionall" id="showtrainingquestionall" value="1"{* if $setting.showtrainingquestionall eq 1 *} checked{* /if *}> {* $lyes *}
+                                                <input type="radio" name="showtrainingquestionall" id="showtrainingquestionall" value="0"{* if $setting.showtrainingquestionall ne 1 *} checked{* /if *}> {* $lno *}
+                                            </td>
+                                            <td >Jika soal belum selesai, tampilkan soal yang belum selesai satu-satu di belakang</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>Banyak loop soal</td>
+                                            <td>:</td>
+                                            <td>
+                                                <input type='text' name="totallooptraining" id="totallooptraining" class='formdefault' value="{* $setting.totallooptraining *}">
+                                            </td>
+                                            <td >Banyak loop soal yang dilakukan pada saat ikut sertifikasi</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>Tipe loop soal</td>
+                                            <td>:</td>
+                                            <td>
+                                                <input type="radio" name="typelooptraining" id="typelooptraining_1" value="1"{* if $setting.typelooptraining eq 1 *} checked{* /if *}> Semua Soal
+                                                <input type="radio" name="typelooptraining" id="typelooptraining_2" value="0"{* if $setting.typelooptraining ne 1 *} checked{* /if *}> Soal yang belum terjawab
+                                            </td>
+                                            <td >Menentukan soal yang ditampilkan pada saat looping terjadi</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>Tampilkan info counter praexam dan materi</td>
+                                            <td>:</td>
+                                            <td>
+                                                <input type="radio" name="showtrainingcounterpraexammateri" id="showtrainingcounterpraexammateri" value="1"{* if $setting.showtrainingcounterpraexammateri eq 1 *} checked{* /if *}> {* $lyes *}
+                                                <input type="radio" name="showtrainingcounterpraexammateri" id="showtrainingcounterpraexammateri" value="0"{* if $setting.showtrainingcounterpraexammateri ne 1 *} checked{* /if *}> {* $lno *}
+                                            </td>
+                                            <td >Jika iya, maka akan muncul jumlah counter praexam dan materi</td>
+                                        </tr>
+                                    </table>
+                                </fieldset>
+                            </div>
+
+                        </div>
+                        <!-- /.box -->
+                    </div>
+                    <div class="box">
+                        <div class="box-body table-responsive no-padding">
+                            <div class="box-body">
+                                <fieldset>
+                                    <legend>{* $lcertification_setting *}</legend>
+                                    <table class="table">
+                                        <tr>
+                                            <td width="25%">{* $lcertificate_template *}</td>
+                                            <td width="1%">:</td>
+                                            <td width='40%'>
+                                                <input type='file' name="certtpl" id="certtpl" class='formnumber' value="">
+                                                {* if $setting.certtpl *}<br /><a href="{* $base_url *}uploads/tmpl/{* $setting.certtpl *}" target="_blank">{* $setting.certtpl *}</a>{* /if *}
+                                            </td>
+                                            <td >{* $lcertificate_template_desc *}</td>
+                                        </tr>
+                                        <tr>
+                                            <td >{* $lcertificate_sign *}</td>
+                                            <td >:</td>
+                                            <td><input type='text' name="certificatesign" id="certificatesign" class='formdefault' value="{* $setting.certificatesign *}"></td>
+                                            <td >{* $lcertificate_sign_description *}</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>{* $lshow_print_certificate *}</td>
+                                            <td>:</td>
+                                            <td>
+                                                <input type="radio" name="showcertificationprint" id="showcertificationprint" value="1"{* if $setting.showcertificationprint eq 1 *} checked{* /if *}> {* $lyes *}
+                                                <input type="radio" name="showcertificationprint" id="showcertificationprint" value="0"{* if $setting.showcertificationprint ne 1 *} checked{* /if *}> {* $lno *}
+                                            </td>
+                                            <td >{* $lshow_print_certificate_desc *}</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>{* $lshow_min_lulus *}</td>
+                                            <td>:</td>
+                                            <td>
+                                                <input type="radio" name="showcertificationminlulus" id="showcertificationminlulus" value="1"{* if $setting.showcertificationminlulus eq 1 *} checked{* /if *}> {* $lyes *}
+                                                <input type="radio" name="showcertificationminlulus" id="showcertificationminlulus" value="0"{* if $setting.showcertificationminlulus ne 1 *} checked{* /if *}> {* $lno *}
+                                            </td>
+                                            <td >{* $lshow_min_lulus_certificate_desc *}</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>Tampilkan Soal satu-satu (single questioner)</td>
+                                            <td>:</td>
+                                            <td>
+                                                <input type="radio" name="showcertificationquestionall" id="showcertificationquestionall" value="1"{* if $setting.showcertificationquestionall eq 1 *} checked{* /if *}> {* $lyes *}
+                                                <input type="radio" name="showcertificationquestionall" id="showcertificationquestionall" value="0"{* if $setting.showcertificationquestionall ne 1 *} checked{* /if *}> {* $lno *}
+                                            </td>
+                                            <td >Jika soal belum selesai, tampilkan soal yang belum selesai satu-satu di belakang</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>Banyak loop soal</td>
+                                            <td>:</td>
+                                            <td>
+                                                <input type='text' name="totalloopcertification" id="totalloopcertification" class='formdefault' value="{* $setting.totalloopcertification *}">
+                                            </td>
+                                            <td >Banyak loop soal yang dilakukan pada saat ikut sertifikasi</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>Tipe loop soal</td>
+                                            <td>:</td>
+                                            <td>
+                                                <input type="radio" name="typeloopcertification" id="typeloopcertification_1" value="1"{* if $setting.typeloopcertification eq 1 *} checked{* /if *}> Semua Soal
+                                                <input type="radio" name="typeloopcertification" id="typeloopcertification_2" value="0"{* if $setting.typeloopcertification ne 1 *} checked{* /if *}> Soal yang belum terjawab
+                                            </td>
+                                            <td >Menentukan soal yang ditampilkan pada saat looping terjadi</td>
+                                        </tr>
+                                    </table>
+                                </fieldset>
+                            </div>
+
+                        </div>
+                        <!-- /.box -->
+                    </div>
+                    <div class="box">
+                        <div class="box-body table-responsive no-padding">
+                            <div class="box-body">
+                                <fieldset>
+                                    <legend>{* $lresource_setting *}</legend>
+                                    <table class="table">
+                                        <tr>
+                                            <td width="25%">{* $lmaximum_size *}</td>
+                                            <td width="1%">:</td>
+                                            <td width='40%'><input type='text' name="resourcemaxsize" id="resourcemaxsize" class='formnumber' value="{* $setting.resourcemaxsize *}"></td>
+                                            <td >{* $lmaximum_size_description *}</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td >{* $lresource_type *}</td>
+                                            <td >:</td>
+                                            <td><input type='text' name="resourcetype[]" id="resourcetype[]" class='formnumber' value="{* if $resourcetype *}{* $resourcetype[0] *}{* /if *}">
+                                                <a href="javascript:addresourcetype()">{* $ladd_recourcetype *}</a></td>
+                                            <td >{* $lresource_type_description *}</td>
+                                        </tr>
+                                        {* foreach from=$maxresourcetypes item=tipe *}
+                                        <tr id="resourcetype{* $tipe.no *}" {* if $tipe.value eq '' *}style="display: none;"{* /if *}>
+                                        <td >&nbsp;</td>
+                                        <td >:</td>
+                                        <td colspan='2'><input type='text' name="resourcetype[]" id="resourcetype[]" class='formnumber' value="{* $tipe.value *}"></td>
+                                        </tr>
+                                        {* /foreach *}
+                                    </table>
+                                </fieldset>
+                            </div>
+
+                        </div>
+                        <!-- /.box -->
+                    </div>
+                    <div class="box">
+                        <div class="box-body table-responsive no-padding">
+                            <div class="box-body">
+                                <fieldset>
+                                    <legend>{* $lreminder *}</legend>
+                                    <table class="table">
+                                        <tr>
+                                            <td style="border: 0 !important;"><table class="table">
+                                                <tr>
+                                                    <td  width='25%'>{* $lday_interval*}</td>
+                                                    <td width="1%">:</td>
+                                                    <td  width='40%'><input type='text' name="day_interval" id="day_interval" class='formnumber' value="{* $setting.day_interval *}"></td>
+                                                    <td >{* $lday_interval_description *}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>{* $lnotice_per*}</td>
+                                                    <td width="1">:</td>
+                                                    <td><input type='text' name="notice_per" id="notice_per" class='formnumber' value="{* $setting.notice_per *}"></td>
+                                                    <td >{* $lnotice_per_description *}</td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>{* $lremindermailsender*}</td>
+                                                    <td width="1">:</td>
+                                                    <td><input type='text' name="remindermailsender" id="remindermailsender" class='formdefault' value="{* $setting.remindermailsender *}"></td>
+                                                    <td >{* $lremindermailsenderdescription *}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>{* $lremindermailsendername*}</td>
+                                                    <td width="1">:</td>
+                                                    <td><input type='text' name="remindersendername" id="remindersendername" class='formdefault' value="{* $setting.remindersendername *}"></td>
+                                                    <td >{* $lremindermailsendernamedescription *}</td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>{* $lremindermailsubject*}</td>
+                                                    <td width="1">:</td>
+                                                    <td><input type='text' name="remindermailsubject" id="remindermailsubject" class='formdefault' value="{* $setting.remindermailsubject *}"></td>
+                                                    <td >{* $lremindermailsubjectdescription *}</td>
+                                                </tr>
+                                            </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </fieldset>
+                            </div>
+
+                        </div>
+                        <!-- /.box -->
+                    </div>
+                    <div class="box">
+                        <div class="box-body table-responsive no-padding">
+                            <div class="box-body">
+                                <fieldset>
+                                    <legend>{* $lsetting_cms_admin *}</legend>
+                                    <table class="table">
+                                        <tr>
+                                            <td style="border: 0 !important;"><table class="table">
+                                                <tr>
+                                                    <td  width='25%'>{* $lcms_admin_activity_periodic *}</td>
+                                                    <td width="1">:</td>
+                                                    <td  width='40%'><input type='text' name="cms_activity_periodic" id="cms_activity_periodic" class='formnumber' value="{* if $setting.cms_activity_periodic ge 0 *}{* $setting.cms_activity_periodic *}{* else *}0{* /if *}"></td>
+                                                    <td >{* $lcms_admin_activity_periodic_description *}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td >{* $lnews_per_page *}</td>
+                                                    <td width="1">:</td>
+                                                    <td width="50"><input type='text' name="cms_news_per_page" id="cms_news_per_page" class='formnumber' value="{* $setting.cms_news_per_page *}"></td>
+                                                    <td >{* $lnews_per_page_description *}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td >{* $lshow_admin_news *}</td>
+                                                    <td width="1">:</td>
+                                                    <td width="50"><input type='radio' name="cms_show_admin_news" id="cms_show_admin_news" value="1"{* if $setting.cms_show_admin_news eq 1 *} checked{* /if *}> {* $lyes *} <input type='radio' name="cms_show_admin_news" id="cms_show_admin_news"  value="0"{* if $setting.cms_show_admin_news eq 0 *} checked{* /if *}> {* $lno *}</td>
+                                                    <td >{* $lshow_admin_news_description *}</td>
+                                                </tr>
+
+                                            </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </fieldset>
+                            </div>
+
+                        </div>
+                        <!-- /.box -->
+                    </div>
+                    <div class="box">
+                        <div class="box-body table-responsive no-padding">
+                            <div class="box-body">
+                                <fieldset>
+                                    <legend>Default Approval Request Proposal</legend>
+                                    <table class="table">
+                                        <tr>
+                                            <td>Import File Approval</td>
+                                            <td width="1">:</td>
+                                            <td><input type='file' name="fileimportapproval" id="fileimportapproval" class='formdefault' value=""><br/><a href="{* $base_url *}uploads/format_import_file_approval.xls" target="_blank">(Download format import file approval)</a></td>
+                                            <td>Import file approval</td>
+                                        </tr>
+                                        {* if $setting.fileimportapproval *}
+                                        <tr>
+                                            <td colspan="2">&nbsp;</td>
+                                            <td colspan="2">Download last file upload : <a href="{* $base_url *}uploads/general_setting/{* $setting.fileimportapproval *}" download>{* $setting.fileimportapproval *}</a></td>
+                                        </tr>
+                                        {* /if *}
+                                        <tr>
+                                            <td  width='25%'>Show Top Running Text Approval</td>
+                                            <td width="1">:</td>
+                                            <td  width='40%'>
+                                                <input type='radio' name="show_running_text_approval" id="show_running_text_approval_1" value="1" {* if $setting.show_running_text_approval eq 1 *}checked{* /if *}> {* $lyes *}
+                                                <input type='radio' name="show_running_text_approval" id="show_running_text_approval_2" value="0" {* if $setting.show_running_text_approval ne 1 *}checked{* /if *}> {* $lno *}
+                                            </td>
+                                            <td >Show running text "request need your approval"</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td  width='25%'>Notification approval by email</td>
+                                            <td width="1">:</td>
+                                            <td  width='40%'>
+                                                <input type='radio' name="notif_email_approval" id="notif_email_approval_1" value="1" {* if $setting.notif_email_approval eq 1 *}checked{* /if *}> {* $lyes *}
+                                                <input type='radio' name="notif_email_approval" id="notif_email_approval_2" value="0" {* if $setting.notif_email_approval ne 1 *}checked{* /if *}> {* $lno *}
+                                            </td>
+                                            <td >Send notification approval by email</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Notification Email Sender</td>
+                                            <td width="1">:</td>
+                                            <td><input type='text' name="notif_email_sender" id="notif_email_sender" class='formdefault' value="{* $setting.notif_email_sender *}"></td>
+                                            <td >{* $lremindermailsenderdescription *}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Notification Sender Name</td>
+                                            <td width="1">:</td>
+                                            <td><input type='text' name="notif_email_name" id="notif_email_name" class='formdefault' value="{* $setting.notif_email_name *}"></td>
+                                            <td >{* $lremindermailsendernamedescription *}</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>Notification Subject</td>
+                                            <td width="1">:</td>
+                                            <td><input type='text' name="notif_email_subject" id="notif_email_subject" class='formdefault' value="{* $setting.notif_email_subject *}"></td>
+                                            <td >{* $lremindermailsubjectdescription *}</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td valign="top">Notification Email Body</td>
+                                            <td valign="top">:</td>
+                                            <td>&nbsp;</td>
+                                            <td valign="top">Notification Email Body</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td colspan='4'>
+       <textarea name="notif_email_body" id="notif_email_body" rows="16" cols="50">
+         {* $setting.notif_email_body *}
+       </textarea>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </fieldset>
+                            </div>
+
+                        </div>
+                        <!-- /.box -->
+                    </div>
+                    <div class="box">
+                        <div class="box-body table-responsive no-padding">
+                            <div class="box-body">
+                                <fieldset>
+                                    <legend>Learning Catalog</legend>
+                                    <table class="table">
+                                        <tr>
+                                            <td>Upload file learning catalog</td>
+                                            <td width="1">:</td>
+                                            <td><input type='file' name="file_learning_catalog" id="file_learning_catalog" class='formdefault' value=""></td>
+                                            <td >Upload file learning catalog</td>
+                                        </tr>
+                                        {* if $setting.file_learning_catalog *}
+                                        <tr>
+                                            <td>&nbsp;</td>
+                                            <td colspan="2">Download file : <a href="{*$base_url*}uploads/learning_catalog/{* $setting.file_learning_catalog *}" download>{* $setting.file_learning_catalog *}</a></td>
+                                        </tr>
+                                        {* /if *}
+                                        <tr>
+                                            <td  width='25%'>Show Learning Catalog</td>
+                                            <td width="1">:</td>
+                                            <td  width='40%'>
+                                                <input type='radio' name="show_learning_catalog" id="show_learning_catalog_1" value="1" {* if $setting.show_learning_catalog eq 1 *}checked{* /if *}> {* $lyes *}
+                                                <input type='radio' name="show_learning_catalog" id="show_learning_catalog_2" value="0" {* if $setting.show_learning_catalog ne 1 *}checked{* /if *}> {* $lno *}
+                                            </td>
+                                            <td >Show Learning Catalog</td>
+                                        </tr>
+                                    </table>
+                                </fieldset>
+                            </div>
+
+                        </div>
+                        <!-- /.box -->
+                    </div>
+                    <div class="box">
+                        <div class="box-body table-responsive no-padding">
+                            <div class="box-body">
+                                <fieldset>
+                                    <legend>Questionaire</legend>
+                                    <table class="table">
+                                        <tr>
+                                            <td  width='25%'>Anonim Report</td>
+                                            <td width="1">:</td>
+                                            <td  width='40%'>
+                                                <input type='radio' name="questionaire_anonim_user" id="questionaire_anonim_user_1" value="1" {* if $setting.questionaire_anonim_user eq 1 *}checked{* /if *}> {* $lyes *}
+                                                <input type='radio' name="questionaire_anonim_user" id="questionaire_anonim_user_2" value="0" {* if $setting.questionaire_anonim_user ne 1 *}checked{* /if *}> {* $lno *}
+                                            </td>
+                                            <td >Anonim Report</td>
+                                        </tr>
+                                    </table>
+                                </fieldset>
+                            </div>
+
+                        </div>
+                        <!-- /.box -->
+                    </div>
+                    <div class="box">
+                        <div class="box-footer">
+                            <div class="btn-group pull-right">
+                                <button name="reset" type="reset" class="btn btn-default">Reset</button>
+                                <button name="submit" type="submit" class="btn btn-info">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+    </section>
+    <!-- /.content -->
+</div>
+
+<iframe id="iframe_setting" name="iframe_setting" src=""
+        style="display: none;width:1000px;height:1000px;border:0px solid #fff; "></iframe>
+
+<script type="text/javascript">
+    $(function () {
+        $('.delete_approval').on('click', function (e) {
+            e.preventDefault();
+            var me = $(this).closest('.step_approval');
+            me.remove();
+            reposition();
+        });
+
+        $('.btn_in').on('click', function (e) {
+            e.preventDefault();
+            var me = $(this).closest('.step_approval');
+            var el = me.find('.user_search option:selected');
+            me.find('.user_approval_request_training').append(el);
+        });
+
+        $('.btn_out').on('click', function (e) {
+            e.preventDefault();
+            var me = $(this).closest('.step_approval');
+            var el = me.find('.user_approval_request_training option:selected');
+            me.find('.user_search').append(el);
+        });
+
+        $('.btn_search').on('click', function (e) {
+            e.preventDefault();
+            var me = $(this).closest('.step_approval');
+            var extra_option = me.find('.extra_option').val() || '';
+            var user_keyword = me.find('.user_keyword').val() || '';
+
+            if (user_keyword == '' && extra_option == '') {
+                me.find('.user_search').empty()
+                return true;
+            }
+
+            $.ajax({
+                url: '{* $site_url *}/request/do_search_user',
+                type: 'POST',
+                data: {user_keyword: user_keyword, extra_option: extra_option},
+                dataType: 'json',
+                success: function (data) {
+                    var tmp = '';
+                    var detail = data.detail || {};
+                    if (Object.keys(detail).length > 0) {
+                        $.each(detail, function (idx, val) {
+                            tmp += '<option value="' + val.id + '">';
+                            tmp += val.label;
+                            tmp += '</option>';
+                        });
+                    }
+                    me.find('.user_search').empty().append(tmp);
+                }
+            });
+        });
+
+        $('#frmsetting').submit(function () {
+            $('.user_approval_request_training option').attr('selected', true);
+        });
+
+        var info_no_urut = function () {
+            var lgt = $('.step_approval').length || 1;
+            return parseInt(lgt);
+        };
+
+        var reposition = function () {
+            $('.step_approval').each(function (idx, val) {
+                idx += 1;
+                $(this).find('.no_urut').text(idx);
+                $(this).find('.user_approval_request_training').attr('name', 'user_approval_request_training_' + idx + '[]');
+            });
+        };
+
+        $('#add_step').click(function (e) {
+            e.preventDefault();
+            var no_urut = info_no_urut() + 1;
+            var cln = $('.step_approval:eq(0)').clone();
+            cln.find('.no_urut').text(no_urut);
+            cln.find('.user_search').empty();
+            cln.find('.user_approval_request_training').empty();
+            cln.find('.user_approval_request_training').attr('name', 'user_approval_request_training_' + no_urut + '[]');
+            cln.find('.user_keyword').val('');
+            cln.find('.extra_option').val('');
+            cln.find('.delete_approval').show();
+            cln.insertBefore('#add_step');
+        });
+
+        $('.delete_approval:not(:eq(0))').show();
+        reposition();
+    });
+</script>

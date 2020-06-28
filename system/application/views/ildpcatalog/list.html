@@ -1,0 +1,35 @@
+	<table width="100%" cellpadding="3" class="tablelist"> 
+		<thead> 
+			<tr> 
+				<th width="15%">{* $lcourse_abb *}</th> 
+				<th width="15%">{* $lcategory *}</th> 
+				<th width="25%">{* $ltraining_type *}</th> 
+				<th width="25%">{* $ldevelopment_area *}</th> 
+				<th width="15%">{* $leligable_grade *}</th>
+				<th width="30%">{* $llearning_method_dev *}</th>  
+				<th width="10%">{* $lstatus *}</th> 
+				<th>&nbsp;</th>
+			</tr> 
+		</thead>
+		<tbody>
+			{* counter start=1 print=false assign="no" *}
+			{* foreach from=$catalogs item=catalog *}
+			<tr> 
+				<td class="odd">{* $catalog->ildp_catalog_course_abb *}</td>
+				<td class="odd">{* $catalog->ildp_category_name *}</td>				
+				<td class="odd"><a href="{* $site_url *}/ildpcatalog/form/{* $catalog->ildp_catalog_id *}">{* $catalog->ildp_catalog_training *}</a></td>
+				<td class="odd">{* $catalog->ildp_development_area *}</td>
+				<td class="odd">{* $catalog->ildp_catalog_grade1 *}</td>
+				<td class="odd">{* $catalog->method *}</td>
+				<td class="odd"><div id="status{* $catalog->ildp_catalog_id *}"><a href="#" onclick="javascript:chagestatus({* $catalog->ildp_catalog_id *},{* $catalog->ildp_catalog_status *})">{* $catalog->ildp_catalog_status_image *}</a></div></td>
+				<td>{* if $catalog->isused *}&nbsp;{* else *}<a href="{* $site_url *}/ildpcatalog/remove/{* $catalog->ildp_catalog_id *}" onclick="javascript: return confirm('{* $lconfirm_delete *}');"><img src="{* $base_url *}images/b_del.gif" width="12" height="12" border="0" /></a>{* /if *}</td>
+			</tr>
+				{* counter *}
+			{* /foreach *}
+		</tbody>
+		<tfoot>
+			<tr>
+				<td colspan="8">{* $paging *}</td>
+			</tr>
+		</tfoot>
+	</table>

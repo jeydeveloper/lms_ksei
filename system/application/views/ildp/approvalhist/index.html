@@ -1,0 +1,73 @@
+<script>
+	$(document).ready(
+		function()
+		{
+			page(0);
+		}
+	);	
+	
+	function page(n)
+	{
+		if (! n) n = 0;
+		
+		$("#wait").show();
+		
+		var url = "{* $base_url *}index.php/ildp/searchapprovalhist/" + n;
+		$.post(url, $("#frmsearch").serialize(),
+			function(r)
+			{
+				$("#wait").hide();
+				$("#list").html(r.html);
+			}
+			, "json"
+		);
+	}
+	
+	function sortby(field)
+	{
+		if ($("#sortby").val() == field)
+		{
+			if ($("#orderby").val() == "asc")
+			{
+				$("#orderby").val("desc");
+			}
+			else
+			{
+				$("#orderby").val("asc");
+			}
+		}
+		else
+		{
+			$("#orderby").val("asc");
+		}
+		
+		$("#sortby").val(field);	
+		page(0);	
+	}
+	
+	function changelimit(elmt)
+	{
+		$("#limit").val(elmt.value);
+		page(0);
+		
+	}
+	
+</script>
+<h2>{* $lapprovalhist_list *}</h2>
+<p><em>{* $lheader_approvalhist_list *}</em><br />
+        <br />        
+{* $lsort_list_by *} <a href="#" onclick="javascript:sortby('user_npk')"{* if $sortby eq 'user_npk' *}class="lite"{* /if *}>{* $lnpk *}</a>
+<form id="frmsearch" onsubmit="javascript:page(0); return false;">
+	<input type="hidden" id="limit" name="limit" value="{* $limit *}" />
+	<input type="hidden" id="sortby" name="sortby" value="user_npk" />
+	<input type="hidden" id="orderby" name="orderby" value="asc" />
+      <p>{* $lsearch_by *}
+      <select name="searchby" id="searchby">
+      	<option value="user_npk">{* $lnpk *}</option>
+      </select> 
+      <input type='text' name="keyword" id="keyword" class='formdefault' value="">
+      <input type='submit' value=" {* $lsearch *} ">
+      </p>    
+</form>  
+<div id="wait" style="display: none;"><img src="{* $base_url *}images/anim_wait.gif" border="0" /></div>
+<div id="list"></div>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<body>
+	Dears {* $user->user_first_name *} {* $user->user_last_name *},<br><br>
+
+This is an electronic reminder that you are required to take your  mandatory {* if $reminder->training_type eq 1 *}training{* else *}certification{* /if *} on  {* $reminder->training_name *}  <BR>
+
+{* if $month_name_en neq "" *} 
+	Please complete this {* if $reminder->training_type eq 1 *}training{* else *}certification{* /if *} {* if $lastdateenglish *}{* $lastdateenglish *}{* else *}by end of{* /if *} {* $month_name_en *}  {* if $year *} {* $year *}{*/if*}<br>
+{* /if *}
+
+You can access the {* if $reminder->training_type eq 1 *}training{* else *}certification{* /if *} through SMART eLearning at <a href="{* $base_url *}index.php/{* if $reminder->training_type eq 1 *}training{* else *}certificate{* /if *}/examintro/{* $reminder->reminder_training_id *}">{* $base_url *}index.php/{* if $reminder->training_type eq 1 *}training{* else *}certificate{* /if *}/examintro/{* $reminder->reminder_training_id *}</a> <BR><BR><BR>
+ 
+Regards,<BR><BR>
+
+SMART eLearning<BR>
+
+
+==================================================================================================================
+<BR><BR>
+
+Dear {* $user->user_first_name *} {* $user->user_last_name *},<br><br>
+
+Ini adalah pengingat elektronik, untuk mengingatkan bahwa anda diwajibkan untuk mengikuti {* if $reminder->training_type eq 1 *}training{* else *}sertifikasi{* /if *} dengan topik {* $reminder->training_name *}  <BR>
+
+{* if $month_name_en neq "" *} 
+	Harap menyelesaikan  {* if $reminder->training_type eq 1 *}training{* else *}sertifikasi{* /if *} ini  paling lambat {* if $lastdateindonesia *}{* $lastdateindonesia *}{* else *}akhir bulan{* /if *} {* $month_name_id *} {* if $year *} {* $year *}{*/if*}<br>
+{* /if *}
+
+Anda dapat mengakses {* if $reminder->training_type eq 1 *}training{* else *}sertifikasi{* /if *} ini melalui SMART eLearning di alamat :  <a href="{* $base_url *}index.php/{* if $reminder->training_type eq 1 *}training{* else *}certificate{* /if *}/examintro/{* $reminder->reminder_training_id *}">{* $base_url *}index.php/{* if $reminder->training_type eq 1 *}training{* else *}certificate{* /if *}/examintro/{* $reminder->reminder_training_id *}</a> <BR><BR><BR>
+ 
+Regards,<BR><BR>
+
+SMART eLearning<BR>
+
+</body>
+</html>

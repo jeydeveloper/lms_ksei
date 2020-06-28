@@ -1,0 +1,98 @@
+<script>
+	function fcheckall()
+	{
+		$("input[id='users[]']").attr("checked", $("#checkall").attr("checked"));
+	}
+	
+	function checkone()
+	{
+		var n = $("input[id='users[]']:checked").length;
+		$("#checkall").attr("checked", n == {* $nuser *});
+	}
+	
+	function frmreset_onsubmit()
+	{
+		if (! confirm("{* $lconfirm_ildp_reset *}")) 
+		{
+			return false;
+		}	
+				
+		$("#waitaction").show();
+		$("#submitbtn").hide();
+		
+		$.post("{* $base_url *}index.php/ildp/resetform/0", $("#frmreset").serialize(),
+			function(r)
+			{				
+				$("#waitaction").hide();
+				$("#submitbtn").show();				
+				
+				if (r.error)
+				{
+					alert(r.message);
+					return;
+				}
+				
+				alert(r.message);
+				location = r.redirect;
+			}
+			, "json"
+		);
+		return false;
+	}
+	</script>
+	<table width="100%">
+		<tr>
+			<td>
+				{* if $sess.asadmin *}
+				<form id="frmreset" onsubmit="javascript:return frmreset_onsubmit();">
+				{* /if *}
+				<table width="100%" cellpadding="3" class="tablelist"> 
+					<thead> 
+						<tr> 
+							{* if $sess.asadmin and $users *}
+							<th width="10"><input type="checkbox" id="checkall" name="checkall" value="" onclick="javascript:fcheckall()" /></th>
+							{* /if *}
+							<th width="100">NPK</th> 
+							<th>{* $lname *}</th> 
+							<th width="140">{* $ldate *}</th> 
+							<th width="400">{* $lstatus *}</th> 
+						</tr>
+					</thead>
+					<tbody>
+						{* foreach from=$users item=user *}		
+						<tr>
+							{* if $sess.asadmin *}
+							<td><input type="checkbox" id="users[]" name="users[]" value="{* $user->user_id *}" onclick="javascript:checkone()" /></td>
+							<td><a href="{* $site_url *}/ildp/myformdetail/{* $user->order_id *}">{* $user->user_npk *}<a/></td>
+							{* else *}
+							<td><a href="{* $site_url *}/ildp/ildpform/{* $user->user_id *}">{* $user->user_npk *}<a/></td>
+							{* /if *}				
+							<td>{* $user->user_first_name *} {* $user->user_last_name *}</td> 
+							<td>{* $user->order_date_fmt *}</td>
+							<td>{* $user->last_status *}</td>
+						</tr>
+						{* /foreach *}	
+						{* if $sess.asadmin and $users *}
+						<tr>
+							<td colspan="5"><div id="waitaction" style="display: none;"><img src="{* $base_url *}images/anim_wait.gif" border="0" /></div><div id="submitbtn"><input type="submit" value=" Reset " /></div></td>
+						</tr>
+						{* /if *}	
+					</tbody>	
+				</table>
+				{* if $sess.asadmin *}
+				</form>
+				{* /if *}
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<table width="100%" cellpadding="3" class="tablelist"> 
+				<tfoot>
+					<tr>
+						<td colspan="{* if $sess.asadmin and $users *}5{* else *}4{* /if *}">{* $paging *}</td>
+					</tr>
+				</tfoot>	
+				</table>
+			</td>
+		</tr>
+	</table>

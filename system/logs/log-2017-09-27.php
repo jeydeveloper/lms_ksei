@@ -1,0 +1,20 @@
+<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed'); ?>
+
+ERROR - 2017-09-27 11:52:42 --> Severity: 8192  --> mysql_pconnect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead /Applications/XAMPP/xamppfiles/htdocs/NCCLP2-NEW-DESIGN/system/database/drivers/mysql/mysql_driver.php 84
+ERROR - 2017-09-27 11:52:49 --> Severity: 8192  --> mysql_pconnect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead /Applications/XAMPP/xamppfiles/htdocs/NCCLP2-NEW-DESIGN/system/database/drivers/mysql/mysql_driver.php 84
+ERROR - 2017-09-27 11:52:49 --> Severity: 8192  --> mysql_pconnect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead /Applications/XAMPP/xamppfiles/htdocs/NCCLP2-NEW-DESIGN/system/database/drivers/mysql/mysql_driver.php 84
+ERROR - 2017-09-27 11:52:49 --> Severity: 8192  --> mysql_pconnect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead /Applications/XAMPP/xamppfiles/htdocs/NCCLP2-NEW-DESIGN/system/database/drivers/mysql/mysql_driver.php 84
+ERROR - 2017-09-27 11:52:51 --> Severity: 8192  --> mysql_pconnect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead /Applications/XAMPP/xamppfiles/htdocs/NCCLP2-NEW-DESIGN/system/database/drivers/mysql/mysql_driver.php 84
+ERROR - 2017-09-27 11:52:51 --> Severity: Notice  --> mysql_pconnect(): send of 5 bytes failed with errno=32 Broken pipe /Applications/XAMPP/xamppfiles/htdocs/NCCLP2-NEW-DESIGN/system/database/drivers/mysql/mysql_driver.php 84
+ERROR - 2017-09-27 11:52:51 --> Severity: Notice  --> Undefined index: trainingtpl /Applications/XAMPP/xamppfiles/htdocs/NCCLP2-NEW-DESIGN/system/application/views_c/%%D9^D96^D960D0E7%%form.html.php 396
+ERROR - 2017-09-27 11:52:51 --> Severity: Notice  --> Undefined index: value /Applications/XAMPP/xamppfiles/htdocs/NCCLP2-NEW-DESIGN/system/application/views_c/%%D9^D96^D960D0E7%%form.html.php 600
+ERROR - 2017-09-27 11:52:51 --> Severity: Notice  --> Undefined index: value /Applications/XAMPP/xamppfiles/htdocs/NCCLP2-NEW-DESIGN/system/application/views_c/%%D9^D96^D960D0E7%%form.html.php 603
+ERROR - 2017-09-27 11:52:51 --> Severity: Notice  --> Undefined index: value /Applications/XAMPP/xamppfiles/htdocs/NCCLP2-NEW-DESIGN/system/application/views_c/%%D9^D96^D960D0E7%%form.html.php 600
+ERROR - 2017-09-27 11:52:51 --> Severity: Notice  --> Undefined index: value /Applications/XAMPP/xamppfiles/htdocs/NCCLP2-NEW-DESIGN/system/application/views_c/%%D9^D96^D960D0E7%%form.html.php 603
+ERROR - 2017-09-27 11:52:51 --> Severity: Notice  --> Undefined index: value /Applications/XAMPP/xamppfiles/htdocs/NCCLP2-NEW-DESIGN/system/application/views_c/%%D9^D96^D960D0E7%%form.html.php 600
+ERROR - 2017-09-27 11:52:51 --> Severity: Notice  --> Undefined index: value /Applications/XAMPP/xamppfiles/htdocs/NCCLP2-NEW-DESIGN/system/application/views_c/%%D9^D96^D960D0E7%%form.html.php 603
+ERROR - 2017-09-27 11:52:51 --> Severity: Notice  --> Undefined index: value /Applications/XAMPP/xamppfiles/htdocs/NCCLP2-NEW-DESIGN/system/application/views_c/%%D9^D96^D960D0E7%%form.html.php 600
+ERROR - 2017-09-27 11:52:51 --> Severity: Notice  --> Undefined index: value /Applications/XAMPP/xamppfiles/htdocs/NCCLP2-NEW-DESIGN/system/application/views_c/%%D9^D96^D960D0E7%%form.html.php 603
+ERROR - 2017-09-27 11:52:51 --> Severity: Notice  --> Undefined index: value /Applications/XAMPP/xamppfiles/htdocs/NCCLP2-NEW-DESIGN/system/application/views_c/%%D9^D96^D960D0E7%%form.html.php 600
+ERROR - 2017-09-27 11:52:51 --> Severity: Notice  --> Undefined index: value /Applications/XAMPP/xamppfiles/htdocs/NCCLP2-NEW-DESIGN/system/application/views_c/%%D9^D96^D960D0E7%%form.html.php 603
+ERROR - 2017-09-27 11:52:51 --> Severity: Notice  --> Undefined index: file_learning_catalog /Applications/XAMPP/xamppfiles/htdocs/NCCLP2-NEW-DESIGN/system/application/views_c/%%D9^D96^D960D0E7%%form.html.php 833

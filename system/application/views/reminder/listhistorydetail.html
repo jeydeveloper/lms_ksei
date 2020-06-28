@@ -1,0 +1,28 @@
+      {* $lperiod *}: {* $date *}
+      <br />
+      {* $lstatus *}: {* $status *}
+      <table width="100%" cellpadding="3" class="tablelist">
+        <thead>
+          <tr>
+          	<th width="5%">No.</th>
+          	<th width="15%">{* $ldate *}</th>
+            <th width="30%">{* $lnpk *}</th>
+            <th>&nbsp;</th>
+          </tr>
+          {* counter start=1 print=false assign="no" *}
+          {* foreach from=$rows item=row *}
+          <tr{* if $no%2 eq 1 *} class="odd"{* /if *}>  
+          	<td>{* $no *} </td>
+          	<td>{* $row->log_created_fmt *}</td>
+          	<td>{* $row->user_npk *}</td>
+          	<td>&nbsp;</td>
+          </tr>          	
+          	{* counter *}
+          {* /foreach *}
+          
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+<br />
+<div id="histdetail"></div>

@@ -1,0 +1,66 @@
+<h2>Questionaire</h2>
+{* if $deny *}
+<table border="0" cellpadding="0" cellspacing="0">
+  <tr>
+    <td>Maaf.. kamu sudah pernah ikut questionaire ini</td>
+  </tr>
+  <tr>
+    <td><br/><a href="{* $site_url *}/questionairestart">[back]</a></td>
+  </tr>
+</table>
+{* elseif $disabled *}
+<table border="0" cellpadding="0" cellspacing="0">
+  <tr>
+    <td>Maaf.. questionaire ini sudah dinonakifkan, silahkan hubungi administrator.</td>
+  </tr>
+  <tr>
+    <td><br/><a href="{* $site_url *}/questionairestart">[back]</a></td>
+  </tr>
+</table>
+{* else *}
+<form method="post" action="">
+  <input type="hidden" name="bank_soal_id" value="{* $detail.bank_soal_id *}">
+  <table border="0" cellpadding="0" cellspacing="0">
+    <tr>
+      <td>
+        {* counter start=1 print=false assign="no" *}
+        {* foreach from=$detail.bank_soal item=item *}
+        {* assign var="x" value=$item.no_urut *}
+        <input type="hidden" name="soal[]" value="{* $item.no_urut *}">
+        <table>
+          <thead>
+            <tr>
+              <td width="20" valign="top" align="right">{* $item.no_urut *}.</td>
+              <td> {* $item.text *}</td>
+            </tr>
+          </thead>
+          <tr>
+            <td>&nbsp;</td>
+            <td>
+              <table>
+                {* foreach from=$item.opt item=pil key=key *}
+                {* assign var="y" value=$key+1 *}
+                <tr>
+                  <td valign="top">
+                    <label><input type="radio" name="jawaban[{* $x *}]" value="{* $y *}" required /> {* $pil *}</label>
+                  </td>
+                </tr>
+                {* /foreach *}
+                {* counter *}
+              </table>
+            </td>
+          </tr>
+        </table>
+        {* /foreach *}
+      </td>
+    </tr>
+    <tfoot>
+      <tr>
+        <td align="right">
+          <br><br><input type="submit" value="Submit" />
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+</form>
+{* /if *}

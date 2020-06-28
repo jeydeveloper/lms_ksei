@@ -1,0 +1,197 @@
+ 	<link type="text/css" href="{*$base_url*}js/jquery-ui-1.7.2.custom/development-bundle/themes/base/ui.all.css" rel="stylesheet" /> 
+	<script type="text/javascript" src="{*$base_url*}js/jquery-ui-1.7.2.custom/development-bundle/external/bgiframe/jquery.bgiframe.js"></script> 
+	<script type="text/javascript" src="{*$base_url*}js/jquery-ui-1.7.2.custom/development-bundle/ui/ui.core.js"></script> 
+	<script type="text/javascript" src="{*$base_url*}js/jquery-ui-1.7.2.custom/development-bundle/ui/ui.draggable.js"></script> 
+	<script type="text/javascript" src="{*$base_url*}js/jquery-ui-1.7.2.custom/development-bundle/ui/ui.resizable.js"></script> 
+	<script type="text/javascript" src="{*$base_url*}js/jquery-ui-1.7.2.custom/development-bundle/ui/ui.dialog.js"></script> 	
+	<script>
+			$(document).ready(
+				function()
+				{
+					$("#linkexport").click(
+						function()
+						{
+							$("#isexport").val(1);
+							$("#frmsearch").submit();
+						}
+					);
+
+					$("#btnsearch").click(
+						function()
+						{
+							$("#isexport").val(0);
+							$("#frmsearch").submit();
+						}
+					);
+					
+					$("a[id=linksortby]").click(
+						function()
+						{
+							var ref = $(this).attr("href").substring(1);
+							
+							$("#isexport").val(0);
+							$("#sortby").val(ref)
+							if (ref != $("#sortby").val())
+							{								
+								$("#orderby").val("asc");
+							}
+							else
+							if ($("#orderby").val() == "desc")
+							{
+								$("#orderby").val("asc");
+							}
+							else
+							{
+								$("#orderby").val("desc");
+							}
+							
+							$("#frmsearch").submit();
+						}
+					);
+				}
+			);
+		
+			function changelimit(elmt)
+			{
+				$("#isexport").val(0);
+				$("#limit").val(elmt.value)
+				$("#frmsearch").submit();
+			}
+			
+			function page(n)
+			{
+				if (! n) n = 0;
+				
+				$("#isexport").val(0);
+				$("#offset").val(n);
+				$("#frmsearch").submit();
+			}			
+	</script>
+
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>
+                {* $learning_topics_list *}
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li><a href="#">Training Report</a></li>
+                <li class="active">Show list</li>
+            </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box">
+                        <div class="box-body table-responsive">
+                            {* if $status ne -1 *}
+                            <h2>{* $lstatus *}: {* if $status eq 1 *}{* $llulus *}{* else *}{* $lnolulus *}{* /if *}</h2>
+                            {* /if *}
+                            {* $sort_list_by *} <a href="#user_npk" id="linksortby" {* if $sortby eq 'user_npk' *}class="lite"{* /if *}>{* $lnpk *}</a> | <a href="#user_name" id="linksortby" {* if $sortby eq 'user_name' *}class="lite"{* /if *}>{* $lname *}</a> | <a href="#" id="linkexport">{* $lexport *}</a> </p>
+                            <form id="frmsearch" method="post" action="{* $site_url *}/{* $pageid *}/summaryreport/{* $subpageex *}/{* $id *}/-1">
+                                <table class="table">
+                                    <tr>
+                                        <td width="8%">{* $lsearch_by *}</td>
+                                        <td>
+                                            <select name="searchby" id="searchby">
+                                                <option value="user_npk"{* if $searchby eq "user_npk" *} selected{* /if *}>{* $lnpk *}</option>
+                                                <option value="user_name"{* if $searchby eq "user_name" *} selected{* /if *}>{* $lname *}</option>
+                                            </select>
+                                            <input type='text' name="keyword" id="keyword" class='formdefault' value="{* $keyword *}">
+                                        </td>
+                                    </tr>
+                                    {* if $subpageex eq "exam" or $subpageex eq "praexam" *}
+                                    <tr>
+                                        <td>{* $lstatus *}</td>
+                                        <td>
+                                            {* if $subpageex eq "exam" *}
+                                            <select id="status" name="status">
+                                                <option value="-1"{* if $status eq "" *} selected{* /if *}>{* $lall *}</option>
+                                                <option value="1"{* if $status eq "1" *} selected{* /if *}>{* $llulus *}</option>
+                                                <option value="0"{* if $status eq "0" *} selected{* /if *}>{* $lnolulus *}</option>
+                                            </select>
+                                            {* /if *}
+                                            <select id="status1" name="status1">
+                                                <option value=""{* if $status1 eq "" *} selected{* /if *}>{* $lall *}</option>
+                                                <option value="1"{* if $status1 eq "1" *} selected{* /if *}>{* $lmax_score *}</option>
+                                                <option value="2"{* if $status1 eq "2" *} selected{* /if *}>{* $llast_score *}</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    {* /if *}
+                                    <tr>
+                                        <td>&nbsp;</td>
+                                        <td><input type='button' id="btnsearch" value=" {* $lsearch *} "></td>
+                                    </tr>
+                                </table>
+
+
+
+                                </p>
+                                <input type="hidden" name="limit" id="limit" value="{* $limit *}" />
+                                <input type="hidden" name="offset" id="offset" value="0" />
+                                <input type="hidden" name="sortby" id="sortby" value="{* $sortby *}" />
+                                <input type="hidden" name="orderby" id="orderby" value="{* $orderby *}" />
+                                <input type="hidden" name="isexport" id="isexport" value="" />
+                            </form>
+                            <table class="table table-hover table-striped">
+                                <thead>
+                                <tr>
+                                    <th width="5%" valign="top"><a href="#training_code" id="linksortby" class="thead">{* $lcode *}</a></th>
+                                    <th width="8%" valign="top">{* $lnpk *}</th>
+                                    <th width="20%" valign="top">{* $lname *}</th>
+                                    {* if $type.0 eq 0 *}
+                                    <th width="12%" valign="top">Material Value</th>
+                                    <th width="12%" valign="top">Material Status</th>
+                                    <th width="12%" valign="top">Material Date</th>
+                                    {* elseif $type.0 eq 1 *}
+                                    <th width="12%" valign="top">Preexam Value</th>
+                                    <th width="12%" valign="top">Preexam Status</th>
+                                    <th width="12%" valign="top">Preexam Date</th>
+                                    {* elseif $pageid eq "certificate" *}
+                                    <th width="12%" valign="top">Certification Value</th>
+                                    <th width="12%" valign="top">Certification Status</th>
+                                    <th width="12%" valign="top">Certification Date</th>
+                                    {* else *}
+                                    <th width="12%" valign="top">Exam Value</th>
+                                    <th width="12%" valign="top">Exam Status</th>
+                                    <th width="12%" valign="top">Exam Date</th>
+                                    {* /if *}
+                                    <th width="8%" valign="top">Duration</th>
+                                </tr>
+
+                                </thead>
+                                <tbody>
+                                {* counter start=1 print=false assign="no" *}
+                                {* foreach from=$rows item=row *}
+                                <tr>
+                                    <td class="odd">{* $row->training_code *}</td>
+                                    <td class="odd">{* $row->user_npk *}</td>
+                                    <td class="odd">{* $row->user_first_name *} {* $row->user_last_name *}</td>
+                                    <td class="odd" style="text-align: right">{* $row->history_exam_score *}</td>
+                                    <td class="odd">{* $row->history_exam_status_str *}</td>
+                                    <td class="odd" style="text-align: center">{* $row->history_exam_date_fmt *}</td>
+                                    <td class="odd" style="text-align: right">{* $row->duration *}</td>
+                                </tr>
+                                {* counter *}
+                                {* /foreach *}
+                                </tbody>
+                                <tr>
+                                    <td colspan="7">&nbsp;</td>
+                                </tr>
+                                <tfoot>
+                                <tr>
+                                    <td colspan="7">{* $paging *}</td>
+                                </tr>
+                                </tfoot>
+                            </table>
+                            <br />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>

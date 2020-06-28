@@ -1,0 +1,960 @@
+<link rel="stylesheet" href="{* $base_url *}js/jquery-ui-1.7.2.custom/development-bundle/themes/ui-lightness/jquery-ui-1.7.2.custom.css" type="text/css" media="all" /> 
+<link rel="stylesheet" href="{* $base_url *}js/jquery-ui-1.7.2.custom/development-bundle/themes/ui-lightness/ui.theme.css" type="text/css" media="all" /> 
+<script src="{* $base_url *}js/jquery-ui-1.7.2.custom/js/jquery-ui-1.7.2.custom.min.js" type="text/javascript"></script>
+<style>
+	.ui-dialog .ui-dialog-titlebar { padding: .5em .3em .3em 1em; position: relative; font-size:12px; background:#def0fa; color:#0066ff; border:none}
+</style>
+<script>
+	var gexternaldata = new Array();
+	
+	function add2cart(training)
+	{
+		$.post("{* $base_url *}index.php/ildp/add2cart/"+training, {period:  $("#period"+training).val()},
+			function(r)
+			{
+				if (r.error)
+				{
+					alert(r.message);
+					return;
+				}
+				
+				$("#ildpcart").html(r.ncart);
+				getcart();
+				alert(r.message);
+			}
+			, "json"
+		);
+	}	
+	
+	function all_click()
+	{
+		$("input[id=carts]").attr("checked", $("#all").attr("checked"));
+	}
+	
+	function cart_onclick(elmt)
+	{
+		if (! elmt.checked)
+		{
+			$("#all").attr("checked", false);
+		}
+	}
+	
+	function removecart()
+	{
+		var ischecked = false;
+		
+		$("input[id='carts']").each(
+			function()
+			{
+				if (this.checked)
+				{
+					ischecked = true;
+					return;
+				}
+			}
+		);
+		
+		if (! ischecked)
+		{
+			alert("{* $lempty_cart_selected *}");
+			return;
+		}
+
+		if (! confirm('{* $lconfirm_delete *}')) return;
+		
+		 $.post("{* $base_url *}index.php/ildp/removecart/", $("#frmildp").serialize(),
+		 	function(r)
+		 	{
+		 		if (r.error)
+		 		{
+		 			alert(r.message);
+		 			return;
+		 		}
+		 				
+		 		getcart(); 		
+				page(0);
+		 		alert(r.message);		 		
+		 	}
+		 	, "json"
+		 );
+	}
+	
+	function draft(isdraft)
+	{
+		{* if $smarty.post.referer eq "approval" *}	
+		if (! confirm("{* $lconfirm_ildp_approve *}")) return false;
+		{* else *}
+			if (isdraft)
+			{
+				if (! confirm("{* $lconfirm_ildp_draft *}")) return false;
+			}
+			else
+			{
+				if (! confirm("{* $lconfirm_ildp_checkout *}")) return false;
+			}
+		{* /if *}
+		
+		var s = "";
+		for(var i=0; i < gexternaldata.length; i++)
+		{
+			s += "&exttitle[]="+escape(gexternaldata[i][0]) + "&exttag[]=" + escape(gexternaldata[i][1]) + "&extobj[]=" + escape(gexternaldata[i][2]);
+			s += "&extstatus[]="+escape(gexternaldata[i][3]) + "&extorder[]=" + escape(gexternaldata[i][5]) + "&extrejected[]=" + escape(gexternaldata[i][6]);
+		}
+		
+		s += "&";
+		s += $("#frmildp").serialize();
+		s += "&";
+		s += $("#frmemployee").serialize();
+		
+		if (isdraft)
+		{
+			s += "&isdraft=1";
+		}
+
+		$("#btnaction").hide();
+		$("#waitaction").show();
+
+	{* if $smarty.post.referer eq "approval" *}	
+		 $.post("{* $base_url *}index.php/ildp/approved/{* $smarty.post.orderer *}", {},
+	{* else *}
+		$.post("{* $base_url *}index.php/ildp/checkout/", s,
+	{* /if *}
+		 	function(r)
+		 	{
+		 		$("#waitaction").hide();
+		 		$("#btnaction").show();
+		 		
+		 		if (r.error)
+		 		{
+		 			alert(r.message);
+		 			return;
+		 		}
+		 				
+		 		alert(r.message);		 		
+		 		if (r.redirect.length == 0) return;
+		 		location = r.redirect;
+		 	}
+		 	, "json"
+		 );		
+	}	
+	
+	function frmildp_onsubmit()
+	{				
+		draft(false); 		
+		return false;
+	}
+	
+	function resetform()
+	{
+		if (! confirm("{* $lconfirm_ildp_reset *}")) 
+		{
+			return;
+		}	
+		
+		$("#btnaction").hide();
+		$("#waitaction").show();
+		
+		$.post("{* $base_url *}index.php/ildp/resetform/{* $smarty.post.orderid *}", {},
+			function(r)
+			{				
+				$("#btnaction").show();
+				$("#waitaction").hide();
+				
+				if (r.error)
+				{
+					alert(r.message);
+					return;
+				}
+				
+				alert(r.message);
+				location = r.redirect;			
+				
+			}
+			, "json"
+		);		
+	}
+	
+	function reject()
+	{
+		$("#rejectreason").val("");
+		$("#rejectcatalogid").val("");
+		$("#rejectextdata").val("");
+		
+		$('#dialogcomment').dialog('option', 'width', 700);
+		$('#dialogcomment').dialog('option', 'height', 300);
+		$('#dialogcomment').dialog('option', 'title', "{* $lreject_reason *}");
+		$('#dialogcomment').dialog('option', 'modal', true);
+		$('#dialogcomment').dialog("open");						
+	}
+
+	function rejectcatalog(catid)
+	{
+		$("#rejectreason").val("");
+		$("#rejectcatalogid").val(catid);
+		$("#rejectextdata").val("");
+		
+		$('#dialogcomment').dialog('option', 'width', 700);
+		$('#dialogcomment').dialog('option', 'height', 300);
+		$('#dialogcomment').dialog('option', 'title', "{* $lreject_reason *}");
+		$('#dialogcomment').dialog("open");						
+	}
+	
+	function rejectedextdata(id)
+	{
+		$("#rejectreason").val("");
+		$("#rejectcatalogid").val("");
+		$("#rejectextdata").val(id);
+		
+		$('#dialogcomment').dialog('option', 'width', 700);
+		$('#dialogcomment').dialog('option', 'height', 300);
+		$('#dialogcomment').dialog('option', 'title', "{* $lreject_reason *}");
+		$('#dialogcomment').dialog("open");			
+	}
+	
+	function frmcomment_onsubmit()
+	{				
+		var reas = $("#rejectreason").val();
+		var catalog = $("#rejectcatalogid").val();
+		var extdata = $("#rejectextdata").val();
+		if (reas.length == 0)
+		{
+			alert("{* $lempty_reason *}");
+			return false;
+		}
+		
+		if (extdata != "")
+		{
+			if (! confirm("{* $lconfirm_extdata_reject *}")) 
+			{
+				$('#dialogcomment').dialog("close");
+				return false;
+			}
+			
+			dorejectedextdata(reas, extdata);
+			return false;
+		}
+		
+		if (catalog == "")
+		{
+			if (! confirm("{* $lconfirm_ildp_reject *}")) 
+			{
+				$('#dialogcomment').dialog("close");
+				return false;
+			}
+			
+			rejected(reas);
+			return false;
+		}
+		
+		if (! confirm("{* $lconfirm_ildp_content_reject *}")) 
+		{
+			$('#dialogcomment').dialog("close");
+			return false;
+		}		
+		
+		rejectedcatalog(reas, catalog);
+		return false;
+	}
+	
+	function dorejectedextdata(reas, extdata)
+	{
+		$("#waitrejectaction").show();
+		$("#btnreject").hide();
+		
+		$.post("{* $base_url *}index.php/ildp/rejectextdata/{* $smarty.post.orderid *}", {reason: reas, id: gexternaldata[extdata][4]},
+			function(r)
+			{
+				$("#waitrejectaction").hide();
+				$("#btnreject").show();
+
+				if (r.error)
+				{
+					alert(r.message);
+					return;
+				}
+				
+				gexternaldata[extdata][3] = 2;			
+				alert(r.laststatus);	
+				$("#status"+extdata).html(r.laststatus);
+
+				//$("#extdatastatusimg"+extdata).attr("src", r.src);
+				$('#dialogcomment').dialog("close");
+				alert(r.message);				
+			}
+			, "json"
+		);
+	}
+	
+	function extdatarepropose(idx)
+	{
+		$.post("{* $base_url *}index.php/ildp/extdatarepropose/{* $smarty.post.orderid *}", {id: gexternaldata[idx][4]},
+			function(r)
+			{
+				if (r.error)
+				{
+					alert(r.message);
+					return;
+				}
+				
+				alert(r.message);
+				gexternaldata[idx][3] = 1;
+				showexternaldata();
+			}
+			, "json"
+		);
+	}
+	
+	function rejectedcatalog(reas, catalog)
+	{				
+		$("#waitrejectaction").show();
+		$("#btnreject").hide();
+		
+		$.post("{* $base_url *}index.php/ildp/rejectcatalog/{* $smarty.post.orderid *}", {reason: reas, catalog: catalog},
+			function(r)
+			{
+				$("#waitrejectaction").hide();
+				$("#btnreject").show();
+
+				if (r.error)
+				{
+					alert(r.message);
+					return;
+				}
+				
+				$('#dialogcomment').dialog("close");
+				alert(r.message);
+				page(0);
+				//$("#statuscatalog"+catalog).attr("src", r.src);												
+			}
+			, "json"
+		);
+	}
+
+	function rejected(reas)
+	{
+		$("#waitrejectaction").show();
+		$("#btnreject").hide();
+		
+		$.post("{* $base_url *}index.php/ildp/reject/{* $smarty.post.orderid *}", {reason: reas},
+			function(r)
+			{
+				$("#waitrejectaction").hide();
+				$("#btnreject").show();
+
+				if (r.error)
+				{
+					alert(r.message);
+					return;
+				}
+				
+				alert(r.message);
+				location = r.redirect;
+			}
+			, "json"
+		);
+	}
+	
+	function repropose(id)
+	{
+		$.post("{* $base_url *}index.php/ildp/repropose/"+id, {},
+			function(r)
+			{
+				if (r.error)
+				{
+					alert(r.message);
+					return;
+				}
+				
+				alert(r.message);
+				page(0);
+			}
+			, "json"
+		);
+	}
+	
+	function comment(id)
+	{
+		$.post("{* $base_url *}index.php/ildp/rejectedcomment/"+id, {},
+			function(r)
+			{
+				$("#rejectreason1").html(r.comment);
+				$("#rejectuser").html(r.rejector);
+				$("#rejectdate").html(r.date);				
+				
+				$('#dialogreason').dialog('option', 'width', 700);
+				$('#dialogreason').dialog('option', 'height', 300);
+				$('#dialogreason').dialog('option', 'title', "{* $lreject_reason *}");
+				$('#dialogreason').dialog('option', 'modal', true);
+				$('#dialogreason').dialog("open");				
+			}
+			, "json"
+		);
+		
+	}
+
+	function frmatasan_onsubmit()
+	{
+		var npkori = $("#npkatasanori").val();
+		var npknew = $("#npkatasan").val();
+		
+		$.post("{* $base_url *}index.php/ildp/changeatasan/", {npkori: npkori, npknew: npknew},
+			function(r)
+			{
+				if (r.error)
+				{
+					alert(r.message);
+					return;
+				}
+								
+				$("#reportto"+npkori).val(r.user.user_id);
+				$("#reportername"+npkori).val(r.user.user_first_name + " " + r.user.user_last_name);
+				$("#reporternpk"+npkori).val(r.user.user_npk);
+				$("#reporterjob"+npkori).val(r.user.jabatan_name);
+				
+				$('#dialogatasan').dialog("close");
+			}
+			, "json"
+		);		
+		
+		return false;
+	}	
+	
+	function changeatasan(id)
+	{
+		$("#npkatasanori").val(id);
+		$("#npkatasan").val("");
+
+		$('#dialogatasan').dialog('option', 'width', 700);
+		$('#dialogatasan').dialog('option', 'height', 300);
+		$('#dialogatasan').dialog('option', 'title', "{* $lchange_this *}");
+		$('#dialogatasan').dialog('option', 'modal', true);
+		$('#dialogatasan').dialog("open");
+	}
+	
+	$(document).ready(
+		function()
+		{
+			$('#dialogext').dialog(
+				{ 
+					 autoOpen: false 						
+				}
+			);
+
+			$('#dialogcomment').dialog(
+				{ 
+					 autoOpen: false 						
+				}
+			);
+
+			$('#dialogreason').dialog(
+				{ 
+					 autoOpen: false 						
+				}
+			);		
+
+			$('#dialogatasan').dialog(
+				{ 
+					 autoOpen: false 						
+				}
+			);					
+			
+			var p;
+			{* foreach from=$orderextdata item=extdata *}
+			p = new Array(7);
+			p[0] = "{* $extdata->externaldata_title *}";
+			p[1] = "{* $extdata->externaldata_tag *}";
+			p[2] = "{* $extdata->externaldata_objective *}";
+			p[3] = "{* $extdata->externaldata_status *}";
+			p[4] = "{* $extdata->externaldata_id *}";
+			p[5] = "{* $extdata->order_id *}";
+			p[6] = "{* $extdata->externaldata_rejector *}";
+			gexternaldata.push(p);
+			{* /foreach *}
+			showexternaldata();
+		}
+	);
+	
+	function addexternal()
+	{
+		$("#exttitle").val("");
+		$("#exttag").val("");
+		$("#extobj").val("");
+		
+		$('#dialogext').dialog('option', 'width', 730);
+		$('#dialogext').dialog('option', 'height', 350);
+		$('#dialogext').dialog('option', 'title', "{* $lexternal_training *}");
+		$('#dialogext').dialog("open");				
+	}
+	
+	function frmext_onsubmit()
+	{
+		var exttitle = $("#exttitle").val();
+		var exttag = $("#exttag").val();
+		var extobj = $("#extobj").val();
+		
+		if (exttitle.length == 0)
+		{
+			alert("{* $lempty_external_catalog_title *}");
+			return false;
+		}
+
+		if (exttag.length == 0)
+		{
+			alert("{* $lempty_external_catalog_tag *}");
+			return false;
+		}
+		
+		var extdata = new Array(7);
+		extdata[0] = exttitle;
+		extdata[1] = exttag;
+		extdata[2] = extobj;
+		extdata[3] = 1;
+		extdata[4] = 0;
+		extdata[5] = 0;
+		extdata[6] = 0;
+		
+		gexternaldata.push(extdata);	
+		showexternaldata();
+		
+		$("#dialogext").dialog("close");
+		
+		return false;
+	}
+	
+	function showexternaldata()
+	{
+		var s = "";
+		for(var i=0; i < gexternaldata.length; i++)
+		{
+			s += "&exttitle[]="+escape(gexternaldata[i][0]) + "&exttag[]=" + escape(gexternaldata[i][1]) + "&extobj[]=" + escape(gexternaldata[i][2]);
+			s += "&extstatus[]="+escape(gexternaldata[i][3]) + "&extorder[]=" + escape(gexternaldata[i][5]) + "&extrejected[]=" + escape(gexternaldata[i][6]);
+		}
+		
+		s += "&referer={* $smarty.post.referer *}";
+		
+		$.post("{* $site_url *}/ildp/externaldata", s, 
+			function(r)
+			{
+				$("#trexdata").show();
+				$("#extdata").html(r.html);
+			}
+			, "json"
+		);		
+	}
+	
+	function removeextdata(idel)
+	{
+		var temp = gexternaldata;
+		gexternaldata = new Array();
+		
+		for(var i=0; i < temp.length; i++)
+		{
+			if (i == idel) continue;
+			
+			gexternaldata.push(temp[i]);			
+		}
+		
+		showexternaldata();
+	}
+	
+	function cancel_onclick()
+	{
+		$("#dialogext").dialog("close");
+	}
+	
+	function cancelchangeatasan_onclick()
+	{
+		$("#dialogatasan").dialog("close");
+	}
+	
+	function cancelreject_onclick()
+	{
+		$("#dialogcomment").dialog("close");
+	}		
+</script>
+{* if $smarty.post.referer eq "cart" or $smarty.post.referer eq "approval" *}
+<form id="frmildp" onsubmit="javascript: return frmildp_onsubmit()">
+{* /if *}
+	<table width="100%" cellpadding="3" class="tablelist"> 
+		<thead> 
+			<tr> 
+				{* if $smarty.post.referer eq "cart" *}
+				<th width="10"><input type="checkbox" id="all" name="all" value="1" onclick="javascript:all_click()" /></th> 
+				<th width="10">&nbsp;</th>
+				{* /if *}
+				<th width="102">{* $lcode *}</th> 
+				<th width="108"><div class="listmain">{* $ltopic *}</div></th> 
+				<th width="100">{* $lcategory *}</th> 
+				<th width="57">{* $lcatalog *}</th> 
+				{* if ($smarty.post.referer ne "cart" and $smarty.post.referer ne "topic" and $smarty.post.referer ne "") or $sess.asadmin  *}
+				<th width="57">{* $lgrade *}</th> 
+				<th width="88">{* $lprovider *}</th> 
+				{* /if *}				
+				<th width="86">{* $lmethod *}</th> 
+				{* if $smarty.post.referer eq "topic" *}
+				<th width="98">{* $ldurations *} ({* $ldays *})</th> 
+				<th width="109">{* $lcost *} (Rp)</th> 
+				{* /if *}
+				{* if $sess.asadmin *}
+				<th width="1">{* $lstatus *}</th> 
+				{* /if *}
+				{* if ! $sess.asadmin *}
+					{* if $smarty.post.referer ne "topic" *}
+				<th width="98">{* $lperiod *}</th>
+					{* /if *}
+				{* /if *}
+				{* if $smarty.post.referer ne "approval" and $smarty.post.referer ne "myform" *}
+					{* if ($smarty.post.referer ne "cart" and $smarty.post.referer ne "topic" and $smarty.post.referer ne "") or $sess.asadmin  *}
+						{* if ! $sess.asadmin *}
+						<th>&nbsp;</th>
+						{* /if *}
+					{* /if *}
+				{* /if *}
+				{* if $smarty.post.referer ne "topic" and ! $sess.asadmin *}
+				<th>{* $lstatus *}</th>
+				{* /if *}
+				{* if $smarty.post.referer eq "approval" or $smarty.post.referer eq "myform" *}
+					{* if ($smarty.post.referer ne "cart" and  $smarty.post.referer ne "topic" and $smarty.post.referer ne "") or $sess.asadmin  *}
+						{* if ! $sess.asadmin *}
+							<th>&nbsp;</th>
+						{* /if *}
+					{* /if *}
+				{* /if *}
+				<!--<th width="89"><a href="#" class="thead" title="sort topics by category">{* $lperiod *}</a></th> -->
+			</tr> 
+		</thead>
+		<tbody>
+			{* counter start=1 print=false assign="no" *}
+			{* foreach from=$catalogs item=catalog *}
+			<tr> 
+				{* if $smarty.post.referer eq "cart" *}
+				<td width="10" align="center" class="odd"><input type="checkbox" id="carts" name="cart[]" value="{* $catalog->training_id *}" onclick="javascript:cart_onclick(this)" /></td> 
+				<td width="10" align="center" class="odd">{* $catalog->training_category *}</td>				
+				{* /if *}
+				{* if $sess.asadmin *}
+				<td class="odd"><a href="{* $site_url *}/ildp/form/{* $catalog->training_id *}">{* $catalog->training_code *}</a></td>
+				{* else *}
+				<td class="odd">{* $catalog->training_code *}</td>
+				{* /if *}			
+				<td class="odd">{* $catalog->category_name *}</td>
+				<td class="odd">
+					{* $catalog->categories[0]->category_name *}
+					<!--{* foreach from=$catalog->categories item=category *}
+						- {* $category->category_name *} <br />
+					{* /foreach *}-->
+				</td>
+				<td class="odd">
+					{* if $sess.asadmin *}
+					<a href="{* $site_url *}/ildp/form/{* $catalog->training_id *}">{* $catalog->training_name *}</a>
+					{* elseif $smarty.post.referer ne "topic" *}
+					{* $catalog->training_name *}
+					{* else *}
+					<a href="{* $site_url *}/ildp/catalogdetail/{* $catalog->training_id *}">{* $catalog->training_name *}</a>
+					{* /if *}
+				</td>	
+				{* if ($smarty.post.referer ne "cart" and $smarty.post.referer ne "topic" and $smarty.post.referer ne "") or $sess.asadmin  *}
+				<td class="odd">{* $catalog->training_grade *}</td>
+				<td class="odd">{* $catalog->training_organization *}</td>
+				{* /if *}				
+				<td class="odd">{* $catalog->training_learning_method *}</td>			
+				{* if $smarty.post.referer eq "topic" *}
+				<td class="odd" style="text-align: right;">{* $catalog->training_duration_fmt*}</td>
+				<td class="odd" style="text-align: right;">{* $catalog->training_cost_fmt*}</td>				
+				{* /if *}
+				{* if $sess.asadmin and $smarty.post.referer ne "myform" *}
+				<td class="odd"><a href="{* $site_url *}/ildp/status/{* $catalog->training_id *}"><img src="{* $base_url *}images/16/{* if $catalog->training_catalog_status eq 1 *}active.png{* else *}inactive.png{* /if *}" width="12" height="12" border="0" title="{* $ldelete *}"/></a></td>
+				{* /if *}		
+				{* if ! $sess.asadmin *}
+					{* if $smarty.post.referer ne "cart" and $smarty.post.referer ne "approval" and $smarty.post.referer ne "myform" *}
+					<!--
+					<td>
+						<select name="period{* $catalog->training_id *}" id="period{* $catalog->training_id *}">
+							{* foreach from=$months item=month key=vmont *}
+							<option value="{* $vmont *}">{* $month *}</option>
+							{* /foreach *}
+						</select>
+					</td>
+					-->
+					{* else *}
+					<td>
+						{* foreach from=$catalog->periods item=period *}
+						{* $period *}&nbsp;
+						{* /foreach *}
+					</td>
+					{* /if *}
+				{* /if *}				
+				{* if ! $sess.asadmin and $smarty.post.referer ne "topic" *}
+				<td class="odd">
+					{* if $sess.asadmin *}
+						{* if $catalog->ordercounts eq 0 *}
+						<a href="{* $site_url *}/ildp/remove/{* $catalog->training_id *}" onclick="javascript: return confirm('{* $lconfirm_delete *}');"><img src="{* $base_url *}images/b_del.gif" width="12" height="12" border="0" title="{* $ldelete *}"/></a>					
+						{* /if *}
+					{* else *}
+						{* if $smarty.post.referer eq "cart" or $smarty.post.referer eq "approval" or $smarty.post.referer eq "myform" *}
+						<a href="{* $base_url *}index.php/ildp/mytrail/{* $catalog->catalog->order_id *}" target="_blank">{* $catalog->laststatus *}</a>&nbsp;
+						{* else *}
+						<!--
+						<a href="javascript:add2cart({* $catalog->training_id *})"><img src="{* $base_url *}images/16/ILDP_form_add.png" width="12" height="12" border="0" title="{* $ladd_to_ildp_form *}"/></a>
+						-->
+						{* /if *}
+					{* /if *}			
+				</td>
+				{* /if *}
+
+				{* if $smarty.post.referer eq "approval" *}
+					{* if $catalog->order_catalog_status eq 1 *}
+					<td class="odd"><input type="button" value="{* $lreject *}" onclick="javascript:rejectcatalog({* $catalog->training_id *})" /></td>
+					{* elseif $catalog->catalog_rejected eq $sess.user_id *}
+					<td class="odd"><input type="button" value="{* $lcomment *}" onclick="javascript: comment({* $catalog->catalog->order_catalog_id *})"></td>
+					{* else *}
+					<td class="odd"><input type="button" value="{* $lcomment *}" onclick="javascript: comment({* $catalog->catalog->order_catalog_id *})"></td>
+					{* /if *}				
+				{* elseif $smarty.post.referer eq "myform" *}
+					{* if $catalog->order_catalog_status eq 1 *}
+						<td class="odd">
+							{* if $sess.asadmin *}
+							<a href="{* $base_url *}index.php/ildp/mytrail/{* $catalog->catalog->order_id *}" target="_blank">{* $catalog->laststatus *}</a>
+							{* /if *}
+							&nbsp;
+						</td>
+					{* elseif $sess.asadmin *}
+						<td class="odd">
+							<a href="{* $base_url *}index.php/ildp/mytrail/{* $catalog->catalog->order_id *}" target="_blank">{* $catalog->laststatus *}</a>
+						</td>
+					{* else *}
+						<td class="odd">
+							<input type="button" value="{* $lcomment *}" onclick="javascript: comment({* $catalog->catalog_id *})">
+							<br />
+							<input type="button" value="{* $lrepropose *}" onclick="javascript: repropose({* $catalog->catalog_id *})">
+						</td>
+					{* /if *}
+				{* /if *} 							
+			</tr>
+				{* counter *}
+			{* /foreach *}
+		</tbody>
+		{* if $smarty.post.referer ne "cart" and $smarty.post.referer ne "approval" *}
+		<tfoot>
+			<tr>
+				{* if $sess.asadmin *}
+				<td colspan="9">{* $paging *}</td>
+				{* elseif ($smarty.post.referer ne "cart" and $smarty.post.referer ne "topic" and $smarty.post.referer ne "") or $sess.asadmin  *}
+				<td colspan="12">{* $paging *}</td>
+				{* elseif $smarty.post.referer eq "topic" *}
+				<td colspan="7">{* $paging *}</td>
+				{* else *}
+				<td colspan="9">{* $paging *}</td>
+				{* /if *}
+			</tr>
+		</tfoot>
+		{* /if *}
+	</table>
+	<br />
+	<table width="100%" cellpadding="3" class="tablelist"> 
+		{* if $ncatalogs gt 0 *}
+			{* if $smarty.post.referer eq "cart" or $smarty.post.referer eq "approval" or $smarty.post.referer eq "myform" *}	
+	        <!--
+	        <tr> 
+	          <td colspan="13"><p><strong>{* $ltraining_type *}</strong><br /> 
+	            {* $ltraining_type_a *}<br /> 
+	          	{* $ltraining_type_b *}<br /> 
+	            {* $ltraining_type_c *}<br /> 
+	            {* $ltraining_type_d *} <br /> 
+	            <br /> 
+	          </p></td> 
+	        </tr>
+	        -->
+		
+	        <tr id="trexdata" style="display: none;">
+	        	<td colspan="13" style="border: 0px;">	        		
+	        		<div id="extdata"></div>
+	        	</td>
+	        </tr>
+	        	{* if $smarty.post.referer eq "cart" *} 		
+	        <tr> 
+	          <td colspan="13"><strong>{* $lactions *}<br /> 
+	          </strong><br /> 
+	          <a href="javascript:removecart()"><img src="{* $base_url *}images/16/delete.png" alt=" {* $ldelete_from_ildp *}" width="16" height="16" border="0" /> {* $ldelete_from_ildp *}</a> 
+	          | <a href="javascript:addexternal()"><img src="{* $base_url *}images/16/ILDP_external_add.png" alt="{* $lexternal_training *}" width="16" height="16" border="0" /> {* $lexternal_training *}</a></td> 
+	        </td>
+	        </tr>
+	        <tr>
+	        	<td style="border: 0px;" colspan="13">
+					{* if $smarty.post.referer eq "cart" *}
+					<hr /> 
+					PART 3 - APPROVAL FLOW<br />    					
+      				<dl class="def1"> 					
+				        {* foreach from=$reportto item=reporter *}
+				        <input name="reportto[]" type="hidden" class="formmid" id="reportto{* $reporter->user_id *}" value="{* $reporter->user_id *}" />
+				      	<dt>{* $lreport_to *}:</dt> 
+				                      <dd><input name="reportername{* $reporter->user_id *}" type="text" class="formmid" id="reportername{* $reporter->user_id *}" value="{* $reporter->user_first_name *} {* $reporter->user_last_name *}" readonly /> Name <a href="javascript:changeatasan({* $reporter->user_id *})"><em>{* $lchange_this *}</em></a></dd>
+				                      <dd><input name="reporternpk{* $reporter->user_id *}" type="text" class="formmid" id="reporternpk{* $reporter->user_id *}" value="{* $reporter->user_npk *}" readonly /> {* $lnpk *} </dd> 
+				                      <dd><input name="reporterjob{* $reporter->user_id *}" type="text" class="formmid" id="reporterjob{* $reporter->user_id *}" value="{* $reporter->jabatan_name *}" readonly 	/> Job Title</dd> 
+				                      <hr /> 
+				        {* /foreach *}      					
+      				</dl>	
+					{* /if *}	        		
+	        	</td>
+	        </tr>
+	        <tr> 	     
+	        	<td colspan="13">
+	        		<div id="btnaction">
+	                    <input type="submit" class="formbutton" value="{* $lstart_approval *}" />  
+	                    <input type="button" class="formbutton" value="{* $lsave_form *}" onclick="javascript: draft(true)" />                           
+                    </div>
+                    <div id="waitaction" style="display: none;"><img src="{* $base_url *}images/anim_wait.gif" border="0" /></div>
+                </td>
+            </tr>   
+            	{* /if *}
+	        {* /if *}	        
+	       {* /if *}
+	</table>
+	{* if $smarty.post.referer eq "approval" *}	
+	<br />		
+		<div id="btnaction">
+		{* if $sess.asadmin *}
+		
+		{* else *}
+		<input type="submit" class="formbutton" value="Approve" />
+		<input type="button" class="formbutton" value="Reject" onclick="javascript:reject()" />
+		{* /if *}
+		{* if $hasapproved *}
+		<input type="button" class="formbutton" value="History" onclick="javascript: window.open('{* $site_url *}/ildp/mytrail/{* $myorder *}', '');" />
+		{* /if *}				
+		</div>
+		<div id="waitaction" style="display: none;"><img src="{* $base_url *}images/anim_wait.gif" border="0" /></div>
+	{* /if *}
+	{* if $smarty.post.referer eq "myform" *}
+    <hr /> 
+      <dl class="def1"> 
+        PART 3 - APPROVAL FLOW<br /> 
+        {* foreach from=$rowreporters item=reporter *}
+      	<dt>{* $lreport_to *}:</dt> 
+                      <dd><input name="reporter{* $reporter->user_id *}" type="text" class="formmid" id="reporter{* $reporter->user_id *}" value="{* $reporter->user_first_name *} {* $reporter->user_last_name *}" readonly /> Name
+                      <dd><input name="reporter{* $reporter->user_id *}" type="text" class="formmid" id="reporter{* $reporter->user_id *}" value="{* $reporter->user_npk *}" readonly /> {* $lnpk *} </dd> 
+                      <dd><input name="reporter{* $reporter->user_id *}" type="text" class="formmid" id="reporter{* $reporter->user_id *}" value="{* $reporter->jabatan_name *}" readonly 	/> Job Title</dd> 
+                      <hr /> 
+        {* /foreach *}
+		{* if $ishrrmapproved *}
+		<dt>{* $lapproved_by *}</dt> 
+                      <dd><input name="hrrmapprovedname" type="text" class="formmid" id="hrrmapprovedname" value="{* $rowhrrm->user_first_name *} {* $rowhrrm->user_last_name *}" readonly	/> Name<!-- <a href="#"><em>change this</em></a></dd> -->
+                      <dd><input name="hrrmapprovednpk" type="text" class="formmid" id="hrrmapprovednpk" value="{* $rowhrrm->user_npk *}" readonly	/> {* $lnpk *} </dd> 
+                      <dd><input name="hrrmapprovedjob" type="text" class="formmid" id="hrrmapprovednpk" value="{* $rowhrrm->jabatan_name *}" readonly 	/> Job Title</dd> 
+		{* /if *}        
+		{* if $ishrldapproved *}
+		<hr /> 
+		<dt>{* $lapproved_by *}</dt> 
+                      <dd><input name="hrldapprovedname" type="text" class="formmid" id="hrldapprovedname" value="{* $rowhrld->user_first_name *} {* $rowhrld->user_last_name *}" readonly	/> Name<!-- <a href="#"><em>change this</em></a></dd> -->
+                      <dd><input name="hrldapprovednpk" type="text" class="formmid" id="hrldapprovednpk" value="{* $rowhrld->user_npk *}" readonly	/> {* $lnpk *} </dd> 
+                      <dd><input name="hrldapprovedjob" type="text" class="formmid" id="hrldapprovednpk" value="{* $rowhrld->jabatan_name *}" readonly 	/> Job Title</dd> 
+		{* /if *}
+        
+        
+        
+ 					</dl> 	
+ 		{* if $sess.asadmin *}
+ 		<input type="button" class="formbutton" value="Reset" onclick="javascript:resetform()" />&nbsp;&nbsp;
+ 		{* /if *}
+		<input type="button" class="formbutton" value="History" onclick="javascript: location = '{* $site_url *}/ildp/mytrail/{* $myorder *}';" />                            					
+	{* /if *}
+
+{* if $smarty.post.referer eq "cart" or $smarty.post.referer eq "approval" *}	
+</form>
+<div id="dialogext" style="display: none;">
+	<form id="frmext" onsubmit="javascript: return frmext_onsubmit();">
+		<table width="100%" cellpadding="3" class="tablelist">
+	
+			<tr>
+				<td colspan='3'>	
+				{* $header_external_data *}
+				</td>
+			</tr>
+			<tr>
+				<td width="210">{* $lexternal_catalog_title *}</td>
+				<td width="1">:</td>
+				<td><input type='text' name="exttitle" id="exttitle" class='formdefault' value="" maxlength='100'></td>
+			</tr>
+			<tr>
+				<td>{* $lexternal_catalog_tag *}</td>
+				<td>:</td>
+				<td><input type='text' name="exttag" id="exttag" class='formdefault' value="" maxlength='100'></td>
+			</tr>		
+			<tr>
+				<td>{* $lexternal_catalog_objective *}</td>
+				<td>:</td>
+				<td><textarea name="extobj" id="extobj" class='formdefault'></textarea></td>
+			</tr>			
+	        <tr> 	     
+	        	<td colspan="3">
+                      <input type="submit" class="formbutton" value="Save" />
+                      <input type="button" class="formbutton" value="Cancel" onclick="javascript: cancel_onclick()" />
+	            </td>
+	        </tr>
+		</table>
+	</form>
+</div>
+<div id="dialogcomment" style="display: none;">
+	<form id="frmcomment" onsubmit="javascript: return frmcomment_onsubmit();">
+		<input type="hidden" id="rejectcatalogid" name="rejectcatalogid" value="" />
+		<input type="hidden" id="rejectextdata" name="rejectextdata" value="" />
+		<table width="100%" cellpadding="3" class="tablelist">
+			<tr>
+				<td width="210">{* $lreject_reason *}</td>
+				<td width="1">:</td>
+				<td><textarea name="rejectreason" id="rejectreason" rows="3" cols="30"></textarea></td>
+			</tr>
+	        <tr> 	     
+	        	<td colspan="3">
+	        		<div id="waitrejectaction" style="display: none;"><img src="{* $base_url *}images/anim_wait.gif" border="0" /></div>
+	        		<div id="btnreject">
+                      <input type="submit" class="formbutton" value="{* $lreject *}" />
+                      <input type="button" class="formbutton" value="{* $lcancel *}" onclick="javascript: cancelreject_onclick()" />
+                    </div>
+	            </td>
+	        </tr>
+		</table>
+	</form>
+</div>
+<div id="dialogatasan" style="display: none;">
+	<form id="frmatasan" onsubmit="javascript: return frmatasan_onsubmit();">
+		<input type="hidden" id="npkatasanori" name="npkatasanori" value="" />
+		<table width="100%" cellpadding="3" class="tablelist">
+			<tr>
+				<td width="210">{* $lnpk *}</td>
+				<td width="1">:</td>
+				<td><input type='text' name="npkatasan" id="npkatasan" class='formdefault' value="" maxlength='100'></td>
+			</tr>
+	        <tr> 	     
+	        	<td colspan="3">
+                      <input type="submit" class="formbutton" value="{* $lsave *}" />
+                      <input type="button" class="formbutton" value="{* $lcancel *}" onclick="javascript: cancelchangeatasan_onclick()" />
+	            </td>
+	        </tr>
+		</table>
+	</form>
+</div>
+{* /if *}
+<div id="dialogreason" style="display: none;">
+	<table width="100%" cellpadding="3" class="tablelist">
+		<tr>
+			<td width="210">{* $lrejected_by *}</td>
+			<td width="1">:</td>
+			<td><span id="rejectuser"></span</td>
+		</tr>
+		<tr>
+			<td>{* $lrejected_date *}</td>
+			<td>:</td>
+			<td><span id="rejectdate"></span</td>
+		</tr>		
+		<tr>
+			<td>{* $lreject_reason *}</td>
+			<td>:</td>
+			<td><span id="rejectreason1"></span</td>
+		</tr>				
+        <tr> 	     
+        	<td colspan="3">
+                  <input type="button" class="formbutton" value="{* $lcancel *}" onclick="javascript: $('#dialogreason').dialog('close')" />
+            </td>
+        </tr>
+	</table>
+</div>

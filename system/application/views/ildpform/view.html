@@ -1,0 +1,181 @@
+<script type="text/javascript" src="{* $base_url *}/js/jquery.blockUI.js"></script>
+<script>
+	function reject()
+	{
+		$("#act").val(0);
+		$("#dvapproval").hide();
+		$("#dvreason").show();
+		$("#reasontitleapprove").hide();
+		$("#reasontitlereject").show();
+	}
+	
+	function approve()
+	{
+		$("#act").val(2);
+		$("#dvapproval").hide();
+		$("#dvreason").show();
+		$("#reasontitleapprove").show();
+		$("#reasontitlereject").hide();
+	}	
+	
+	function cancelApproval()
+	{
+		$("#dvapproval").show();
+		$("#dvreason").hide();
+	}
+	
+	function startapproval()
+	{
+		$.post("{* $site_url *}/ildpform/approvedraft/", {},
+			function(r)
+			{
+				if (r.error)
+				{
+					alert(r.message);
+					return;
+				}
+				
+				alert(r.message);
+				setTimeout("location='{* $site_url *}/ildpform/';", 1000);
+			}
+			, "json"
+		);
+	}
+	
+	function approval(id)
+	{
+		var reason = $("#reason").val();
+		if (reason.length == 0)
+		{
+			alert("{* $lempty_reason *}");
+			return;
+		}
+		
+		if ($("#act").val() == 0)
+		{
+			if (! confirm("{* $lconfirm_ildp_reject *}")) return;
+		}
+		else
+		if (! confirm("{* $lconfirm_ildp_approve *}")) return;
+		
+	  $.blockUI({ message: '<img src="{* $base_url *}images/anim_wait.gif" /> Please wait ...' });
+		$.post("{* $site_url *}/ildpapproval/save/", {id: id, reason: reason, status: $("#act").val()},
+			function(r)
+			{
+				$.unblockUI();	
+				if (r.error)
+				{
+					alert(r.message);
+					return;
+				}
+				
+				alert(r.message);
+				setTimeout("location='{* $site_url *}/ildpapproval/';", 1000);
+			}
+			, "json"
+		);
+	}
+	
+	window.onbeforeunload = null;
+	
+</script>
+{* if $ildpcatalogs *}
+<b><i>{* $lsubmitted_ildp_form *}</i></b>
+<br />
+<i>{* $llast_edited *} {* $submitted_date *}</i>
+<br />
+{* /if *}
+<form id="frmildp" name="frmildp" method="post" action="" onsubmit="javascript: page('edit','{* $formid *}'); return false;">
+<input type="hidden" name="act" id="act" value="" />
+<input type="hidden" name="formid" id="formid" value="{* $formid *}" />
+<table width="635" border="1" class="tablelist" style="border-collapse:collapse">
+  <thead>
+  <tr>
+    <th width="60">{* $lno *}</th>
+    <!-- <th width="304">{* $lildp_form_header *}</th> -->
+    <th width="230">{* $ldevelopment_area *}</th>
+    <th width="230">{* $llearning_method_dev *}</th>
+    <th>{* $ltimeline *}</th>
+  </tr>
+  </thead>
+  <tbody>
+  {* if $ildpcatalogs *}	
+  {* foreach from=$ildpcatalogs item=catalogs key=categoryname *}
+			<tr>
+				<td colspan="5"><b>{* $categoryname *}</b></td>
+			</tr>
+				{* counter start=1 print=false assign="no" *}
+				{* foreach from=$catalogs item=catalog *}
+					<tr class="history"> 
+						<td >{* $no *}</td>
+						<!-- <td >{* $catalog->ildp_catalog_training *}</td>-->
+						<td >{* if $catalog->dev_area_id *}{* $catalog->dev_area_title *}{* else *}{* $catalog->ildp_detail_devarea *}{* /if *}</td>
+						<td >{* $catalog->ildp_method_name *}</td>
+						<td>{* $catalog->ildp_detail_timeline *}</td>
+					</tr>
+					{* counter *}
+				{* /foreach *}
+ {* /foreach *}
+ {* /if *}	
+ 
+  {* if $rowform *}	
+ 	<tr height='20px'>
+		<td colspan="5"><b>{* $lcareer_aspiration|upper *}</b></td>
+	</tr>
+	<tr> 
+		<td class="odd" colspan='2'>
+			<b>{* $lshort_term *}</b>:
+			{* $rowform->ildp_form_short_term *}
+		</td>
+		<td class="odd" colspan='2'>
+			<b>{* $llong_term *}</b>: 
+			{* $rowform->ildp_form_long_term *}
+		</td>
+	</tr>
+	{* /if *}				
+  <tr class="odd">
+    <td colspan="5">&nbsp;</td>
+    </tr>
+</tbody>
+</table>
+ <br />
+{* if $ildpcatalogs *}
+	{* if $iscanapprove *}
+			<div id="dvapproval">
+			<input type="button" value="{* $lapprove *}" onclick="javascript:approve()" />&nbsp;&nbsp;<input type="button" value="{* $lreject *}" onclick="javascript:reject()" />
+			</div>
+			<div id="dvreason" style="display: none;">
+				<div id="reasontitleapprove" style="display: none;">{* $lapprove_desc *}</div>
+				<div id="reasontitlereject" style="display: none;">{* $lreject_reason *}</div>
+				<div>
+					<textarea name="reason" id="reason" rows="4" cols="60"></textarea>
+				</div>
+				<input type="button" value="OK" onclick="javascript: approval({* $formid *})"> <input type="button" value="{* $lcancel *}" onclick="javascript: cancelApproval({* $formid *})">
+			</div>
+	
+	{* elseif $isdraft and $isperiod and $isowner *}
+	<div>
+<input type="submit" value="{* $ledit *}" />&nbsp;&nbsp;
+	</div>
+	{* /if *}
+	{* if $laststatus *}
+	<div>
+	<br />
+	{* $lstatus *} : {* $laststatus *}
+	</div>
+	{* /if *}
+	
+	{* if $ildp_comments *}
+		<div>
+		{* $lcomments *} : <br />{* $ildp_comments *}
+		</div>
+	{* elseif $rejectreason *}
+	<div>
+	{* $lreject_reason *} : <br />{* $rejectreason *}
+	</div>
+	{* /if *}	
+{* elseif $isperiod *}
+<input type="submit" value="{* $lnew *}" />
+{* /if *}
+</form>
+   

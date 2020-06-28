@@ -1,0 +1,27 @@
+	<table width="100%" cellpadding="3" class="tablelist"> 
+		<thead> 
+			<tr> 
+				<th width="20%">{* $lildp_period *}</th> 
+				<th width="30%">{* $lstatus *}</th> 
+				<th width="40%">{* $lcomment *}</th> 
+				<th>&nbsp;</th>
+			</tr> 
+		</thead>
+		<tbody>
+			{* counter start=1 print=false assign="no" *}
+			{* foreach from=$rows item=row *}
+			<tr> 
+				<td class="odd"><a href="{* $site_url *}/ildpform/hist/{* $row->ildp_id *}">{* $row->ildp_form_ildp_period *}</a></td>
+				<td class="odd">{* $row->laststatus *}</td> 
+				<td class="odd">{* $row->lastcomment *}</td>
+				<td>&nbsp;</td>
+			</tr>
+				{* counter *}
+			{* /foreach *}
+		</tbody>
+		<tfoot>
+			<tr>
+				<td colspan="5">{* $paging *}</td>
+			</tr>
+		</tfoot>
+	</table>

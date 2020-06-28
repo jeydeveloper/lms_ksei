@@ -1,0 +1,29 @@
+	<table width="100%" cellpadding="3" class="tablelist"> 
+		<thead> 
+			<tr> 
+				<th width="5%">{* $lnpk *}</th> 
+				<th width="30%">{* $lname *}</th> 
+				<th width="17%">{* $lsubmitdate *}</th> 
+				<th width="30%">{* $lstatus *}</th> 
+				<th>&nbsp;</th>
+			</tr> 
+		</thead>
+		<tbody>
+			{* counter start=1 print=false assign="no" *}
+			{* foreach from=$rows item=row *}
+			<tr> 
+				<td class="odd">{* $row->user_npk *}</td>
+				<td class="odd"><a href="{* $site_url *}/ildpform/approval/{* $row->ildp_id *}">{* $row->user_first_name *} {* $row->user_last_name *}</a></td>
+				<td class="odd">{* $row->ildp_period_start_t *}</td>
+				<td class="odd">{* $row->laststatus *}</td> 
+				<td>&nbsp;</td>
+			</tr>
+				{* counter *}
+			{* /foreach *}
+		</tbody>
+		<tfoot>
+			<tr>
+				<td colspan="5">{* $paging *}</td>
+			</tr>
+		</tfoot>
+	</table>

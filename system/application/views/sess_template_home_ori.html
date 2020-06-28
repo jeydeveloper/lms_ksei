@@ -1,0 +1,406 @@
+{*if ! isset($current_url) *}
+  {* assign var='current_url' value='' *}
+{*/if*}
+
+{*if ! isset($win) *}
+  {* assign var='win' value='' *}
+{*/if*}
+
+
+{* if !isset($smarty.post.noheader) or ! $smarty.post.noheader *}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>{* $website_title *}</title>
+<style type="text/css" media="screen">@import url({* $theme_url *});</style>
+<link href='{*$base_url*}js/fullcalendar/css/fullcalendar.css' rel='stylesheet' />
+<link href='{*$base_url*}js/fullcalendar/css/fullcalendar.print.css' rel='stylesheet' media='print' />
+<link href='{*$base_url*}js/impromptu/css/jquery-impromptu.css' rel='stylesheet' />
+<style type="text/css">
+.read-less-link, .read-more-link, .morelink {
+    float: right;
+}
+.desc_news p {margin: 0;}
+
+a.morelink {
+    text-decoration:none;
+    outline: none;
+}
+.morecontent span {
+    display: none;
+}
+</style>
+<style type="text/css">
+#calendar {
+    width: 300px;
+    margin: 0 auto;
+    font-size: 10px;
+}
+.fc-toolbar {
+    font-size: .9em;
+}
+.fc-toolbar h2 {
+    font-size: 12px;
+    white-space: normal !important;
+}
+/* click +2 more for popup */
+.fc-more-cell a {
+    display: block;
+    width: 85%;
+    margin: 1px auto 0 auto;
+    border-radius: 3px;
+    background: grey;
+    color: transparent;
+    overflow: hidden;
+    height: 4px;
+}
+.fc-more-popover {
+    width: 100px;
+}
+.fc-view-month .fc-event, .fc-view-agendaWeek .fc-event, .fc-content {
+    font-size: 0;
+    overflow: hidden;
+    height: 2px;
+}
+.fc-view-agendaWeek .fc-event-vert {
+    font-size: 0;
+    overflow: hidden;
+    width: 2px !important;
+}
+.fc-agenda-axis {
+    width: 20px !important;
+    font-size: .7em;
+}
+
+.fc-button-content {
+    padding: 0;
+}
+
+.certification, .certification div, .certification span {background-color: green;border-color: green;color:yellow;}
+.eventsx, .eventsx div, .eventsx span {background-color: purple;border-color: purple;color:white;}
+
+.fc-event{height: 6px;}
+
+</style>
+<script type="text/javascript" src="{*$base_url*}js/fullcalendar/moment.min.js"></script>
+<script type="text/javascript" src="{*$base_url*}js/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="{*$base_url*}js/jquery.shorten.min.js"></script>
+<script type="text/javascript" src="{*$base_url*}js/fullcalendar/fullcalendar.min.js"></script>
+<script type="text/javascript" src="{*$base_url*}js/impromptu/jquery-impromptu.js"></script>
+<script type="text/javascript" src="{*$base_url*}js/common.js"></script>
+</head>
+
+<body>
+{* /if *}
+<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">
+{* if ! isset($smarty.post.dialog) or ! $smarty.post.dialog *}
+  <tr>
+    <td height="1">
+	<!-- Logos and Corporate Identity -->
+	<div id="logo" style="background-image: url({* $website_logo *});">
+    <br />{* $website_title *}&nbsp;&nbsp; </div>
+	<!-- Main Navigation -->
+	
+	{* if $sessmodules.trainee and ! $sess.asadmin *}
+		{* if ($page eq "training" or $page eq "certificate") and $subpage eq "historydetail" *}
+			{* assign var="isprofile" value=true *}
+		{* elseif ($page eq "user" and ($subpage eq "info" or $subpage eq "changepass" or $subpage eq "editinfo")) or ($page eq "training" and $subpage eq "history" and ! $sess.asadmin) or ($page eq "certificate" and $subpage eq "history" and ! $sess.asadmin) or ($page eq "resources" and (! $sess.asadmin and ($subpage eq "history" or $subpage eq "historydetail"))) *}
+			{* assign var="isprofile" value=true *}
+		{* else *}
+			{* assign var="isprofile" value=false *}
+		{* /if *}
+	{* elseif ($page eq "user" and ($subpage eq "info" or $subpage eq "changepass" or $subpage eq "editinfo")) or ($page eq "training" and $subpage eq "history" and ! $sess.asadmin) or ($page eq "certificate" and $subpage eq "history" and ! $sess.asadmin) or ($page eq "resources" and (! $sess.asadmin and ($subpage eq "history" or $subpage eq "historydetail"))) *}
+		{* assign var="isprofile" value=true *}
+	{* else *}
+		{* assign var="isprofile" value=false *}
+	{* /if *}
+	
+	{* if $sessmodules.trainee and ! $sess.asadmin *}
+		{* if ($page eq "training" or $page eq "certificate") and $subpage eq "historydetail" *}
+			{* assign var="istraining" value=false *}
+		{* elseif ($page eq "topic" and $subpage ne "category") or ($page eq "training" and $subpage ne "history") or ($page eq "certificate" and $subpage ne "history") or $page eq "banksoal" or ($page eq "resources" and $subpage ne "history" and $subpage ne "historydetail") *}
+			{* assign var="istraining" value=true *}
+		{* else *}
+			{* assign var="istraining" value=false *}
+		{* /if *}
+	{* elseif $page eq "topic" or $page eq "training" or $page eq "certificate" or $page eq "banksoal" or $page eq "resources" or $page eq "classroom" or ($page eq "import" and $subpage eq "topic_traning") or ($page eq "user" and $subpage eq "activities") or ($page eq "activities") *}
+		{* assign var="istraining" value=true *}
+	{* else *}
+		{* assign var="istraining" value=false *}	
+	{* /if *}	
+	
+	<div id="navbg">
+	<div id="navcontainer">
+	 {* if $win ne "popup" *}
+	  <ul id="navlist">
+	  	{* if $sess *}	  	
+		<li><a href="{* $base_url *}" id="current">{* $home *}</a></li>
+		<li{* if $isprofile or (($page eq "ildpform" and ! $sess.asadmin) or $page eq "ildpapproval" or $page eq "ildpapprovalhist" or $page eq "ildphist") *} id="active"{*/if*}><a href="{* $site_url *}/user/info">{* $your_profile *}</a></li>
+		{* if $sessmodules.trainee and ! $sess.asadmin *}
+			<li{* if $page eq "topic" and $subpage eq "category" *} id="active"{*/if*}><a href="{* $site_url *}/topic/category">{* $lcategory1 *}</a></li>
+			<li{* if $istraining or ($page eq "ildp" and ($subpage ne "myform" and $subpage ne "approval") ) *} id="active"{*/if*}><a href="{* $site_url *}/topic/">{* $llearning_topics *}</a></li>
+			<li{* if ($page eq "request" and ($subpage eq "training" or $subpage eq "formtraining" or $subpage eq "approval")) *} id="active"{*/if*}><a href="{* $site_url *}/request/training">Request Training</a></li>
+		{* else *}
+		{* if $sess.user_type eq 0 or $sessmodules.category or $sessmodules.topic or $sessmodules.training or $sessmodules.certificate or $sessmodules.classroom or $sessmodules.resources or $ishavedelegetion *}
+			{* if $sess.user_type eq 0 or $sessmodules.category *}			
+				<li{* if $istraining or ($page eq "user" and $subpage eq "activities") or ($page eq "activities") *} id="active"{*/if*}><a href="{* $site_url *}/topic/category">{* $llearning_admin *}</a></li>
+			{* elseif $sessmodules.topic *}			
+				<li{* if $istraining *} id="active"{*/if*}><a href="{* $site_url *}/topic/">{* $llearning_admin *}</a></li>
+			{* elseif $sessmodules.training or $ishavedelegetion  *}			
+				<li{* if $istraining *} id="active"{*/if*}><a href="{* $site_url *}/training/showlist">{* $llearning_admin *}</a></li>
+			{* elseif $sessmodules.certificate *}
+				<li{* if $istraining  *} id="active"{*/if*}><a href="{* $site_url *}/certificate">{* $llearning_admin *}</a></li>
+			{* elseif $sessmodules.classroom *}
+				<li{* if $istraining *} id="active"{*/if*}><a href="{* $site_url *}/classroom">{* $llearning_admin *}</a></li>
+			{* elseif $sessmodules.resources *}
+				<li{* if $istraining *} id="active"{*/if*}><a href="{* $site_url *}/resources">{* $llearning_admin *}</a></li>				
+			{* /if *}
+		{* /if *}		
+		{* /if *}
+		{* if $sessmodules.ildpadmin and $sess.asadmin and $showildp eq 1 *}
+			<li{* if $page eq "ildp" or $page eq "ildpcatalog" or $page eq "ildpmethod" or $page eq "hrrm" or $page eq "hrld" or $page eq "ildpcategory" or $page eq "ildpregperiod" or $page eq "ildpreport" or $page eq "ildpqueue" or ($page eq "ildpform" and $sess.asadmin) or ($page eq "ildpformimport")  *} id="active"{*/if*}><a href="{* $site_url *}/ildpcatalog/">{* $lildp_admin *}</a></li>
+		{* /if *}
+		{* if $sess.asadmin *}
+			{* if $sess.user_type eq 0 or $sessmodules.user or $sessmodules.right *}
+                                <li{* if ($page eq "user" and $subpage eq "showlist") or $page eq "reminder" or $page eq "level" or $page eq "jabatan" or $page eq "func" or $page eq "right" *} id="active"{*/if*}><a href="{* $site_url *}/user/showlist/">{* $luser_admin *}</a></li>
+
+                                <li{* if ($page eq "user" and $subpage eq "admin_news") *} id="active"{*/if*}><a href="{* $site_url *}/user/admin_news/">{* $ladmin_news *}</a></li>
+			{* /if *}
+			{* if $sess.user_type eq 0 or $sessmodules.master or $sessmodules.right *}
+				{* if $sessmodules.master *}
+					<li{* if $page eq "reminder" or $page eq "generalsetting" or $page eq "lokasi" or ($page eq "import" and $subpage eq "masterdata")  *} id="active"{*/if*}><a href="{* $site_url *}/generalsetting/">{* $lsettings *}</a></li>						
+				{* else *}
+					<li{* if $page eq "reminder" or $page eq "generalsetting" or $page eq "lokasi" or ($page eq "import" and $subpage eq "masterdata")  *} id="active"{*/if*}><a href="{* $site_url *}/generalsetting/">{* $lsettings *}</a></li>						
+				{* /if *}
+			{* /if *}
+		{* /if *}
+		{* if $sess.asadmin and $sessmodules.trainee *}
+			<li><a href="{* $site_url *}/user/astrainee">{* $ltrainee_menu *}</a></li>
+		{* /if *}		
+		{* if $sessmodules.trainee and ! $sess.asadmin and $sessmodulesadmin *}
+			<li><a href="{* $site_url *}/user/asadmin">{* $ladmin_menu *}</a></li>
+		{* /if *}		
+		{* if $sess.asadmin and $sessmodules.report *}
+			<li{* if $page eq "report"  *} id="active"{*/if*}><a href="{* $site_url *}/report/">{* $lreport *}</a></li>
+		{* /if *}		
+		<li><a href="{* $site_url *}/user/logout">{* $logout *}</a></li>
+		{* /if *}
+	  </ul>	 
+	   
+	   {* if $show_changelang *}
+		  {* if $lang eq "id" *}
+		  	<!--<img src="{* $base_url *}images/b_id.gif"  border="0" />--><b>IND</b>
+		  {* else *}
+		  	<a href="#" onclick="javascript:setlang('{* $site_url *}/home/setlang', '{* $current_url *}', 'id')"><!--<img src="{* $base_url *}images/b_id.gif" border="0" />-->IND</a>
+		  {* /if *}
+		  
+		  	<img src="{* $base_url *}images/b_flag.gif" width="9" height="16" border="0" />
+		  {* if $lang eq "en" *}
+		  	<b><!--<img src="{* $base_url *}images/b_en.gif"  border="0" />-->ENG</b>	  
+		  {* else *}	  
+		  	<a href="#" onclick="javascript:setlang('{* $site_url *}/home/setlang', '{* $current_url *}', 'en')"><!--<img src="{* $base_url *}images/b_en.gif"  border="0" />-->ENG</a>
+		  {* /if *}
+		{* /if *}
+	 {* /if *}
+&nbsp;&nbsp;&nbsp;&nbsp;	</div>
+    </div>
+	{* if $sess *}
+    <!-- LOGIN Name / Active Account -->    
+    <div id="login"><span class="lite"><a href="{* $site_url *}/user/info" title="account settings"><strong>{* $sess.user_first_name *} {* $sess.user_last_name *} </strong>({* $lnpk *}: {* $sess.user_npk *})</a></span>
+    </div>
+    {* /if *}
+	</td>
+  </tr>
+  {* /if *}
+  <tr>
+  		<td>
+	  		<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">
+			    <td valign="top" style="width:75%;">
+			    	<div id="news_learning">
+			    		<ul class="news_li">
+			    			{* foreach from=$list item=row *}
+			    			<li>
+		    					<img class="img_news" src="{* $row->url_image *}">
+		    					<div class="desc_news more">
+		    						<h3>{* $row->news_title *}</h3>
+		    						<div class="create_by_time">by admin | {* $row->entrydate *}</div>
+		    						<p>{* $row->news_desc *}</p>
+		    					</div>
+			    			</li>
+			    			{* /foreach *}
+			    		</ul>
+
+			    		<!--<ul class="post-pagination">
+                            <li class="older full-size"><a href="/page/2/" rel="prev">More&nbsp;News</a></li>
+                    	</ul>-->
+
+                    	<ul class="post-pagination">
+                            {* $paging_list *}
+                    	</ul>
+			    	</div>
+			    </td>
+			    <td valign="top" style="width:25%;">
+			    	<div class="new_training_activities">
+			    		<div id='calendar'></div>
+			    	</div>
+			    	<div class="new_training_activities">
+			    		<div class="training_activities">
+			    			<h3>Online Training Activities</h3>
+			    		</div>
+			    		<ul class="detail_activities">
+			    			{* foreach from=$ol_activities item=row *}
+		    				<li>
+		    					<div>
+		    						<h5><a href="{* $row->url_link *}">{* $row->training_name *}</a></h5>
+		    						<div class="create_by_time">Created {* $row->entrydate *}</div>
+		    					</div>
+		    				</li>
+		    				{* /foreach *}
+		    			</ul>
+			    	</div>
+			    	<div class="new_training_activities">
+			    		<div class="training_activities">
+			    			<h3>Certification Activities</h3>
+			    		</div>
+			    		<ul class="detail_activities">
+			    			{* foreach from=$oc_activities item=row *}
+		    				<li>
+		    					<div>
+		    						<h5><a href="{* $row->url_link *}">{* $row->training_name *}</a></h5>
+		    						<div class="create_by_time">Created {* $row->entrydate *}</div>
+		    					</div>
+		    				</li>
+		    				{* /foreach *}
+		    			</ul>
+			    	</div>
+			    	<div class="new_training_activities">
+			    		<div class="training_activities">
+			    			<h3>Resources Activities</h3>
+			    		</div>
+			    		<ul class="detail_activities">
+			    			{* foreach from=$or_activities item=row *}
+		    				<li>
+		    					<div>
+		    						<h5><a href="{* $row->url_link *}">{* $row->reference_name *}</a></h5>
+		    						<div class="create_by_time">Created {* $row->entrydate *}</div>
+		    					</div>
+		    				</li>
+		    				{* /foreach *}
+		    			</ul>
+			    	</div>
+			    	{* if $show_learning_catalog *}
+			    	{* if $file_learning_catalog *}
+			    	<div class="new_training_activities">
+			    		<div class="training_activities">
+			    			<h3>Learning Catalog</h3>
+			    		</div>
+			    		<ul class="detail_activities">
+			    			<li>
+		    					<div>
+		    						<h5>Download : <a href="{*$base_url*}uploads/learning_catalog/{* $file_learning_catalog *}" download>File Learning Catalog</a></h5>
+		    					</div>
+		    				</li>
+		    			</ul>
+			    	</div>
+			    	{* /if *}
+			    	{* /if *}
+			    </td>
+			</table>
+		</td>
+	</tr>
+  {* if ! isset($smarty.post.dialog) or ! $smarty.post.dialog *}
+  <tr>
+    <td height="1">
+	<div class="lite" id="copy">
+    Powered by <a href="http://www.netpolitan.com" title="Netpolitan Creative Content" target="_blank">NCC</a>. 
+    {* $app_revision *}
+    <br />
+  &copy; Copyright {* $strYear *} {* $strCompany *}. All rights reserved. </div>
+	</td>
+  </tr>
+  {* /if *}
+</table>
+{* if !isset($smarty.post.noheader) or ! $smarty.post.noheader *}
+<div id="container">  
+    
+</div>
+
+<script type="text/javascript">
+$(".more").shorten({
+    "showChars" : 500,
+    "moreText"  : "Read More",
+    "lessText"  : "Close"
+});
+</script>
+
+<script>
+
+	$(document).ready(function() {
+		$.prompt.setDefaults({
+			persistent: false
+		});
+
+		$('#calendar').fullCalendar({
+			height: 300,
+        	contentHeight: 360,
+			//defaultDate: '2015-12-12',
+			editable: true,
+			eventLimit: true, // allow "more" link when too many events
+			events: {
+				url: '{*$base_url*}index.php/ajax/json_training',
+				error: function() {
+				  $('#script-warning').show();
+				}
+			},
+			eventClick: function(calEvent, jsEvent, view) {
+				if(calEvent.className == 'eventsx') {
+					var statesdemo = {
+						state0: {
+							title: "Detail Event",
+							html:'<p>Name : '+calEvent.title+'</p><p>Description : '+calEvent.desc+'</p>'
+						}
+					};
+				} else {
+					var statesdemo = {
+						state0: {
+							title: "Detail Training",
+							html:'<p>Name : '+calEvent.title+'</p><p>Date : '+calEvent.tanggal_start+' s/d '+calEvent.tanggal_end+'</p><p>Description : '+calEvent.desc+'</p>'
+						}
+					};
+				}
+
+				$.prompt(statesdemo);
+			},
+			selectable: true,
+			select: function(start, end) {
+				var tmp = (new Date(start)).toISOString().slice(0, 10);
+				var tmp_dt = tmp.split('-');
+				var dt = tmp_dt[2]+'-'+tmp_dt[1]+'-'+tmp_dt[0];
+				var dt2 = tmp_dt[0]+'-'+tmp_dt[1]+'-'+tmp_dt[2];
+				//window.location = baseurl+'new?dt='+dt;
+
+				/*
+				$('#evnt_date').val(dt);
+				$('.modal-title').text('Create Event');
+				$('#btn_modal').trigger('click');
+				*/
+
+				var statesdemo = {
+					state0: {
+						title: "Form Event",
+						html:'<form method="post" action="{*$base_url*}index.php/home/create_event" id="form_new" class="form-horizontal"><table border="0" style="width:100%;"><tr><td>Event Name</td><td>:</td><td><input name="event_name" id="event_name" style="width:100%;" required /></td></tr><tr><td>Event Description</td><td>:</td><td><textarea name="event_desc" id="event_desc" style="width:100%;" required></textarea></td></tr><tr><td>Event Date</td><td>:</td><td><input name="event_date" id="event_date" value="'+dt2+'" readonly style="width:100%;" /></td></tr><tr><td colspan="3" style="text-align:right;"><button class="btn btn-success" id="btn_submit" style="margin-top:10px;">Submit</button></td></tr></table>'
+					}
+				};
+
+				$.prompt(statesdemo);
+			},
+		});
+		
+	});
+
+</script>
+
+</body>
+</html>
+{* /if *}

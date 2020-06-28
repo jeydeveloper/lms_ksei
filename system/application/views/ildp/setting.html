@@ -1,0 +1,107 @@
+<script>
+	function frmsetting_onchange()
+	{
+		if (! confirm("{* $lconfirm_ildp_catalog_save *}")) return false;
+		
+		$("#message").show();
+		$("#message").html("submitting...");
+		
+		$.post("{* $site_url *}/ildp/savesetting", $("#frmsetting").serialize(),
+			function(r)
+			{
+				if (r.error)
+				{
+					$("#message").html(r.message);
+					return;
+				}
+				
+				$("#message").html(r.message);				
+			}
+			, "json"
+		);
+		
+		return false;
+	}	
+	
+	$(document).ready(
+		function()
+		{
+			$('#reportlevelcond1').keyup(
+				function() {
+					$("#reportlevelcond2").val($('#reportlevelcond1').val());
+				}
+			);
+			
+			reload();
+		}
+	);
+	
+	function reload(isconfirm)
+	{
+		if (isconfirm)
+		{
+			if (! confirm("{* $lconfirm_reset_data *}")) return;
+		}
+		
+		{* if $settings.startreg *}
+		$("#startreg").val({* $settings.startreg *});
+		{* /if *}
+		{* if $settings.endreg *}
+		$("#endreg").val({* $settings.endreg *});
+		{* /if *}			
+		
+		$("#reportlevelcond1").val({* $settings.reportlevelcond1 *});
+		$("#reportlevelcond2").val({* $settings.reportlevelcond1 *});
+		
+		$("#reportlevelval1").val({* $settings.reportlevelval1 *});
+
+		$("#reportlevelval2").val({* $settings.reportlevelval2 *});
+		$("#maxgrade").val({* $settings.maxgrade *});
+	}
+</script>   
+<form name="frmsetting" id="frmsetting" onsubmit="javascript: return frmsetting_onchange()">	
+  <table width="100%">
+  	<tr>
+  		<td colspan="2"><h2>{* $lsetting *}</h2> </td>
+  	</tr>
+    <tr>
+      <td><table width="100%" border="0" cellpadding="0" cellspacing="0" class="tb_data">
+          <tr>
+            <td width="20%">{* $leligible_grade_for_approval *}</td>
+            <td width="1">:</td>
+            <td>
+            	{* $lgrade *} &gt;= <input type='text' name="reportlevelcond1" id="reportlevelcond1" class='formshort' value="" maxlength="2" style="width: 30px; text-align: right;"> 
+            	<!-- , {* $lthen *}
+            	<input type='text' name="reportlevelval1" id="reportlevelval1" class='formshort' value="" maxlength="2" style="width: 30px; text-align: right;">
+            	{* $llevel_approval *}-->
+            </td>
+		</tr>    
+		<tr>
+			<td>{* $lmail_notification *}</td>
+			<td width="1">:</td>
+			<td>
+					<input type="radio" name="ildpmailnotify" id="ildpmailnotify" value="1"{* if $settings.ildpmailnotify eq 1 *} checked{* /if *} /> {* $lyes *}
+					<input type="radio" name="ildpmailnotify" id="ildpmailnotify" value="0"{* if $settings.ildpmailnotify ne 1 *} checked{* /if *} /> {* $lno *}
+			</td>
+		</tr>
+		<tr>
+			<td colspan="3"><legend>{* $lcareer_aspiration *}</legend></td>
+		</tr>
+		<tr>
+			<td>{* $lshort_term*}</td>
+			<td width="1">:</td>
+			<td><input type='text' name="shortterm" id="shortterm" class='formdefault' value="{* $settings.shortterm *}"></td>
+		</tr>
+		<tr>
+			<td>{* $llong_term*}</td>
+			<td width="1">:</td>
+			<td><input type='text' name="longterm" id="longterm" class='formdefault' value="{* $settings.longterm *}"></td>
+		</tr>		
+          <tr align='center'>
+            <td colspan="3"><span id="message" style="display: none;"></span>
+            	<br><input type="submit" value=" Submit " /><input type="button" value=" Reset " onclick="javascript: reload(true)" /></td>
+          </tr>
+      </table></td>
+    </tr>
+  </table>
+</form>

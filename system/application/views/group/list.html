@@ -1,0 +1,54 @@
+      <script>
+      	function chagestatus(id, status)
+      	{
+      		f_onsubmit("{* $site_url *}/group/changestatus/" + id + "/" + status, "frmtemp", "status"+id, "Updating...", 
+      			function(data)
+      			{      				
+      				document.frmtemp.submit();
+      			}
+      		);      			
+      	}
+      </script>
+      <h2>{* $group_list *}</h2>
+      <p>{* $header_list_group *}<br />
+        <br />
+      {* $sort_list_by *} <a href="#" onclick="javascript:sortby('group_name', 'asc')"{* if $sortby eq 'group_name' *}class="lite"{* /if *}>{* $group_name *}</a> | <a href="#" onclick="javascript:sortby('directorat_name', 'asc')"{* if $sortby eq 'directorat_name' *}class="lite"{* /if *}>{* $directorat_name *}</a> | <a href="#" onclick="javascript:sortby('group_status', 'asc')"{* if $sortby eq 'group_status' *}class="lite"{* /if *}>{* $status *}</a> | <a href="{* $site_url *}/group/form">{* $date_added *}</a>      </p>
+      <table width="100%" cellpadding="3" class="tablelist">
+        <thead>
+          <tr>
+            <th width="35%"><a href="#" onclick="javascript:sortby('group_name', 'asc')" class="thead" title="sort topics by code">{* $group_name *}</a></th>
+            <th width="35%"><a href="#" onclick="javascript:sortby('directorat_name', 'asc')" class="thead" title="sort topics by code">{* $directorat_name *}</a></th>
+            <th><div class="listmain"><a href="#" onclick="javascript:sortby('directorat_status', 'asc')" class="thead" title="sort by topic STATUS">{* $status *}</a></div></th>
+            <th width="10%">&nbsp;</th>
+          </tr>
+          {* counter start=1 print=false assign="no" *}
+          {* foreach from=$list item=row *}
+          <tr{* if $no%2 eq 1 *} class="odd"{* /if *}>
+            <td class="odd"><a href="{* $site_url *}/group/form/{* $row->group_id *}">{* $row->group_name *}</a></td>
+            <td class="odd"><a href="{* $site_url *}/directorat/form/{* $row->group_id *}">{* $row->directorat_name *}</a></td>
+            <td class="odd"><div id="status{* $row->group_id *}"><a href="#" onclick="javascript:chagestatus({* $row->group_id *},{* $row->group_status *})">{* $row->group_status_desc *}</a></div></td>
+            {* if $row->used *}            
+            <td>&nbsp;</td>
+            {* else *}
+            <td><a href="{* $site_url *}/group/remove/{* $row->group_id *}" onclick="javascript: return confirm('{* $confirm_delete *}');"><img src="{* $base_url *}images/b_del.gif" width="12" height="12" border="0" /></a></td>
+            {* /if *}
+          </tr>          	
+          	{* counter *}
+          {* /foreach *}
+          
+        </thead>
+        <tbody>
+        </tbody>
+        <tfoot>
+          <tr>
+            	<td colspan="4">{* $paging *}</td>
+          </tr>
+        </tfoot>        
+      </table>
+<br />
+<form id="frmtemp" name="frmtemp" method="post" action="{* $site_url *}/group/">
+	<input type="hidden" id="limit" name="limit" value="{* $limit *}" />
+	<input type="hidden" id="sortby" name="sortby" value="{* $sortby *}" />
+	<input type="hidden" id="orderby" name="orderby" value="{* $orderby *}" />
+	<input type="hidden" id="offset" name="offset" value="{* $offset *}" />
+</form>

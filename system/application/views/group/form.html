@@ -1,0 +1,75 @@
+<link rel="stylesheet" href="{* $base_url *}js/autocomplete/jquery.autocomplete.css" type="text/css" />
+<script type="text/javascript" src="{* $base_url *}js/autocomplete/jquery.bgiframe.min.js"></script> 
+<script type="text/javascript" src="{* $base_url *}js/autocomplete/jquery.autocomplete.js"></script>
+<script>
+	function frmgroup_onchange()
+	{
+		return f_onsubmit("{* $site_url *}/group/save/{* $edit *}", "frmgroup", "message", "Saving...",
+			function(data)
+			{
+				$("#message").html("{* $ok_save_group *}");
+				location = "{* $site_url *}/group";
+			}
+		);				
+	}
+	
+	  $(document).ready(function(){
+	
+	    	$.post("{* $site_url *}/directorat/getlist", {},
+	    		function (data)
+	    		{
+	    			var datas = data.split("\1");
+	    			$("#directorat").autocomplete(datas);
+	    		}
+	    	);  	  	  	    		
+	  });		
+</script>
+<form name="frmgroup" id="frmgroup" onsubmit="javascript: return frmgroup_onchange()">
+<table width="100%">
+    <tr>
+      <td><table width="100%" border="0" cellpadding="0" cellspacing="0" class="tb_data">
+          <tr>
+            <td width="200">{* if $edit *}
+ID</td>
+            <td>:</td>
+            <td>{* $groupedit.group_id *}</td>
+          </tr>
+          <tr>
+            <td>{* /if *}
+{* $directorat *}</td>
+            <td width="1">:</td>
+            <td><input type='text' name="directorat" id="directorat" class='formdefault' value="{* $groupedit.directorat_name *}" /></td>
+          </tr>
+          <tr>
+            <td>{* $group_name *}</td>
+            <td>:</td>
+            <td><input type='text' name="name" id="name" class='formdefault' value="{* $groupedit.group_name *}"></td>
+          </tr>
+          <tr>
+            <td>{* $status *}</td>
+            <td>:</td>
+            <td><select name="status" id="status">
+              <option value="1" {* if $groupedit.group_status eq 1 *}selected{* /if *}>
+              {* $active *}
+              </option>
+              <option value="2" {* if $groupedit.group_status eq 2 *}selected{* /if *}>
+              {* $inactive *}
+              </option>
+            </select></td>
+          </tr>
+
+          <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td><div id="message"></div></td>
+          </tr>
+          <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td><input type="submit" value=" Submit " />
+<input type="reset" value=" Reset " /></td>
+          </tr>
+      </table></td>
+    </tr>
+  </table>
+</form>

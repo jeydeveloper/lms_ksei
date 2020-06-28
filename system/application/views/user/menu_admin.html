@@ -1,0 +1,32 @@
+<aside class="main-sidebar" style="background-color: #243d56;">
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+        <!-- sidebar menu: : style can be found in sidebar.less -->
+        <ul class="sidebar-menu" data-widget="tree">
+            {* if $sess.user_type eq 0 or $sessmodules.master *}
+            <li class="{* if $page eq "level" and $subpage eq "" *} active{*/if*}"><a href="{* $site_url *}/level/"><i class="fa fa-building-o"></i> <span>{*
+                $lorganisational_structure *}</span></a></li>
+            {* $level_tree *}
+            <li class="{* if $page eq "jabatan" and ($subpage eq "catjabatan" or
+            $subpage eq "formcategory") *} active{*/if*}"><a href="{* $site_url *}/jabatan/catjabatan/"><i class="fa fa-sitemap"></i> <span>{*
+                $lcatjabatan *}</span></a></li>
+            <li class="{* if $page eq "jabatan" and $subpage ne
+            "catjabatan" and $subpage ne "formcategory" *} active{*/if*}"><a class="user-jabatan" href="{* $site_url *}/jabatan/"><i class="fa fa-id-card-o"></i> <span>{* $jabatan
+                *}</span></a></li>
+            <li class="{* if $page eq "func" *} active{*/if*}" style="display: none"><a href="{* $site_url *}/func/"><i class="fa fa-th"></i> <span>{* $function
+                *}</span></a></li>
+            {* /if *}
+            {* if $sess.user_type eq 0 or $sessmodules.right *}
+            <li class="{* if $page eq "right" *} active{*/if*}"><a href="{* $site_url *}/right/"><i class="fa fa-id-card-o"></i> <span>{*
+                $luser_rights *}</span></a></li>
+            {* /if *}
+            <li class="{* if $page eq "user" and ($subpage eq "showlist" or $subpage eq
+            "form") *} active{*/if*}"><a href="{* $site_url *}/user/showlist"><i class="fa fa-users"></i> <span>{* $user_list *}</span></a></li>
+            <li class="{* if $page eq "user" and $subpage eq "changepass1" *}
+            active{*/if*}"><a href="{* $site_url *}/user/changepass1"><i class="fa fa-key"></i> <span>{* $change_pass *}</span></a></li>
+            <li class="{* if $page eq "user" and $subpage eq "import" *}
+            active{*/if*}"><a href="{* $site_url *}/user/import"><i class="fa fa-upload"></i> <span>{* $limport *}</span></a></li>
+        </ul>
+    </section>
+    <!-- /.sidebar -->
+</aside>

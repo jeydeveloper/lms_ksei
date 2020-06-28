@@ -1,0 +1,100 @@
+<script>
+    $(document).ready(
+        function () {
+            //getcart();
+        }
+    );
+
+    function getcart() {
+        $.post("{* $base_url *}index.php/ildp/getcart", {},
+            function (r) {
+                if (r.total == 0) {
+                    $("#menucartildp").hide();
+                }
+                else {
+                    $("#menucartildp").show();
+                    $("#nildpcart").html(r.htmltotal);
+                }
+            }
+            , "json"
+        )
+    }
+</script>
+
+<aside class="main-sidebar" style="background-color: #243d56;">
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+        <!-- sidebar menu: : style can be found in sidebar.less -->
+        <ul class="sidebar-menu" data-widget="tree">
+            {* if $sess.user_type eq 0 or ($sessmodules.topic and $sess.asadmin) *}
+            {* if $sess.user_type eq 0 or  $sessmodules.category *}
+            <li class="{* if $page eq "topic" and ($subpage eq "category" or $subpage eq "formcategory") *} active{*/if*}"><a href="{* $site_url *}/topic/category"><i class="fa fa-sitemap"></i> <span>{* $category *}</span></a></li>
+            {* /if *}
+            {* /if *}
+            {* if  $sess.user_type eq 0 or $sessmodules.topic or ($sessmodules.trainee and ! $sess.asadmin) *}
+            <li class="{* if ($page eq "topic" and ($subpage eq "" or $subpage eq "formtopic")) or ((! $sess.asadmin) and ($page eq "ildp") and ($subpage ne "cart"))*} active{*/if*}"><a href="{* $site_url *}/topic/"><i class="fa fa-newspaper-o"></i> <span>{* $topic *}</span></a></li>
+            {* if ! $sess.asadmin *}
+            <li class="{* if $page eq "topic" and $subpage eq "onlinetraining" or (! $sess.asadmin and $page eq "training") *}active{* /if *}"><a href="{* $site_url *}/topic/onlinetraining"><i class="fa fa-mobile" style="font-size: 23px;"></i> <span>{* $online_training *}</span></a>
+            <li class="{* if $page eq "topic" and $subpage eq "certificate" or (! $sess.asadmin and $page eq "certificate") *}active{* /if *}"><a href="{* $site_url *}/topic/certificate"><i class="fa fa-university"></i> <span>{* $certification *}</span></a>
+            <li class="{* if $page eq "topic" and $subpage eq "resources" or (! $sess.asadmin and $page eq "resources") *}active{* /if *}"><a href="{* $site_url *}/topic/resources"><i class="fa fa-file-text"></i> <span>{* $resources *}</span></a></li>
+            <li class="" id="menucartildp" style="display: none;"><a href='{* $site_url *}/ildp/cart'><i class="fa fa-th"></i> <span>{* $lildp_form *}</span><span id="nildpcart"></span></a></li>
+            {* /if *}
+            {* /if *}
+            {* if ($sess.user_type eq 0 or $sessmodules.training or $ishavedelegetion) and $sess.asadmin *}
+            <li class="{* if ($page eq 'training' and ($subpage eq "showlist" or $subpage eq "form" or $subpage eq "historyexam" or $subpage eq "historydetail" or $subpage eq "historyparticipant" or $subpage eq "historynpk")) or ($page eq 'training' and $subpage eq "setting") or ($page eq 'training' and $subpage eq "participant") or ($page eq 'training' and $subpage eq "prequisite") or ($page eq 'training' and $subpage eq "postrequisite") or ($page eq 'training' and $subpage eq "praexam") or ($page eq "banksoal" and $subpage eq "training") or ($page eq "banksoal" and $subpage eq "formedit") or ($page eq 'training' and $subpage eq "material") or ($page eq 'training' and $subpage eq "summaryreport") *} treeview active{*/if*}">
+                <a href="{* $site_url *}/training/showlist"><i class="fa fa-mobile" style="font-size: 23px;"></i> <span>{* $online_training *}</span>{* if ($page eq 'training' and ($subpage eq "showlist" or $subpage eq "form" or $subpage eq "historyexam" or $subpage eq "historydetail" or $subpage eq "historyparticipant" or $subpage eq "historynpk")) or ($page eq 'training' and $subpage eq "setting") or ($page eq 'training' and $subpage eq "participant") or ($page eq 'training' and $subpage eq "prequisite") or ($page eq 'training' and $subpage eq "postrequisite") or ($page eq 'training' and $subpage eq "praexam") or ($page eq "banksoal" and $subpage eq "training") or ($page eq 'training' and $subpage eq "material") or ($page eq 'training' and $subpage eq "summaryreport") *} <span class="pull-right-container">
+					  <i class="fa fa-angle-left pull-right"></i>
+					</span>{*/if*}</a>
+            {* if ($page eq "training" or ($page eq "banksoal" and $subpage eq "training") or ($page eq "banksoal" and $subpage eq "historytraining") or ($page eq "banksoal" and $subpage eq "form" and $type eq "training") or ($page eq "banksoal" and $subpage eq "formedit" and $type eq "training")) and ($subpage ne "history")  *}
+                {* include file="training/menu.html" *}
+            {* /if *}
+            </li>
+            {* /if *}
+            {* if ($sess.user_type eq 0 or $sessmodules.classroom) and $sess.asadmin *}
+            <li class="{* if ($page eq 'classroom' and ($subpage eq "showlist" or $subpage
+            eq "historynpk" or $subpage eq "historydetail" or $subpage eq "form")) or ($page eq 'classroom' and $subpage eq "import") *} treeview active{*/if*}"><a href="{* $site_url *}/classroom/showlist"><i class="fa fa-university"></i> <span>{* $classroom_training *}</span>{* if ($page eq 'classroom' and ($subpage eq "showlist" or $subpage
+            eq "historynpk" or $subpage eq "historydetail" or $subpage eq "form")) or ($page eq 'classroom' and $subpage eq "import") *} <span class="pull-right-container">
+					  <i class="fa fa-angle-left pull-right"></i>
+					</span>{*/if*}</a>
+                {* if $page eq "classroom" *}
+                {* include file="classroom/menu.html" *}
+                {* /if *}
+            </li>
+            {* /if *}
+            {* if ($sess.user_type eq 0 or $sessmodules.certificate or $ishavedelegetion) and $sess.asadmin *}
+            <li class="{* if ($page eq 'certificate' and ($subpage eq "showlist" or $subpage eq "form" or $subpage eq "historyexam" or $subpage eq "historydetail" or $subpage eq "historyparticipant" or $subpage eq "historynpk")) or ($page eq 'certificate' and $subpage eq "setting") or ($page eq 'certificate' and $subpage eq "participant") or ($page eq 'certificate' and $subpage eq "prequisite") or ($page eq 'certificate' and $subpage eq "postrequisite") or ($page eq 'certificate' and $subpage eq "praexam") or ($page eq "banksoal" and $subpage eq "certificate") or ($page eq 'certificate' and $subpage eq "material") or ($page eq 'certificate' and $subpage eq "summaryreport") or ($page eq "banksoal" and $subpage eq "form") *} treeview active{*/if*}">
+                <a href="{* $site_url *}/certificate"><i class="fa fa-pencil-square-o"></i> <span>{* $certification *}</span>{* if ($page eq 'certificate' and ($subpage eq "showlist" or $subpage eq "form" or $subpage eq "historyexam" or $subpage eq "historydetail" or $subpage eq "historyparticipant" or $subpage eq "historynpk")) or ($page eq 'certificate' and $subpage eq "setting") or ($page eq 'certificate' and $subpage eq "participant") or ($page eq 'certificate' and $subpage eq "prequisite") or ($page eq 'certificate' and $subpage eq "postrequisite") or ($page eq 'certificate' and $subpage eq "praexam") or ($page eq "banksoal" and $subpage eq "certificate") or ($page eq 'certificate' and $subpage eq "material") or ($page eq 'certificate' and $subpage eq "summaryreport") or ($page eq "banksoal" and $subpage eq "form") *} <span class="pull-right-container">
+					  <i class="fa fa-angle-left pull-right"></i>
+					</span>{*/if*}</a>
+                {* if ($page eq "certificate" or ($page eq "banksoal" and $subpage eq "certificate") or ($page eq "banksoal" and $subpage eq "history") or ($page eq "banksoal" and $subpage eq "form" and $type eq "certificate")) and ($subpage ne "history") *}
+                {* include file="training/menu.html" *}
+                {* /if *}
+            </li>
+            {* /if *}
+            {* if ($sess.user_type eq 0 or $sessmodules.resources) and $sess.asadmin *}
+            <li class="{* if $page eq "resources" *} active{*/if*}"><a href="{* $site_url *}/resources"><i class="fa fa-file-text"></i> <span>{* $resources *}</span></a></li>
+            {* /if *}
+            {* if ($sess.user_type eq 0 or $sessmodules.report) and $sess.asadmin *}
+            <li class="{* if $page eq "import" *} active{*/if*}"><a href="{* $site_url *}/import/topic_traning"><i class="fa fa-upload"></i> <span>{* $limport *}</span></a></li>
+            {* /if *}
+            {* if ($sess.user_type eq 0 or $sessmodules.report) and $sess.asadmin *}
+            <li class="{* if $page eq "user" or $page eq "activities" *} active{*/if*}"><a href="{* $site_url *}/user/activities"><i class="fa fa-users"></i> <span>{* $luser_activities *}</span></a></li>
+            {* /if *}
+            {* if 1==1 *}
+            <li class="treeview {* if ($page eq "questionaire" and $subpage eq "") or ($page eq "questionairebanksoal" and $subpage eq "") or ($page eq "questionairestart" and $subpage eq "") *} active{*/if*}">
+                <a href="#questionaire""><i class="fa fa-question-circle"></i> <span>Questionaire</span><span class="pull-right-container">
+					  <i class="fa fa-angle-left pull-right"></i>
+					</span></a>
+                <ul class="treeview-menu">
+                    {* if $sess.asadmin *}
+                    <li class="{* if $page eq "questionaire" and $subpage eq "" *} active{*/if*}"><a name="reminder" href="{* $site_url *}/questionaire/"><i class="fa fa-file-text-o"></i> <span>{* $llist *}</span></a></li>
+                    <li class="{* if $page eq "questionairebanksoal" and $subpage eq "" *} active{*/if*}"><a href="{* $site_url *}/questionairebanksoal/"><i class="fa fa-book"></i> <span>Bank Soal</span></a></li>
+                    {* /if *}
+                    <li class="{* if $page eq "questionairestart" and $subpage eq "" *} active{*/if*}"><a href="{* $site_url *}/questionairestart/"><i class="fa fa-question-circle-o"></i> <span>Start Questionaire</span></a></li>
+                </ul>
+            </li>
+            {* /if *}
+        </ul>
+    </section>
+    <!-- /.sidebar -->
+</aside>

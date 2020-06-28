@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<body>
+	Dear {* $user->user_first_name *} {* $user->user_last_name *},<br><br>
+
+This is an electronic reminder that you are required to refresh your  mandatory {* if $training->training_type eq 1 *}training{* else *}certification{* /if *} on  {* $training->training_name *}  <BR>
+
+Please complete this {* if $training->training_type eq 1 *}training{* else *}certification{* /if *} by end of {* $deadline_month_en *} {* $deadline_year_en *}<br>
+
+You can access the mandatory modules through our Permata Bank Learning  Management System at <a href="{* $base_url *}index.php/{* if $training->training_type eq 1 *}training{* else *}certificate{* /if *}/examintro/{* $training->training_id *}">{* $base_url *}index.php/{* if $training->training_type eq 1 *}training{* else *}certificate{* /if *}/examintro/{* $training->training_id *}</a> <BR><BR><BR>
+ 
+Regards,<BR><BR>
+
+Elearning Division<BR>
+Permatabank <BR><BR>
+
+====================================================================================================
+<BR><BR>
+
+Dear {* $user->user_first_name *} {* $user->user_last_name *},<br><br>
+
+Ini adalah pengingat elektronik, untuk mengingatkan bahwa anda diwajibkan untuk me-refresh kembali {* if $training->training_type eq 1 *}training{* else *}sertifikasi{* /if *} dengan topik {* $training->training_name *}  <BR>
+
+Harap menyelesaikan  {* if $training->training_type eq 1 *}training{* else *}sertifikasi{* /if *} ini  paling lambat pada akhir {* $deadline_month_id *} {* $deadline_year_id *} <br>
+
+Anda dapat mengakses module mandatory ini melalui Permata Bank Learning Management System di alamat :  <a href="{* $base_url *}index.php/{* if $training->training_type eq 1 *}training{* else *}certificate{* /if *}/examintro/{* $training->training_id *}">{* $base_url *}index.php/{* if $training->training_type eq 1 *}training{* else *}certificate{* /if *}/examintro/{* $training->training_id *}</a> <BR><BR><BR>
+ 
+Regards,<BR><BR>
+
+Elearning Division<BR>
+Permatabank
+</body>
+</html>

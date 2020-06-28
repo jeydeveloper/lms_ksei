@@ -1,0 +1,13 @@
+<ul>
+	{* if $hasnpk *}
+	<li><input type="checkbox" name="allnpk{* $smarty.post.id *}" value="1" {* if $smarty.post.ischecked eq "true" or $rowallnpks->training_jabatan_allnpk *}checked{* /if *} onclick="javascript:allnpk_onclick(this, {* $smarty.post.id *})" /> <a href="javascript:shownpk({* $smarty.post.id *})">{* $lall_npk *}</a></li>
+	{* /if *}
+{* if $rows *}	
+	<li><b>{* $lfunction *}</b></li>
+	{* foreach from=$rows item=row *}
+		<li>		
+			<input type="checkbox" name="function[]" value="{* $row->function_id *}" {* if $smarty.post.ischecked eq "true" or $row->checked *}checked{* /if *} /> {* $row->function_desc *}
+		</li>
+	{* /foreach *}
+{* /if *}
+</ul>

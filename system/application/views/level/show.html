@@ -1,0 +1,41 @@
+<script>
+	$(document).ready(
+		function()
+		{			
+			{* foreach from=$rows item=row *}				
+				{* if $row->isopen *}	
+				showLevelGroup({* $row->level_group_id *}, "#div{* $row->level_group_id *}");
+				{* /if *}
+			{* /foreach *}
+		}
+	);
+</script>
+<ul>
+{* if $jabatans *}	
+	<li><b>{* $ljabatan *}</b></li>
+	{* foreach from=$jabatans item=jabatan *}
+		<li>
+			{* if $jabatan->hasnpkfunct *}
+			<input type="checkbox" name="jabatan[]" value="{* $jabatan->jabatan_id *}" {* if $smarty.post.ischecked eq "true" or $jabatan->checked *}checked{* /if *} onclick="javascript:jabatan_onclick(this.value, this.checked)" /> <a href="javascript:showJabatan({* $jabatan->jabatan_id *}, '#divjabatan{* $jabatan->jabatan_id *}')">{* $jabatan->jabatan_name *}</a>
+			<div id="divjabatan{* $jabatan->jabatan_id *}" style="display: none;"></div>
+			{* else *}
+			<input type="checkbox" name="jabatan[]" value="{* $jabatan->jabatan_id *}" {* if $smarty.post.ischecked eq "true" or $jabatan->checked *}checked{* /if *} onclick="javascript:jabatan_onclick(this.value, this.checked)" /> {* $jabatan->jabatan_name *}
+			{* /if *}			
+		</li>
+	{* /foreach *}
+{* /if *}
+{* if $rows *}	
+	<li><b>{* $level->level_name *}</b></li>
+	{* foreach from=$rows item=row *}
+		<li>		
+			<input type="checkbox" name="levelgroup[]" value="{* $row->level_group_id *}" {* if $smarty.post.ischecked eq "true" or $row->checked *}checked{* /if *} onclick="javascript:levelgroup_onclick(this)" /> 
+			{* if $row->haschild *}
+			<a href="javascript:showLevelGroup({* $row->level_group_id *}, '#div{* $row->level_group_id *}')">{* $row->level_group_name *}</a>		
+			{* else *}
+			{* $row->level_group_name *}
+			{* /if *}
+			<div id="div{* $row->level_group_id *}" style="display: none;"></div>					
+		</li>
+	{* /foreach *}
+{* /if *}
+</ul>

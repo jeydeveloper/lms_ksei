@@ -1,0 +1,6 @@
+<select name="training_periode" id="training_periode" class="formdefault">
+	<option value="">--- Periode List ---</option>
+	{* foreach from=$trainingperiodes item=trainingperiode *}
+	<option value="{* $trainingperiode->training_time_id *}" {* if $training_npk_time_id eq $trainingperiode->training_time_id *} selected{* /if *}>{* $trainingperiode->date_1 *} s/d {* $trainingperiode->date_2 *}</option>
+	{* /foreach *}
+</select>

@@ -1,0 +1,134 @@
+<script type='text/javascript' src='{* $base_url *}js/autocomplete/jquery.autocomplete.js'></script>
+<link rel="stylesheet" type="text/css" href="{* $base_url *}js/autocomplete/jquery.autocomplete.css" /> 
+
+<script>
+	$(document).ready(
+		function()
+		{
+			loadgroup(1, 0);
+		}
+	);
+	
+	function loadgroup(level, parentid)
+	{
+			$.post("{* $site_url *}/hrrm/loadgroup/"+level+"/"+parentid, {},
+				function(r)
+				{		
+					for(var i=1; i <= {* $nlevel *}; i++)
+					{
+						if (i >= level) 
+						{
+							$("#groupid"+i+" option[value!='0']").remove();
+						}
+					}
+					for(var i=0; i < r.groups.length; i++)
+					{
+						if (r.groups[i].level_group_name == null) continue;
+						if (r.groups[i].level_group_name.length == 0) continue;
+						
+						$("#groupid"+level).append($('<option></option>').val(r.groups[i].level_group_id).html(r.groups[i].level_group_name));
+					}
+				}
+				,"json"
+			);
+	}
+	
+	function group_onchange(level)
+	{
+		var parentid = $("#groupid"+level).val();		
+		loadgroup(level+1, parentid);
+	}
+	
+	function frmsetting_onchange()
+	{
+		if (! confirm("{* $lconfirm_ildp_catalog_save *}")) return false;
+		
+		$("#message").show();
+		$("#message").html("submitting...");
+		
+		$.post("{* $site_url *}/hrrm/save", $("#frmsetting").serialize(),
+			function(r)
+			{
+				if (r.error)
+				{
+					$("#message").html(r.message);
+					return;
+				}
+				
+				gloc = r.redirect;
+				
+				setTimeout("golist()", 200);
+				$("#message").html(r.message);				
+			}
+			, "json"
+		);
+		
+		return false;
+	}	
+	
+	$(document).ready(
+		function()
+		{
+			$.post("{* $site_url *}/user/getList", {},
+				function(r)
+				{
+					$("#npk").autocomplete(r.rows, {
+						matchContains: true,
+						minChars: 0
+					});					
+				}
+				, "json"
+			);
+			
+		}
+	);
+	
+	function golist()
+	{
+		location = gloc;
+	}
+	
+	function reload(isconfirm)
+	{
+		if (isconfirm)
+		{
+			if (! confirm("{* $lconfirm_reset_data *}")) return;
+		}
+
+		loadgroup(1, 0);
+	}
+	
+	var gloc = "";
+</script>
+   <h2>{* $lhrrm_setting *}</h2>   
+<form name="frmsetting" id="frmsetting" onsubmit="javascript: return frmsetting_onchange()">
+  <table width="100%">
+    <tr>
+      <td><table width="100%" border="0" cellpadding="0" cellspacing="0" class="tb_data">
+         <tr>
+         	<td>NPK</td>
+         	<td>:</td>
+         	<td>
+         		<input type='text' name="npk" id="npk" class='formdefault' value="">
+         	</td>
+        </tr>
+        {* foreach from=$levels item=level	 *}
+          <tr>
+            <td width="200">{* $level->level_name *}</td>
+            <td width="1">:</td>
+            <td>
+				<select style="width:350px" name="groupid{* $level->level_nth *}" id="groupid{* $level->level_nth *}" onchange="javascript:group_onchange({* $level->level_nth *})">
+					<option value="0">{* $lall *} {* $level->level_name *}</option>
+				</select>
+			</td>
+         </tr> 
+        {* /foreach *}
+
+          <tr>
+			  <td colspan="2"></td>
+            <td><div id="message" style="display: none;"></div><input type="submit" value=" Submit " /><input type="button" value=" Reset " onclick="javascript: reload(true)" /></td>
+          </tr>
+      </table></td>
+    </tr>
+  </table>
+</form>

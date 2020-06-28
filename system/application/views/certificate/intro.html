@@ -1,0 +1,33 @@
+<script>
+	function nextstep()
+	{
+		document.frmexam.submit();
+	}
+</script>
+
+<div class="content-wrapper">
+	<!-- Main content -->
+	<section class="content">
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="box">
+					<div class="box-body table-responsive">
+						<h2>{* $lcertificate *} {* $mycertificate->training_name *}</h2>
+						<br />
+						<h3><div id="clock" style="display: none;">{* $watch *}</div></h3>
+						<br />&nbsp;
+						<form id="frmexam" name="frmexam" action="{* $site_url *}/certificate/showexam/{* $trainingid *}" method="post">
+							{* if $mycertificate->training_intro *}
+							{* eval var=$buffer assign="parsedBuffer" *}
+							{* $parsedBuffer *}
+							{* else *}
+							{* include file="certificate/cert.rule.layout.html" *}
+							{* /if *}
+							<input type="button" value="Start" onclick="javascript:nextstep()" />
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+</div>

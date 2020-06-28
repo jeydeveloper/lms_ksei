@@ -1,0 +1,74 @@
+<script>
+	$(document).ready(
+		function()
+		{
+			page(0);
+			searchby_onchange();
+		}
+	);	
+	
+	function page(n)
+	{
+		if (! n) n = 0;
+		
+		$("#wait").show();
+		
+		var url = "{* $base_url *}index.php/ildpdelegetion/search/" + n;
+		$.post(url, $("#frmsearch").serialize(),
+			function(r)
+			{
+				$("#wait").hide();
+				$("#list").html(r.html);
+			}
+			, "json"
+		);
+	}
+	
+	function sortby(field)
+	{
+		if ($("#sortby").val() == field)
+		{
+			if ($("#orderby").val() == "asc")
+			{
+				$("#orderby").val("desc");
+			}
+			else
+			{
+				$("#orderby").val("asc");
+			}
+		}
+		else
+		{
+			$("#orderby").val("asc");
+		}
+		
+		$("#sortby").val(field);	
+		page(0);	
+	}
+	
+	function changelimit(elmt)
+	{
+		$("#limit").val(elmt.value);
+		page(0);
+		
+	}
+	
+	function searchby_onchange()
+	{
+		var seacrhby = $("#searchby").val();
+		$("#keyword").hide();
+		
+		switch(seacrhby)
+		{
+			default:
+				$("#keyword").show();
+		}
+	}
+	
+</script>
+<h2>{* $lildp_delegetion *}</h2>
+
+        <br />        
+ <a href="{* $base_url *}index.php/ildpdelegetion/form">{* $ldata_added *}</a>
+ <div id="wait" style="display: none;"><img src="{* $base_url *}images/anim_wait.gif" border="0" /></div>
+<div id="list"></div>

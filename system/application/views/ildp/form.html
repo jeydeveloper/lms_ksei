@@ -1,0 +1,127 @@
+<script type="text/javascript" src="{*$base_url*}js/date.js"></script>
+<script type="text/javascript" src="{*$base_url*}js/jquery.datePicker.js"></script>
+<link rel="stylesheet" type="text/css" media="screen" href="{*$base_url*}css/datePicker.css"> 
+<link rel="stylesheet" type="text/css" media="screen" href="{*$base_url*}css/date.css"> 
+<script>
+	function frmcatalog_onsubmit()
+	{
+		$("#message").show();
+		$("#message").html("saving...");
+		
+		$.post("{* $site_url *}/ildp/save{* if $rowedit *}/{*$rowedit->training_id*}{*/if*}", $("#frmcatalog").serialize(),
+			function(r)
+			{
+				if (r.error)
+				{
+					$("#message").html(r.message);
+					return;
+				}
+				
+				$("#message").html(r.message);
+				setTimeout("location='{* $site_url *}/ildp/';", 1000);
+			}
+			, "json"
+		);
+		
+		return false;
+	}
+	
+	function category_onchange()
+	{
+		$("#topic_div").html("Loading...");
+		
+		$.post("{* $site_url *}/topic/getparent", {cat: $("#cat").val(), isshowroot: 'no', selectname: 'topic', parent: ''},
+			function (data)
+			{
+				$("#topic_div").html(data);		
+				$("#topic").val({* $rowedit->training_topic *});						
+			}
+		);
+	}		
+	
+	$(document).ready(function(){			
+		{* if $rowedit *}
+			$("#cat").val({* $rowedit->category->category_id *});
+		{* /if *}		
+		category_onchange();
+	});	
+		
+</script>
+<h2>{* $lcatalog *}</h2>
+<form name="frmcatalog" id="frmcatalog" onsubmit="javascript: return frmcatalog_onsubmit()">
+	<table id="tbltrainingtime" width="100%" cellpadding="3" cellspacing="3" border="0">
+		<tr>
+			<td width="25%">&nbsp;&nbsp;{* $category *}</td>
+			<td>
+  			<select name="cat" id="cat" style="width: 320px;" onchange="javascript: category_onchange()">
+  				{* $tree *}
+  			</select>				
+				</td>
+		</tr>	
+		<tr>
+			<td>&nbsp;&nbsp;{* $topic *}</td>
+			<td>
+				<span id="topic_div">
+					<select name="topic" id="topic" style="width: 320px;">
+						<option value="0">-- {* $topic *} --</option>
+					</select>
+				</span>
+			</td>
+		</tr>
+		<tr>
+			<td>* {* $lcode *}</td>
+			<td><input type='text' name="code" id="code" class='formshort' value="{* if $rowedit *}{* $rowedit->training_code *}{* /if *}" maxlength='100' {* if $rowedit *}readonly{* /if *}> </td>
+		</tr>		
+		<tr>
+			<td>* {* $lclassroom_name *}</td>
+			<td><input type='text' name="name" id="name" class='formdefault' value="{* if $rowedit *}{* $rowedit->training_name *}{* /if *}" maxlength='100'> </td>
+		</tr>
+		<tr>
+			<td>* {* $lgrade *}</td>
+			<td><input type='text' name="grade" id="grade" class='formshort' value="{* if $rowedit *}{* $rowedit->training_grade *}{* /if *}" maxlength='3' style="width: 30px;"></td>
+		</tr>		
+		<tr valign='top'>
+			<td valign="top">&nbsp;&nbsp;{* $ldescription *}</td>
+			<td><textarea name="desc" id="desc" class='textareadefault'>{* if $rowedit *}{* $rowedit->training_desc *}{* /if *}</textarea></td>
+		</tr>	
+		<tr>
+			<td width="13%">&nbsp;&nbsp; {* $lduration *}</td>
+			<td>
+				<input type='text' name="hour" id="hour" value="{* if $rowedit *}{* $rowedit->training_hour *}{* /if *}" class='formnumber' style="width: 30px;" > {* $lhour *}
+				<input type='text' name="minute" id="minute" value="{* if $rowedit *}{* $rowedit->training_minute *}{* /if *}" class='formnumber' style="width: 30px;" > {* $lminute *}
+			</td>
+		</tr>		
+		<tr>
+			<td>&nbsp;&nbsp; {* $lcost *}</td>
+			<td><input type='text' name="cost" id="cost" class='formshort' value="{* if $rowedit *}{* $rowedit->training_cost_fmt *}{* /if *}" maxlength='12'> </td>
+		</tr>
+		<tr>
+			<td>&nbsp;&nbsp; {* $ltraining_max *}</td>
+			<td><input type='text' name="max" id="max" class='formshort' value="{* if $rowedit *}{* $rowedit->training_max *}{* /if *}" maxlength='4' style="width: 30px;" > &nbsp * {* $lmax_ambil_info *}</td>
+		</tr>		
+		<tr>
+			<td>&nbsp;&nbsp;{* $lprovider *}</td>
+			<td><input type='text' name="provider" id="provider" class='formdefault' value="{* if $rowedit *}{* $rowedit->training_organization *}{* /if *}" maxlength='100'> </td>
+		</tr>
+		<tr>
+			<td valign='top'>&nbsp;&nbsp;{* $lmethod *}</td>
+			<td>
+				<textarea name='method' id='method' class="textareadefault">
+					{* if $rowedit *}{* $rowedit->training_learning_method *}{* /if *}
+				</textarea>	
+			</td>
+		</tr>
+		<tr valign='top'>
+			<td valign="top">&nbsp;&nbsp;{* $lobjective *}</td>
+			<td><textarea name="objective" id="objective" class='textareadefault'>{* if $rowedit *}{* $rowedit->training_objective *}{* /if *}</textarea></td>
+		</tr>
+		<tr>
+			<td>&nbsp;&nbsp;{* $ltag *}</td>
+			<td><input type='text' name="tag" id="tag" class='formdefault' value="{* if $rowedit *}{* $rowedit->training_tag *}{* /if *}" maxlength='100'>  &nbsp * {* $ltag_info *}</td>
+		</tr>
+		<tr>
+			<td valign="top">&nbsp;</td>
+			<td valign="top"><div id="message" style="display: none;"></div><input type="submit" value=" {* $lsave *} " /></td>
+		</tr>	
+	</table>
+</form>

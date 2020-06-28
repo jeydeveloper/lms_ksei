@@ -1,0 +1,142 @@
+<script>
+	function changesoalstatus(id)
+	{
+		$.post("{* $site_url *}/banksoal/changesoalstatus/", {id: id},
+			function(data)
+			{			
+				$("#status_"+id).html(data);
+			}			
+		);
+	}
+
+	function removeunitsoalquest(id)
+	{
+		if (! confirm('{* $confirm_delete *}'))
+		{
+			return;
+		}
+		
+		$.post("{* $site_url *}/banksoal/removeunitsoalquest/", {id: id},
+			function (data)
+			{
+				loadunitrefresh("loadunitsoaldetail({* $smarty.post.unitsoal *})");				
+			}
+		);
+	}
+
+	  $(document).ready(
+	  	function()
+	  	{	
+			$("#dialogquest").dialog(
+				{ 
+					autoOpen: false 
+					,modal: true
+					,width: 500
+				}
+			) 
+			
+			$("#dvjabatanjmlsoal").html("{* $jmlsoal *}");
+		}
+	);
+	
+	function editsoal(id)
+	{
+		$.post("{* $site_url *}/banksoal/showdlgsoal", {banksoalid: id},
+			function(data)
+			{
+				$("#dialogquestcontent").html(data);
+				
+				$("#dialogquest").dialog('option', 'title', '{* $ledit_soal*}');
+				$("#dialogquest").dialog("open");						
+			}
+		);			
+	}
+	
+	function addsoal()
+	{
+		$.post("{* $site_url *}/banksoal/showdlgaddsoal", $("#frmbanksoal").serialize(),
+			function(data)
+			{
+				$("#dialogquestcontent").html(data);
+				
+				$("#dialogquest").dialog('option', 'title', '{* $ladd_soal*}');
+				$("#dialogquest").dialog("open");				
+			}
+		);		
+	}
+	
+	function submitsoal()
+	{
+		
+	}
+	
+	var pEdit = -1;
+</script>
+<input type="hidden" name="edit" id="edit" value="" />
+<input type="hidden" name="pertanyaan" id="pertanyaan" value="" />
+<input type="hidden" name="paket" id="paket" value="" />
+<input type="hidden" name="jawaban" id="jawaban" value="" />
+{* foreach from=$choose_answer item=code *}
+<input type="hidden" name="pilihan[]" value="" />
+{* /foreach *}
+<input type="hidden" name="bobot" id="bobot" value="" />
+<table width="100%" cellpadding="3" class="tablelist">
+	<thead>
+		<tr>
+			<th align="center" width="3%" rowspan="2">{* $lno *}</th>
+			<th align="center" width="7%" rowspan="2">{* $lpacket *}</th>
+			<th align="center" rowspan="2">{* $lsoal *}</th>
+			<th align="center" width="12%" rowspan="2">{* $lkey_answer *}</th>
+			{* if $ncol_choose_answer gt 0 *}
+			<th align="center" colspan="{* $ncol_choose_answer *}">{* $lchoose_answer *}</th>
+			{* /if *}
+			<th align="center" width="7%" rowspan="2">{* $lbobot *}</th>
+			{* if ! $smarty.post.readonly *}
+			<th align="center" width="4%" rowspan="2">&nbsp;</th>
+			<th align="center" width="4%" rowspan="2">&nbsp;</th>
+			<th align="center" width="4%" rowspan="2">&nbsp;</th>
+			{* /if *}
+		</tr>
+		{* if $ncol_choose_answer gt 0 *}
+		<tr>
+			{* foreach from=$choose_answer item=code *}
+			<th align="center">{* $code *}</th>
+			{* /foreach *}
+		</tr>
+		{* /if *}
+	</thead>
+	<tbody>
+		{* counter start=1 print=false assign="no" *}
+		{* foreach from=$list item=row *}
+			<tr{* if $no%2 eq 1 *} class="odd"{* /if *}>
+				<td class="odd">{* $no *}</td>
+				<td class="odd"><div id="packet_{* $row->banksoal_question_id *}">{* $row->banksoal_question_packet *}</div></td>
+				<td class="odd"><div id="quest_{* $row->banksoal_question_id *}">{* $row->banksoal_question_quest *}</div></td>
+				<td class="odd"><div id="answer_{* $row->banksoal_question_id *}">{* $row->banksoal_question_answer_chr *}</div></td>
+				{* foreach from=$row->pilihans item=pilihan key=key *}
+				<td class="odd"><div id="pilihan_{* $row->banksoal_question_id *}_{* $key *}">{* $pilihan *}</div>&nbsp;</td>
+				{* /foreach *}
+				<td class="odd"><div id="bobot_{* $row->banksoal_question_id *}">{* $row->banksoal_question_bobot_fmt *}</div>&nbsp;</td>
+				{* if ! $smarty.post.readonly *}
+				<td><a href="javascript: changesoalstatus({* $row->banksoal_question_id *})"><span id="status_{* $row->banksoal_question_id *}"><img src="{* $base_url *}images/16/{* if  $row->banksoal_question_status eq 2 *}inactive.png{* else *}active.png{* /if *}" border="0" alt="{* $row->banksoal_question_status_desc *}" title="{* $row->banksoal_question_status_desc *}" /></span></a></td>
+					{* if $totexam eq 0 *}
+				<td><a href="javascript: editsoal({* $row->banksoal_question_id *})"><img src="{* $base_url *}images/b_edit.gif" width="12" height="12" border="0" /></a></td>
+				<td><a href="javascript: removeunitsoalquest({* $row->banksoal_question_id *})"><img src="{* $base_url *}images/b_del.gif" width="12" height="12" border="0" /></a></td>
+					{* else *}
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+					{* /if *}
+				{* /if *}
+			</tr>
+		{* counter *}
+		{* /foreach *}
+	</tbody>
+				{* if ! $smarty.post.readonly *}
+        <tfoot>
+          <tr>
+            <td colspan="{* $ncol_choose_answer+8 *}">
+		<input type="button" value=" Add Soal " onclick="javascript:addsoal()" />
+          </tr>         
+        </tfoot>	
+        {* /if *}
+</table>

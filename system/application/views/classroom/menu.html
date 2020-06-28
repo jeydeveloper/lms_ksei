@@ -1,0 +1,7 @@
+<ul class="treeview-menu">
+    <li class="{* if $page eq 'classroom' and ($subpage eq "showlist" or $subpage
+    eq "historynpk" or $subpage eq "historydetail" or $subpage eq "form") *} active{*/if*}"><a href="{* $site_url *}/classroom/showlist"><i class="fa fa-tasks"></i> <span>{* $llist *}</span></a>
+    </li>
+    <li class="{* if $page eq 'classroom' and $subpage eq "import" *}
+    active{*/if*}"><a href="{* $site_url *}/classroom/import"><i class="fa fa-upload"></i> <span>{* $limport *}</span></a></li>
+</ul>

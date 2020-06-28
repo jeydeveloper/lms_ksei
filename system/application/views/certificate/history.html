@@ -1,0 +1,183 @@
+ 	<script>
+      	$(document).ready(
+      		function()
+      		{
+/*
+				$("#exportdialog").dialog(
+					{ 
+						autoOpen: false 
+						,modal: true
+						,width: 550
+					}
+				)  
+*/
+      		}
+      	);
+      	
+      	function doexport()
+      	{
+			var val_checked = $('input[name=exporttype]:checked', '#frmexportype').val();
+			var url = "{* $site_url *}/certificate/historyexamexport/" + $("#training_id").val() + "/" + $("#training_time_id").val() + "/" + val_checked;
+
+// 			$("#exportdialog").dialog("close");
+			location = url;
+		}
+      	
+      	function showexporttype(trainingid, trainingtimeid)
+      	{
+			$("#training_time_id").val(trainingtimeid);
+			$("#training_id").val(trainingid);
+
+			$('#modal-default').modal('show');
+		}
+</script>
+
+	<div class="content-wrapper">
+		<!-- Content Header (Page header) -->
+		<section class="content-header">
+			<h1>
+				{* $lhistory *} &quot;{* $row->training_name *}&quot;
+			</h1>
+			<ol class="breadcrumb">
+				<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+				<li><a href="#">Training</a></li>
+				<li class="active">History</li>
+			</ol>
+		</section>
+
+		<!-- Main content -->
+		<section class="content">
+			<div class="row">
+				<div class="col-xs-12">
+					<div class="box">
+						<div class="box-body table-responsive">
+							{* assign var="total" value=0 *}
+							{* foreach from=$rows item=row1 *}
+							{* assign var="total" value=$total+$row1->participant *}
+							{* /foreach *}
+							<b>{* $ltotal *}</b>:
+							{* if $total *}
+							<a href="{* $site_url *}/training/historynpk/0/0/{* $edit *}">{* $total *}</a>
+							{* else *}
+							{* $total *}
+							{* /if *}
+							<table class="table table-hover table-striped">
+								<thead>
+								<tr>
+									<th width="50%">{* $lperiod *}</th>
+									<th width="20%">{* $lparticipant *}</a></th>
+
+									{* if $pageid eq "certificate" *}
+									<th width="20%">&nbsp;</a></th>
+									{* /if *}
+									<th>&nbsp;</th>
+
+								</tr>
+								</thead>
+								<tbody>
+								{* counter start=1 print=false assign="no" *}
+								{* foreach from=$rows item=row *}
+								<tr{* if $no%2 eq 1 *} class="odd"{* /if *}>
+								<td class="odd">{* $row->training_time_date1_fmt *} {* if $row->training_time_date2_fmt *}{* $luntil *} {* $row->training_time_date2_fmt *}{* /if *}</td>
+								{* if $row->participant *}
+								{* if $row->training_time_id *}
+								<td class="odd">(<a href="{* $site_url *}/{* $pageid *}/historynpk/{* $row->training_time_id *}/0/0/list/1/1/{* $examtype *}">{* $row->participant *} / {* $row->totparticipant *}</a>)</td>
+								{* else *}
+								<td class="odd">(<a href="{* $site_url *}/{* $pageid *}/historynpk/0/0/{* $row->training_id *}/list/1/1/{* $examtype *}">{* $row->participant *} / {* $row->totparticipant *}</a>)</td>
+								{* /if *}
+
+								{* if $pageid eq "certificate" *}
+								<td class="odd"><a href="{* $site_url *}/certificate/resetter/{* $row->training_time_training *}/{* $row->training_time_id *}" onclick="javascript: return confirm('{* $lconfirm_reset_periode *}')">{* $lreset *}</a></td>
+								{* /if *}
+								{* if $row->training_time_training *}
+								<td class="odd"><a href="javascript:showexporttype({* $row->training_time_training *}, {* $row->training_time_id *})">{* $lexport *}</a></td>
+								{* else *}
+								<td class="odd"><a href="javascript:showexporttype({* $row->training_id *}, 0)">{* $lexport *}</a></td>
+								{* /if *}
+								{* else *}
+								<td class="odd">0</td>
+								<td class="odd">&nbsp;</td>
+								{* if $pageid eq "certificate" *}
+								<td class="odd">&nbsp;</td>
+								{* /if *}
+								{* assign var="total" value=$total+$row->participant *}
+								{* /if *}
+								</tr>
+								{* counter *}
+								{* /foreach *}
+
+								</tbody>
+								<tfoot>
+								<tr>
+									{* if $pageid eq "certificate" *}
+									<td colspan="4">&nbsp;</td>
+									{* else *}
+									<td colspan="3">&nbsp;</td>
+									{* /if *}
+
+								</tr>
+								</tfoot>
+							</table>
+							<br />
+							<form id="frmtemp" name="frmtemp" method="post" action="{* $site_url *}/{* $pageid *}/showlist/{* $topicid *}">
+								<input type="hidden" id="limit" name="limit" value="{* $limit *}" />
+								<input type="hidden" id="sortby" name="sortby" value="{* $sortby *}" />
+								<input type="hidden" id="orderby" name="orderby" value="{* $orderby *}" />
+								<input type="hidden" id="offset" name="offset" value="{* $offset *}" />
+								<input type="hidden" id="training_id" name="training_id" value="" />
+								<input type="hidden" id="training_time_id" name="training_time_id" value="" />
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</div>
+	
+	<div class="modal fade" id="modal-default">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="frmexportype">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">{* $lexport_history *}</h4>
+                </div>
+                <div class="modal-body text-center">
+                    <div class="alert alert-info alert-dismissible">
+                        Export type
+                    </div>
+                    <div class="form-group">
+                        <div class="radio">
+                            <label>
+                                <input type="radio" name="exporttype" value="1">
+                                {* $lmax_score *}
+                            </label>
+                        </div>
+                        <div class="radio">
+                            <label>
+                                <input type="radio" name="exporttype" value="2" checked>
+                                {* $llast_lulus *}
+                            </label>
+                        </div>
+                        <div class="radio">
+                            <label>
+                                <input type="radio" name="exporttype" value="3">
+                                {* $llast_score *}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                    <input class="btn btn-primary" type="button" onclick="javascript:doexport()"
+                           value="{* $lexport *}"/>
+                </div>
+            </form>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+

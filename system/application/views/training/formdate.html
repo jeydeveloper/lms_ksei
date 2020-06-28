@@ -1,0 +1,20 @@
+			<td valign="top">{* $ldate *}</td>
+			<td>
+				<table>
+					<tr>
+						<td>
+							<input type='text' name="trainingdate{* $lastid *}_1" id="trainingdate{* $lastid *}_1"   class="formshort date-pick" value="{* $smarty.post.trainingdate1 *}"  maxlength='10'>
+						</td>
+						<td>
+							{* $luntil *}
+						</td>
+						<td>
+							<input type='text' name="trainingdate{* $lastid *}_2" id="trainingdate{* $lastid *}_2"  class="formshort date-pick" value="{* $smarty.post.trainingdate2 *}" maxlength='10'> 
+						</td>
+						<td>
+							{* if $lastid *}<input type="checkbox" name="trainingrefresment{* $lastid *}" id="trainingrefresment{* $lastid *}" value="1"{* if $smarty.post.parentid *} checked{* /if *} /> {* $lrefreshment *}{* else *}&nbsp;{* /if *}
+						</td>
+				<input type="hidden" name="period[]" value="0" />
+					</tr>				
+				</table>
+			</td>

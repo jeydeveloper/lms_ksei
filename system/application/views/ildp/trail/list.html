@@ -1,0 +1,24 @@
+<table width="100%" cellpadding="3" class="tablelist"> 
+	<thead> 
+		<tr> 
+			<th width="200">{* $ldate *}</th> 
+			<th>{* $lactivity *}</th> 
+			<th>{* $ldescription *}</th> 
+		</tr>
+	</thead>
+	<tbody>
+		{* foreach from=$rows item=row *}		
+		<tr>
+			<td>{* $row->ildp_trail_created_fmt *}</td>
+			<td>{* $row->ildp_trail_activity *}</td>
+			<td>{* $row->ildp_trail_description *}</td>
+		</tr>
+		{* /foreach *}
+	</tbody>	
+	<tfoot>
+		<tr>
+			<td colspan="3">{* $paging *}</td>
+		</tr>
+	</tfoot>
+	</thead>
+</table>

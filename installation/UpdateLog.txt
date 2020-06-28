@@ -1,0 +1,1036 @@
+16/4/2013 to btn
+random soal bugfix
+2406-2414
+"C:/Program Files/WinRAR/WinRAR.exe" a 20130416.2200.rev.2406-2414.netpolitan.lmsv2.btn.zip @20130416.2200.rev.2406-2414.netpolitan.lmsv2.btn.txt 
+
+
+22/3/2013 to btn
+- bank soal bugfix
+- user activities
+2395-2405
+"C:/Program Files/WinRAR/WinRAR.exe" a 20130305.1300.rev.2395-2405.netpolitan.lmsv2.btn.zip @20130305.1300.rev.2395-2405.netpolitan.lmsv2.btn.txt 
+
+18/3/2013 to ncc
+to latest update until 18 march 2013
+
+5/3/2013 to permata
+"C:/Program Files/WinRAR/WinRAR.exe" a 20130305.1300.rev.2391-2395.netpolitan.lmsv2.permata.zip @20130305.1300.rev.2391-2395.netpolitan.lmsv2.permata.txt 
+2391-2395
+
+4/3/2013 2368 - 2394 to btn
+"C:/Program Files/WinRAR/WinRAR.exe" a 20130304.0900.rev.2368-2394.netpolitan.lmsv2.btn.zip @20130304.0900.rev.2368-2394.netpolitan.lmsv2.btn.txt 
+
+CHange log :
+- ILDP , permata modification
+- training, import history dr flash
+- language & config for btn theme
+
+SOP For update : 
+- run db patch : 
+	
+	./db/patch/20121126.1100.ild-catalog.alter.sql
+	./db/patch/20121210.1400.ildp.form.alter.sql
+	./db/patch/20130103.0448.ildpcategorydevarea.sql
+	./db/patch/20130108.0950.alter-ildp_category.sql
+	./db/patch/20130108.1800.drop.index.unique.sql
+
+
+-------------------
+9/1/2013 to permata
+2390
+"C:/Program Files/WinRAR/WinRAR.exe" a 20130109.1730.rev.2390.netpolitan.lmsv2.permata.zip @20130109.1730.rev.2390.netpolitan.lmsv2.permata.txt 
+
+8/1/2013 to permata
+2388 - 2389
+"C:/Program Files/WinRAR/WinRAR.exe" a 20130108.2255.rev.2388-2389.netpolitan.lmsv2.permata.zip @20130108.2255.rev.2388-2389.netpolitan.lmsv2.permata.txt 
+
+8/1/2013 to permata
+2311-2387
+"C:/Program Files/WinRAR/WinRAR.exe" a 20130108.2045.rev.2311-2387.netpolitan.lmsv2.permata.zip @20130108.2045.rev.2311-2387.netpolitan.lmsv2.permata.txt 
+
+2328-2387
+"C:/Program Files/WinRAR/WinRAR.exe" a 20130108.2045.rev.2328-2387.netpolitan.lmsv2.permata.zip @20130108.2045.rev.2328-2387.netpolitan.lmsv2.permata.txt 
+
+8/1/2013 to permata
+2367-2387
+"C:/Program Files/WinRAR/WinRAR.exe" a 20130108.2000.rev.2367-2387.netpolitan.lmsv2.permata.zip @20130108.2000.rev.2367-2387.netpolitan.lmsv2.permata.txt 
+
+8/1/2013 to permata
+2387
+"C:/Program Files/WinRAR/WinRAR.exe" a 20130108.1900.rev.2387.netpolitan.lmsv2.permata.zip @20130108.1900.rev.2387.netpolitan.lmsv2.permata.txt 
+
+8/1/2013 to permata 
+2382-2386
+"C:/Program Files/WinRAR/WinRAR.exe" a 20130108.1800.rev.2382-2386.netpolitan.lmsv2.permata.zip @20130108.1800.rev.2382-2386.netpolitan.lmsv2.permata.txt 
+
+8/1/2013 to permata 
+2367-2381
+ildp modif
+"C:/Program Files/WinRAR/WinRAR.exe" a 20130108.1035.rev.2367-2381.netpolitan.lmsv2.permata.zip @20130108.1035.rev.2367-2381.netpolitan.lmsv2.permata.txt
+----
+
+
+
+21/12/2012 to BTN
+rev 2344 - 2367
+"C:/Program Files/WinRAR/WinRAR.exe" a 20121219.rev.2344-2367.netpolitan.lmsv2.btn.zip @20121219.rev.2344-2367.netpolitan.lmsv2.btn.txt
+db patch : 
+/db/patch/20121126.1100.ild-catalog.alter.sql
+/db/patch/20121210.1400.ildp.form.alter.sql
+
+17/12/2012 to permata
+rev 2362-2366
+"C:/Program Files/WinRAR/WinRAR.exe" a 20121217.rev.2362-2366.netpolitan.lmsv2.permata.zip @20121217.rev.2362-2366.netpolitan.lmsv2.permata.txt
+
+ILDP Bug fix u/ history approval
+
+---
+10/12/2012 to permata
+rev 2360-2361
+- ILDP : bug fix u/ edit ildp form with existing form
+- ILDP : tambah short and long term career aspiration
+"C:/Program Files/WinRAR/WinRAR.exe" a 20121210.rev.2360-2361.netpolitan.lmsv2.permata.zip @20121210.rev.2360-2361.netpolitan.lmsv2.permata.txt
+-----
+
+04/12/2012 to permata
+2355-2359
+-banksoal problem
+"C:/Program Files/WinRAR/WinRAR.exe" a 20121204.rev.2355-2359.netpolitan.lmsv2.permata.zip @20121204.rev.2355-2359.netpolitan.lmsv2.permata.txt
+
+------------
+
+2/12/2012 to permata
+2353
+"C:/Program Files/WinRAR/WinRAR.exe" a 20121202.rev.2353.netpolitan.lmsv2.permata.zip @20121202.rev.2353.netpolitan.lmsv2.permata.txt
+- Program Title dirubah menjadi Category - Function  
+- Development Area dirubah menjadi Area of Development 
+- Time Line dirubah menjadi Period
+- time line table fieldnya dikecilkan? 
+- Category – Function di hidden.
+- Field Area of Development di ganti menjadi Free Text yang diinput oleh user
+
+---------
+
+27/11/2012 to permata
+rev 2348-2352
+"C:/Program Files/WinRAR/WinRAR.exe" a 20121127.rev.2347-2352.netpolitan.lmsv2.permata.zip @20121127.rev.2347-2352.netpolitan.lmsv2.permata.txt
+
+- export ildp , add abbr, and dev area
+
+--
+
+26/11/2012 to permata
+rev 2342 - 2347
+"C:/Program Files/WinRAR/WinRAR.exe" a 20121126.rev.2342-2346.netpolitan.lmsv2.permata.zip @20121126.rev.2342-2346.netpolitan.lmsv2.permata.txt
+
+- ILDP modification
+- add timelines
+- add development area 
+- Add 'course abbr'
+- hide budget and realization
+- rename method ==> development activities
+ 
+affected : 
+- maintain catalog (list/insert/update/import)
+- submit ILDP (view ILDP Form, input ILDP)
+- report
+
+============
+21/11/2012 to BTN
+up to 2343
+
+============
+16/11/2012 to permata
+rev 2339 - 2341
+modif ildp , feedback
+"C:/Program Files/WinRAR/WinRAR.exe" a 20121116.rev.2339-2341.netpolitan.lmsv2.permata.zip @20121116.rev.2339-2341.netpolitan.lmsv2.permata.txt
+
+05/11/2012 to permata
+rev 2328 - 2338 
+modif ildp 
+"C:/Program Files/WinRAR/WinRAR.exe" a 20121105.rev.2328-2338.netpolitan.lmsv2.permata.zip @20121105.rev.2328-2338.netpolitan.lmsv2.permata.txt
+
+-------------
+23/09/2012 to permata
+rev 2316-2327
+"C:/Program Files/WinRAR/WinRAR.exe" a 20120923.1300.rev.2316-2327.netpolitan.lmsv2.permata.zip @20120923.1300.rev.2316-2327.netpolitan.lmsv2.permata.txt
+- perbaikan get soal certification
+- index.php/test/sendmailhtml/
+- perbaikan fungsi update untuk setting durasi soal sertifikasi
+- penambahan config : ./config/config.app.php
+   $config['IS_DEBUG'] = TRUE;
+   jika true, maka akan me-log debug untuk start sertification dan get soal 
+- set email multipart=false (outlook problem)
+- user activity : admin can print sertifikat   
+   
+
+23/07/2012 to brp
+rev. 2323-2324
+
+17/07/2012 to brp
+user activities , can print certificate
+2321-2322
+"C:/Program Files/WinRAR/WinRAR.exe" a 20120717.rev.2321-2322.netpolitan.lmsv2.brp.zip @20120717.rev.2321-2322.netpolitan.lmsv2.brp.txt
+
+9/7/2012 to ncc
+up to rev. 2321
+"C:/Program Files/WinRAR/WinRAR.exe" a 20120615.rev.2316-2320.netpolitan.lmsv2.brp.zip @20120615.rev.2316-2320.netpolitan.lmsv2.brp.txt
+
+15/6/2012 to resona brp
+revision 2316 - 2320 
+"C:/Program Files/WinRAR/WinRAR.exe" a 20120615.rev.2316-2320.netpolitan.lmsv2.brp.zip @20120615.rev.2316-2320.netpolitan.lmsv2.brp.txt
+
+31/5/2012 to permata
+revision 2312-2315
+
+31/5/2012 to brp
+rev 1983-2315 
+"C:/Program Files/WinRAR/WinRAR.exe" a 20120531.rev.1983-2315.netpolitan.lmsv2.brp.zip @20120531.rev.1983-2315.netpolitan.lmsv2.brp.txt
+
+db patch : 
+./db/patch/20120118.arsipsoal.sql             
+./db/patch/20120215.banksoaltrash.sql         
+./db/patch/20120215.training.sql              
+./db/patch/20120216.gradecode.sql             
+./db/patch/20120225.reminderdeadline.sql      
+./db/patch/20120408.1345.general.setting.sql  
+./db/patch/20120427.deleteshowmaterihist.sql  
+./db/patch/20120506.2130.alter-reminderext.sql
+
+changes : 
+1. perbaikan :
+ 	Jumlah soal yang muncul tidak sesuai dengan yang Admin setting.
+	Contoh : Bank soal sebanyak 80. Admin setting soal certification yang akan
+	muncul sebanyak 20. Saat dicoba, soal certification yang muncul hanya 8??
+2. perbaikan paging di ildp 
+3. tambahan setting multiple login , jika yes maka bisa akses dari pc lain pada saat bersamaan.
+4. administrasi resources : tambah export dan paging.
+5. perbaikan input date di user administration
+6. penambahan field di interface user administration untuk npk atasan dan grade
+7. reset password : bisa by npk atau email. jika di masukkan npk, maka akan di kirim ke email yg terdaftar atas npk tsb
+8. user administration : search by name bisa lebih 1 suku kata
+9. bug fix di general setting update
+10. bug fix export history di training dan certification
+11. reminder new joiner : bisa edit deadline
+12. reset password : bisa by npk
+13. bug fix u/ search user berdasar user name
+14. archive bank soal
+15. perbaikan paging di ildp 
+16. tambahan setting multiple login , jika yes maka bisa akses dari pc lain pada saat bersamaan.
+17. administrasi resources : tambah export dan paging.
+18. perbaikan input date di user administration
+19. penambahan field di interface user administration untuk npk atasan dan grade
+20. reset password : bisa by npk atau email. jika di masukkan npk, maka akan di kirim ke email yg terdaftar atas npk tsb
+21. user administration : search by name bisa lebih 1 suku kata
+22. bug fix di general setting update
+23. bug fix export history di training dan certification
+24. reminder new joiner : bisa edit deadline
+25. reset password : bisa by npk
+26. bug fix u/ search user berdasar user name
+27. Online training >> set participant >> search by position
+28. export history participant >> tambah filter
+29. general setting >> setting u/ print certificate
+30. Trainee >> Certification >> ambil certification >> soalnya di rapihin
+31. Learning Admin >> Online Traning >> export history
+32. Admin >> Online Training >> jika di general setting 'show materi history' = yes , maka hrs di hitung jg di persentase nya
+33. Admin >> user activities
+34. Trainee >> certification / training >> pre requisite , tampilkan apa nama pre requisite nya
+35. Online training >> bank soal >> bobot soal harusnya tidak ada
+36. Online training / certification >> tambahkan link di name dan code
+37. Classroom >> import >> kolom k ke kanan, tidak di baca ?
+38. settings >> position >> header kolom dan header export
+39. perbaikan periode salah u/ training report
+40. print certificate di learning profile certification/online training, base on general setting
+42. trainee ildp form : title u/ hierarchy
+43. perbaikan paging reset participant
+44. session expired on browser closed 
+45. report training dan certification
+46. certification report
+47. bug fix di position administration
+46. language certification rule
+47. language
+48. report correction
+49. header certification report correction
+
+50. Online Training -- Klik pada List Participant yang sudah akses, klik Export tidak berfungsi. Akan otomatis terbuka Page Profile
+
+51. Pada Trainee Menu di List Online Training, Certification dan Resources. Apabila telah diklik Topic maka akan terbuka semua OL Training / Certification / Resources di dalam Topic tersebut. Tetapi masih ada fungsi Search by Topic, dan apabila dilakukan search by Topic lain maka tidak menampilkan hasil.
+Seharusnya apabila sudah masuk ke suatu Topic tidak perlu ada Search By Topic karena sistem sudah menampilkan all Training untuk 1 Topic tersebut saja
+Additional Information	
+
+52. a.Online Training : List Participant yang belum akses masih belum benar. Masih ada beberapa participant yang belum akses tidak tercantum di List (terdapat selisih antara jumlah participant yang diset dengan list participant yang sudah akses dan belum akses)
+b.Certification : List Participant yang belum akses masih belum benar. Masih ada beberapa participant yang belum akses tidak tercantum di List (terdapat selisih antara jumlah participant yang diset dengan list participant yang sudah akses dan belum akses). Dan jumlah participant belum akses yang ditampilkan di tabel berbeda dengan list participant
+
+53.Online Training : export participant (berdasarkan Last Passed) masih salah. Di List terdapat karyawan yang Failed dan baru mengakses PreExam dengan status Completed, dan karyawan tersebut belum akses Exam.
+
+54.Online Training : export history, sebelum dilakukan update aplikasi, report menampilkan semua detail activity per Training termasuk untuk activity PreExam dan Material. Tetapi sekarang report hanya menampilkan activity Exam saja, dan Training yang tidak ada / exam belum diakses tidak muncul di report
+
+55. Setelah Logoff, apabila ditekan tombol Back maka Last Page akan ditampilkan (contoh : Profile Page). Seharusnya setelah Logoff apabila dilakukan Back tidak akan terbuka Page-Page yang sebelumnya
+
+56. Forgot Password. Setelah user berhasil melakukan change password, dan melakukan login, akan muncul error message : "Invalid reset id! Please type a your new password".
+Apabila user kembali ke Page Login dan menekan tombol Bahasa maka akan otomatis terbuka Page Profile.
+
+57. Periode harusnya tidak boleh overlapping. validasi waktu create.
+
+58. Trainee >> certification / training >> pre requisite , tampilkan apa nama pre requisite nya
+
+59.tambahan setting pada general setting	
+a. U/ Online training : 
+   * Show print certificate ? (Y/N)
+Kalau yes, pada saat selesai mengerjakan exam, kalau lulus , bisa print(spt yg lama). Kalau 'no' link print nya ga muncul.
+   * Show Nilai Min. Lulus ? (Y/N) 
+Kalau yes, pada saat selesai mengerjakan exam, tampilkan : 'Min Lulus : xx'
+
+b. U/ Certification : 
+   * Show print certificate ? (Y/N)
+Kalau yes, pada saat selesai mengerjakan certification, kalau lulus , bisa print(spt yg lama). Kalau 'no' link print nya ga muncul.
+   * Show Nilai Min. Lulus ? (Y/N) 
+Kalau yes, pada saat selesai mengerjakan certification, tampilkan : 'Min Lulus : xx'
+
+60. new menu : Admin - User activities , activities per user
+61. Learning Admin >> Online Traning >> export history
+Penambahan kolom nama user pada Export History 
+
+62. Learning admin - resources - export history participant
+bisa export by : 
+- First access 
+  hanya export akses pertama u/ tiap user
+- Last access
+  hanya export akses terakhir u/ tiap user
+- All access
+
+63. bug fix pada set participant online training/certification
+
+64.  set session expired when close browser
+65. new report for online training / certification
+66. di user admin, bisa reset last login , dan kill user session
+67. bug fix u/ general setting : password expired when first login
+68. general setting : show/hide ildp module
+69. hide menu home
+70. general setting : bugfix u/ max training to be taken / day
+
+71. bug fix u/ concurrent user
+72. perbaikan paging ildp history
+73. perbaikan certification, pada saat soal per bobot soal tidak cukup
+
+=========================================
+1/5/2012 to permata
+2312 - 2315
+"C:/Program Files/WinRAR/WinRAR.exe" a 20120531.rev.2312-2315.netpolitan.lmsv2.permata.zip @20120531.rev.2312-2315.netpolitan.lmsv2.permata.txt
+
+changes : 
+- perbaikan paging ildp history
+- perbaikan certification, pada saat soal per bobot soal tidak cukup
+
+================
+31/5/2012 to smart
+2311-2315
+"C:/Program Files/WinRAR/WinRAR.exe" a 20120531.rev.2311-2315.netpolitan.lmsv2.smart.zip @20120531.rev.2311-2315.netpolitan.lmsv2.smart.txt
+
+changes : 
+- perbaikan paging ildp history
+- perbaikan certification, pada saat soal per bobot soal tidak cukup
+
+
+--------------
+30/5/2012 to permata
+2076-2311
+"C:/Program Files/WinRAR/WinRAR.exe" a 20120530.1200.rev.2076-2311.netpolitan.lmsv2.to.permata.zip @20120530.1200.rev.2076-2311.netpolitan.lmsv2.to.permata.txt
+db patch : 
+/db/patch/20120408.1345.general.setting.sql
+/db/patch/20120427.deleteshowmaterihist.sql
+/db/patch/20120506.2130.alter-reminderext.sql
+
+-exclude theme smart
+$this->input->is_cli_request()
+- 
+changes : 
+- #1128 Periode harusnya tidak boleh overlapping. validasi waktu create.
+- #1147 Trainee >> certification / training >> pre requisite , tampilkan apa nama pre requisite nya
+- #1136 tambahan setting pada general setting	
+a. U/ Online training : 
+   * Show print certificate ? (Y/N)
+Kalau yes, pada saat selesai mengerjakan exam, kalau lulus , bisa print(spt yg lama). Kalau 'no' link print nya ga muncul.
+   * Show Nilai Min. Lulus ? (Y/N) 
+Kalau yes, pada saat selesai mengerjakan exam, tampilkan : 'Min Lulus : xx'
+
+b. U/ Certification : 
+   * Show print certificate ? (Y/N)
+Kalau yes, pada saat selesai mengerjakan certification, kalau lulus , bisa print(spt yg lama). Kalau 'no' link print nya ga muncul.
+   * Show Nilai Min. Lulus ? (Y/N) 
+Kalau yes, pada saat selesai mengerjakan certification, tampilkan : 'Min Lulus : xx'
+
+- #1143 , new menu : Admin - User activities , activities per user
+- #1133 ,  Learning Admin >> Online Traning >> export history
+Penambahan kolom nama user pada Export History 
+
+- #1140 , Learning admin - resources - export history participant
+bisa export by : 
+- First access 
+  hanya export akses pertama u/ tiap user
+- Last access
+  hanya export akses terakhir u/ tiap user
+- All access
+
+- #1134 , bug fix pada set participant online training/certification
+- #1148 ,  set session expired when close browser
+- #1146 , new report for online training / certification
+- #1178 , di user admin, bisa reset last login , dan kill user session
+- #1173 , bug fix u/ general setting : password expired when first login
+- #1200 , general setting : show/hide ildp module
+- #1207 , hide menu home
+- #1220 , general setting : bugfix u/ max training to be taken / day
+- #1216 , bug fix u/ concurrent user
+
+-----
+
+29/5/2012 to smart
+2301-2310
+"C:/Program Files/WinRAR/WinRAR.exe" a 20120529.rev.2301-2310.netpolitan.lmsv2.smart.zip @20120529.rev.2301-2310.netpolitan.lmsv2.smart.txt
+
+changes : 
+81. Online Training -- Klik pada List Participant yang sudah akses, klik Export tidak berfungsi. Akan otomatis terbuka Page Profile
+
+76. Pada Trainee Menu di List Online Training, Certification dan Resources. Apabila telah diklik Topic maka akan terbuka semua OL Training / Certification / Resources di dalam Topic tersebut. Tetapi masih ada fungsi Search by Topic, dan apabila dilakukan search by Topic lain maka tidak menampilkan hasil.
+Seharusnya apabila sudah masuk ke suatu Topic tidak perlu ada Search By Topic karena sistem sudah menampilkan all Training untuk 1 Topic tersebut saja
+Additional Information	
+
+5. a.Online Training : List Participant yang belum akses masih belum benar. Masih ada beberapa participant yang belum akses tidak tercantum di List (terdapat selisih antara jumlah participant yang diset dengan list participant yang sudah akses dan belum akses)
+b.Certification : List Participant yang belum akses masih belum benar. Masih ada beberapa participant yang belum akses tidak tercantum di List (terdapat selisih antara jumlah participant yang diset dengan list participant yang sudah akses dan belum akses). Dan jumlah participant belum akses yang ditampilkan di tabel berbeda dengan list participant
+
+84.Online Training : export participant (berdasarkan Last Passed) masih salah. Di List terdapat karyawan yang Failed dan baru mengakses PreExam dengan status Completed, dan karyawan tersebut belum akses Exam.
+
+85.Online Training : export history, sebelum dilakukan update aplikasi, report menampilkan semua detail activity per Training termasuk untuk activity PreExam dan Material. Tetapi sekarang report hanya menampilkan activity Exam saja, dan Training yang tidak ada / exam belum diakses tidak muncul di report
+
+74. Setelah Logoff, apabila ditekan tombol Back maka Last Page akan ditampilkan (contoh : Profile Page). Seharusnya setelah Logoff apabila dilakukan Back tidak akan terbuka Page-Page yang sebelumnya
+
+75. Forgot Password. Setelah user berhasil melakukan change password, dan melakukan login, akan muncul error message : "Invalid reset id! Please type a your new password".
+Apabila user kembali ke Page Login dan menekan tombol Bahasa maka akan otomatis terbuka Page Profile.
+ 
+=============
+
+28/25/2012 to smart
+2301 - 2303
+"C:/Program Files/WinRAR/WinRAR.exe" a 20120528.rev.2301-2303.netpolitan.lmsv2.smart.zip @20120528.rev.2301-2303.netpolitan.lmsv2.smart.txt
+====
+
+
+11/5/2012 to smart
+2282-2300
+"C:/Program Files/WinRAR/WinRAR.exe" a 20120511.rev.2282-2300.netpolitan.lmsv2.smart.zip @20120511.rev.2282-2300.netpolitan.lmsv2.smart.txt
+=====
+10/5/2012 to smart
+2273-2281 
+"C:/Program Files/WinRAR/WinRAR.exe" a 20120510.rev.2273-2281.netpolitan.lmsv2.smart.zip @20120510.rev.2273-2281.netpolitan.lmsv2.smart.txt
+
+---------
+07/05/2012 to smart
+2204-2272
+"C:/Program Files/WinRAR/WinRAR.exe" a 20120507.rev.2204-2272.netpolitan.lmsv2.smart.zip @20120507.rev.2204-2272.netpolitan.lmsv2.smart.txt
+
+db patch  : 
+
+--------------------
+30/04/2012 to smart
+2194-2203
+"C:/Program Files/WinRAR/WinRAR.exe" a 20120430.rev.2194-2204.netpolitan.lmsv2.smart.zip @20120430.rev.2194-2204.netpolitan.lmsv2.smart.txt
+
+-----
+
+27/04/2012 15.30 to smart 
+2192 - 219xx
+"C:/Program Files/WinRAR/WinRAR.exe" a 20120427.rev.2192-2193.netpolitan.lmsv2.smart.zip @20120427.rev.2192-2193.netpolitan.lmsv2.smart.txt
+
+---------------------
+
+27/04/2012 14.30 to smart 
+2188 - 2191
+"C:/Program Files/WinRAR/WinRAR.exe" a 20120427.rev.2187-2191.netpolitan.lmsv2.smart.zip @20120427.rev.2187-2191.netpolitan.lmsv2.smart.txt
+
+
+------------------
+
+
+27/04/2012 14.00 to smart 
+2186 - 2187
+"C:/Program Files/WinRAR/WinRAR.exe" a 20120427.rev.2186-2187.netpolitan.lmsv2.smart.zip @20120427.rev.2186-2187.netpolitan.lmsv2.txt
+
+export history , kolom user npk, training code
+ildp waiting approval
+
+------------------
+27/04/2012 to smart
+2160-2185
+"C:/Program Files/WinRAR/WinRAR.exe" a 20120427.rev.2160-2185.netpolitan.lmsv2.smart.zip @20120427.rev.2160-2185.netpolitan.lmsv2.smart.txt
+
+db patch :
+/db/patch/20120427.deleteshowmaterihist.sql
+
+changes :
+- language
+- report correction
+- header certification report correction
+
+
+----------------
+
+20/04/2012 to smart
+2146-2159
+"C:/Program Files/WinRAR/WinRAR.exe" a 20120420.rev.2146-2159.netpolitan.lmsv2.smart.zip @20120420.rev.2146-2159.netpolitan.lmsv2.smart.txt
+changes : 
+- certification report
+- bug fix di position administration
+- language certification rule
+
+
+----------------
+
+17/04/2012 to smart
+2116-2145
+"C:/Program Files/WinRAR/WinRAR.exe" a 20120417.rev.2116-2145.netpolitan.lmsv2.smart.zip @20120417.rev.2116-2145.netpolitan.lmsv2.smart.txt
+
+a. config.php : 
+$config['enable_query_strings'] = TRUE;
+
+b. config.app.php : 
+$config['enable_query_strings'] = TRUE;
+$config['sess_expire_on_close'] = TRUE;
+
+changes : 
+- perbaikan periode salah u/ training report
+- print certificate di learning profile certification/online training, base on general setting
+- change language setting : not found locally
+- trainee ildp form : title u/ hierarchy
+- perbaikan paging reset participant
+- session expired on browser closed 
+- 10a. report training dan certification
+
+------------
+13/04/2012 to smart
+2099-2115
+"C:/Program Files/WinRAR/WinRAR.exe" a 20120413.rev.2099-2115.netpolitan.lmsv2.smart.zip @20120413.rev.2099-2115.netpolitan.lmsv2.smart.txt
+changes : 
+
+40,41,72, 10, 75, 81, double periode bug
+--------------
+
+09/04/2012
+2077-2098 to smart
+"C:/Program Files/WinRAR/WinRAR.exe" a rev.1977-2098.netpolitan.lmsv2.smart.zip @rev.1977-2098.netpolitan.lmsv2.smart.txt
+db patch : 
+./db/patch/20120408.1345.general.setting.sql 
+
+changes : 
+[74] Online training >> set participant >> search by position
+[14] export history participant >> tambah filter
+[58] [90] general setting >> setting u/ print certificate
+[91] Trainee >> Certification >> ambil certification >> soalnya di rapihin
+[12] Learning Admin >> Online Traning >> export history
+[10c] Admin >> Online Training >> jika di general setting 'show materi history' = yes , maka hrs di hitung jg di persentase nya
+[9] Admin >> user activities
+[84]Trainee >> certification / training >> pre requisite , tampilkan apa nama pre requisite nya
+[39] Online training >> bank soal >> bobot soal harusnya tidak ada
+[62] Online training / certification >> tambahkan link di name dan code
+[64] Classroom >> import >> kolom k ke kanan, tidak di baca ?
+[42] settings >> position >> header kolom dan header export
+
+
+---------------------------------------------------------
+1974-2076 to smart 
+"C:/Program Files/WinRAR/WinRAR.exe" a rev.1974-2076.netpolitan.lmsv2.smart.zip @rev.1974-2076.netpolitan.lmsv2.smart.txt
+db patch : 
+./db/patch/20111229.1300.create.index.sql
+./db/patch/20120118.arsipsoal.sql
+./db/patch/20120215.banksoaltrash.sql
+./db/patch/20120215.training.sql
+./db/patch/20120216.gradecode.sql
+./db/patch/20120225.reminderdeadline.sql
+
+edit : 
+- ./system/application/config/config.path.php
+- copy file ixed ke folder : xampp/php/ext
+- edit php.ini, tambahkan : 
+	extension=ixed.5.2ts.win
+- schedule u/ archive bank soal
+c:\xampp\php\php.exe <web-root>\index.php cron
+
+
+-----------------------------------
+17/03/2012 to permata
+1946-2075
+"C:/Program Files/WinRAR/WinRAR.exe" a 20120317.1000.rev.1946-2075.netpolitan.lmsv2.to.permata.zip @20120317.1000.rev.1946-2075.netpolitan.lmsv2.to.permata.txt
+DB Patch : 
+./db/patch/20110728.certificate_template.sql
+./db/patch/20110803.trainingcerttpl.sql
+./db/patch/20111229.1300.create.index.sql
+./db/patch/20120118.arsipsoal.sql
+./db/patch/20120215.banksoaltrash.sql
+./db/patch/20120215.training.sql
+./db/patch/20120216.gradecode.sql
+./db/patch/20120225.reminderdeadline.sql
+
+
+SOP For update :
+a. edit config.php  :
+$config['base_path']	= "xxxx";
+$config['company'] = "Bank Permata";
+$config['theme'] = "";                   
+
+b. edit config.path.php
+
+
+Change log : 
+ 
+- perbaikan :
+ Jumlah soal yang muncul tidak sesuai dengan yang Admin setting.
+ Contoh : Bank soal sebanyak 80. Admin setting soal certification yang akan
+ muncul sebanyak 20. Saat dicoba, soal certification yang muncul hanya 8??
+- perbaikan paging di ildp 
+- tambahan setting multiple login , jika yes maka bisa akses dari pc lain pada saat bersamaan.
+- administrasi resources : tambah export dan paging.
+- perbaikan input date di user administration
+- penambahan field di interface user administration untuk npk atasan dan grade
+- reset password : bisa by npk atau email. jika di masukkan npk, maka akan di kirim ke email yg terdaftar atas npk tsb
+- user administration : search by name bisa lebih 1 suku kata
+- bug fix di general setting update
+- bug fix export history di training dan certification
+- reminder new joiner : bisa edit deadline
+- reset password : bisa by npk
+- bug fix u/ search user berdasar user name
+- archive bank soal
+
+----------------------------------------------------
+
+12/03/2012 to permata
+2071-2074
+"C:/Program Files/WinRAR/WinRAR.exe" a 20120312.1300.rev.2071-2074.netpolitan.lmsv2.to.permata.zip @20120312.1300.rev.2071-2074.netpolitan.lmsv2.to.permata.txt
+
+02/03/2012 to permata
+2063-2070
+"C:/Program Files/WinRAR/WinRAR.exe" a 20120302.1100.rev.2062-2070.netpolitan.lmsv2.to.permata.zip @20120302.1100.rev.2062-2070.netpolitan.lmsv2.to.permata.txt
+update patch : 
+./db/patch/20120215.banksoaltrash.sql
+
+27/02/2012  to permata
+2028-2062
+"C:/Program Files/WinRAR/WinRAR.exe" a 20120227.1540.rev.2028-2064.netpolitan.lmsv2.to.permata.zip @20120227.1540.rev.2028-2064.netpolitan.lmsv2.to.permata.txt
+update patch : 
+./db/patch/20120215.banksoaltrash.sql
+./db/patch/20120215.training.sql
+./db/patch/20120216.gradecode.sql
+./db/patch/20120225.reminderdeadline.sql
+
+changes : 
+- bug fix di general setting update
+- bug fix export history di training dan certification
+- reminder new joiner : bisa edit deadline
+- reset password : bisa by npk
+- bug fix u/ search user berdasar user name
+- archive bank soal
+
+====
+
+
+14/02/2012  to permata
+1979-2027
+"C:/Program Files/WinRAR/WinRAR.exe" a 20120214.1600.rev.1979-2027.netpolitan.lmsv2.to.permata.zip @20120214.1600.rev.1979-2027.netpolitan.lmsv2.to.permata.txt
+db patch :
+/db/patch/20111229.1300.create.index.sql
+/db/patch/20120118.arsipsoal.sql
+
+changes : 
+Changes : 
+- perbaikan :
+ Jumlah soal yang muncul tidak sesuai dengan yang Admin setting.
+Contoh : Bank soal sebanyak 80. Admin setting soal certification yang akan
+muncul sebanyak 20. Saat dicoba, soal certification yang muncul hanya 8??
+- perbaikan paging di ildp 
+- tambahan setting multiple login , jika yes maka bisa akses dari pc lain pada saat bersamaan.
+- administrasi resources : tambah export dan paging.
+- perbaikan input date di user administration
+- penambahan field di interface user administration untuk npk atasan dan grade
+- reset password : bisa by npk atau email. jika di masukkan npk, maka akan di kirim ke email yg terdaftar atas npk tsb
+- user administration : search by name bisa lebih 1 suku kata
+ 
+
+------------------------------
+ 
+
+09/01/2012 to brp
+1972-1982
+"C:/Program Files/WinRAR/WinRAR.exe" a 20120109.2100.rev.1972-1982.netpolitan.lmsv2.brp.zip @20120109.2100.rev.1972-1982.netpolitan.lmsv2.brp.txt 
+
+06/01/2011 to smart
+until 1973
+=====
+30/12/2011 to permata
+1945-1979
+"C:/Program Files/WinRAR/WinRAR.exe" a 20111229.1800.rev.1945-1979.netpolitan.lmsv2.to.permata.zip @20111229.1800.rev.1945-1979.netpolitan.lmsv2.to.permata.txt 
+changes : 
+- certificate template.
+  bisa di setting di general setting, maupun di tiap2 certification/training.
+  template nya, kmrn sdh kasih ke andri, tp ini gw attach lagi.
+
+- Penambahan setting di general setting , dan tampilan.
+- Modifikasi export result u/ refreshment, di sesuaikan dgn rumus excel.
+
+a. config.php  :
+$config['base_path']	= "xxxx";
+$config['company'] = "Bank Permata";
+$config['theme'] = "";                   
+
+b. edit config.path.php
+c. db patch : 
+./db/patch/20110728.certificate_template.sql
+./db/patch/20110803.trainingcerttpl.sql
+./db/patch/20111229.1300.create.index.sql
+
+===
+
+
+9/29/2011 to brp : 
+1967-1971
+"C:/Program Files/WinRAR/WinRAR.exe" a 20110929.1600.rev.1967-1971.netpolitan.lmsv2.brp.zip @20110929.1600.rev.1967-1971.netpolitan.lmsv2.brp.txt 
+- add in the config 
+$config['company'] = "Bank Resona Perdania";
+$config['theme'] = "brp";
+
+13/09/2011 to brp
+1965-1966
+"C:/Program Files/WinRAR/WinRAR.exe" a 20110913.2000.rev.1965-1966.netpolitan.lmsv2.brp.zip @20110913.2000.rev.1965-1966.netpolitan.lmsv2.brp.txt 
+
+17/08/2011 to brp
+1943 - 1964
+"C:/Program Files/WinRAR/WinRAR.exe" a 20110817.1900.rev.1943-1964.netpolitan.lmsv2.brp.zip @20110817.1900.rev.1943-1964.netpolitan.lmsv2.brp.txt
+
+SOP deploy : 
+a. config.php  :
+$config['base_path']	= "E:/dedy/kerjaan/netpolitan/lms2/adilahsoft";
+$config['company'] = "brp";
+b. db patch : 
+
+
+
+26/07/2011 10.00 to permata
+1910-1945
+
+
+25/07/2011 1611 to brp
+"C:/Program Files/WinRAR/WinRAR.exe" a 20110725.1600.rev.1910-1942.netpolitan.lmsv2.zip @20110725.1600.rev.1910-1942.netpolitan.lmsv2.txt
+1910-1942
+-include brp modif
+-import user modif
+-
+
+18/07/2011 to dev
+1904-1909
+"C:/Program Files/WinRAR/WinRAR.exe" a 20110718.1200.rev.1904-1909.netpolitan.lmsv2.zip @20110718.1200.rev.1904-1909.netpolitan.lmsv2.txt
+- export participant : refreshment
+
+23/06/2011 to dev
+1900-1903
+"C:/Program Files/WinRAR/WinRAR.exe" a 20110627.1600.rev.1900-1903.netpolitan.lmsv2.zip @20110627.1600.rev.1900-1903.netpolitan.lmsv2.txt
+- duration
+- reset npk, by periode 
+
+
+
+23/06/2011 to dev
+"C:/Program Files/WinRAR/WinRAR.exe" a 20110623.1400.rev.1888-1899.netpolitan.lmsv2.zip @20110623.1400.rev.1888-1899.netpolitan.lmsv2.txt
+- export : last score balikin ke last lulus
+- export , tambah last score
+
+17/06/2011 to dev
+1877-1887
+"C:\Program Files (x86)\WinRAR.exe" a 20110617.1100.rev.1877-1887.netpolitan.lmsv2.zip @20110617.1100.rev.1877-1887.netpolitan.lmsv2.txt
+- export correction for max and last score
+- import ildp form , also the history for atasan who approve
+- hide icon 'taken' di list topic
+- ildp : setting hrrm , get active dept/directorat/group/unit only
+
+
+
+3/6/2011  to prod
+1522-1876
+ILDP patch module
+"C:\Program Files (x86)\WinRAR.exe" a 20110603.1200.rev.1522-1876.netpolitan.lmsv2.zip @20110603.1200.rev.1522-1876.netpolitan.lmsv2.txt
+
+3/6/2011  to devel
+1873-1876
+ildp import correction
+"C:\Program Files (x86)\WinRAR.exe" a 20110603.1200.rev.1873-1876.netpolitan.lmsv2.zip @20110603.1200.rev.1873-1876.netpolitan.lmsv2.txt
+
+31/05/2011 to devel
+ildp form , import , 'done' approved can not edited
+1856 - 1872
+"C:\Program Files (x86)\WinRAR.exe" a 20110530.1100.rev.1856-1872.netpolitan.lmsv2.zip @20110530.1100.rev.1856-1872.netpolitan.lmsv2.txt
+
+02/05/2011 to devel
+languages
+1849 - 1855
+"C:\Program Files (x86)\WinRAR.exe" a 20110502.1200.rev.1849-1855.netpolitan.lmsv2.zip @20110502.1200.rev.1849-1855.netpolitan.lmsv2.txt
+
+
+19/04/2011 ke devel  13.24
+ILDP Correction
+1847-1848
+"C:\Program Files (x86)\WinRAR.exe" a 201104119.1330.rev.1847-1848.netpolitan.lmsv2.zip @201104119.1330.rev.1847-1848.netpolitan.lmsv2.txt
+
+
+19/04/2011 ke devel
+ILDP Correction
+1802-1844
+"C:\Program Files (x86)\WinRAR.exe" a 201104119.0600.rev.1802-1844.netpolitan.lmsv2.zip @201104119.0600.rev.1802-1844.netpolitan.lmsv2.txt
+
+
+14/4/2011 ke prod
+export training
+/system/application/config/config.en.php
+/system/application/config/config.id.php
+/system/application/controllers/training.php
+/system/application/views/training/list.html
+
+
+11/4/2011 ke devel
+ILDP New, correction
+ver 2.3
+rev 1793-1801
+"C:\Program Files (x86)\WinRAR.exe" a 20110411.1000.rev.1793-1801.netpolitan.lmsv2.zip @20110411.1000.rev.1793-1801.netpolitan.lmsv2.txt
+
+7/4/2011 ke devel
+ILDP New
+ver 2.3
+rev 1522-1792
+"C:\Program Files (x86)\WinRAR.exe" a 20110407.1300.rev.1522-1792.netpolitan.lmsv2.zip @20110407.1300.rev.1522-1792.netpolitan.lmsv2.txt
+
+18/03/2011 ke prod
+Learning dashboard
+rev 1516 - 1521
+"C:/Program Files/WinRAR/WinRAR.exe" a 20110318.1100.rev.1516-1521.netpolitan.lmsv2.zip @20110318.1100.rev.1516-1521.netpolitan.lmsv2.txt
+
+11/03/2011 ke permata devel
+rev 1515 - 1517 
+"C:/Program Files/WinRAR/WinRAR.exe" a 20110311.1100.rev.1515-1517.netpolitan.lmsv2.zip @20110311.1100.rev.1515-1517.netpolitan.lmsv2.txt
+
+21/02/2011 11.00 ke netpolitan
+rev 1482 - 1506
+"C:/Program Files/WinRAR/WinRAR.exe" a 20110221.1100.rev.1482-1506.netpolitan.lmsv2.zip @20110221.1100.rev.1482-1506.netpolitan.lmsv2.txt
+
+21/02/2011 10.25 ke permata
+kirim topic/menu.html , topic/list_topic.html , user/menu.html , u/ menampilkan kembali menu ILDP 
+
+17/02/11 11.00 for prod
+1478-1505 
+"C:/Program Files/WinRAR/WinRAR.exe" a 20110217.1100.rev.1478-1505.netpolitan.lmsv2.zip @20110217.1100.rev.1478-1505.netpolitan.lmsv2.txt
+
+16/02/2011 to devel 
+1475-1574
+reminder
+rev. 2.27
+"C:/Program Files/WinRAR/WinRAR.exe" a 20110216.rev.1474-1504.netpolitan.lmsv2.zip @20110216.rev.1474-1504.netpolitan.lmsv2.txt
+
+
+11/02/2011 to devel permata
+/system/application/controllers/reminder.php
+/system/application/controllers/training.php
+/system/application/views/reminder/search.html
+
+reminder correction
+
+
+2/2/2011 to netpolitan
+rev tgl 24 jan 2011 - 1481
+"C:/Program Files/WinRAR/WinRAR.exe" a 20110202.rev.1434-1481.netpolitan.lmsv2.zip @20110202.rev.1434-1481.netpolitan.lmsv2.txt
+
+31/01/2011 to prod permata, (not apply)
+rev 988 - 1478 
+- reminder, ildp 
+"C:/Program Files/WinRAR/WinRAR.exe" a 20110131.rev.988-1478.netpolitan.lmsv2.zip @20110131.rev.988-1478.netpolitan.lmsv2.txt
+
+
+rev. 2.26
+30/01/2011 2130  ILDP  
+1434 - 1475
+"C:/Program Files/WinRAR/WinRAR.exe" a 20110130.rev.1434-1474.netpolitan.lmsv2.zip @20110130.rev.1434-1474.netpolitan.lmsv2.txt
+
+21/01/2011 11.00 tambahan message content 
+1428 - 1433
+"C:/Program Files/WinRAR/WinRAR.exe" a 20110121.rev.1428-1433.netpolitan.lmsv2.zip @20110121.rev.1428-1433.netpolitan.lmsv2.txt
+
+
+21/01/2011 tambahan
+1424 - 1427
+"C:/Program Files/WinRAR/WinRAR.exe" a 20110121.rev.1424-1427.netpolitan.lmsv2.zip @20110121.rev.1424-1427.netpolitan.lmsv2.txt
+
+
+21/01/2011
+1310-1423 
+ildp + reminder correction
+"C:/Program Files/WinRAR/WinRAR.exe" a 20110121.rev.1310-1423.netpolitan.lmsv2.zip @20110121.rev.1310-1423.netpolitan.lmsv2.txt
+./db/patch/20100116.0603.extdatarejected.sql
+./db/patch/20110110.resetted.sql
+./db/patch/20110111.rejecteddate.sql
+
+
+04/01/2011 ke dev
+rev. 1278 - 1310
+"C:/Program Files/WinRAR/WinRAR.exe" a 20110104.rev.1278-1310.netpolitan.lmsv2.zip @20110104.rev.1278-1310.netpolitan.lmsv2.txt
+ildp
+
+23/12/2010 ke dev
+rev. 2.26
+rev. 1096 - 1278
+"C:/Program Files/WinRAR/WinRAR.exe" a 20101223.rev.1096-1278.netpolitan.lmsv2.zip @20101223.rev.1096-1278.netpolitan.lmsv2.txt
+ildp
+
+
+29/11/2010 ke dev 
+rev. 1054-1096
+"C:/Program Files/WinRAR/WinRAR.exe" a 20101129.rev.1054-1096.netpolitan.lmsv2.zip @20101129.rev.1054-1096.netpolitan.lmsv2.txt
+-correction 
+- refreshment using import
+- db patch : 
+./db/patch/20101123.remindertype.sql
+
+
+22/11/2010 ke prod
+user.php , import user old system , bug fixing
+
+15/11/2010 ke development
+rev 2.24
+-reminder for new period
+-reminder for mandatory
+rev 988-1053
+"C:/Program Files/WinRAR/WinRAR.exe" a 20101115.1130.rev.988-1053.netpolitan.lmsv2.zip @20101115.1130.rev.988-1053.netpolitan.lmsv2.txt
+./db/patch/20101001.9754.reminderext.sql
+./db/patch/20101003.0600.reminder_user_reminder.sql
+./db/patch/20101104.0700.table_log.sql
+./db/patch/20101104.0800.log.sql
+
+04/10/2010
+rev 2.23
+- perbaikan pengambil max, tambah cert id
+- perbaikan import bank soal certification, set time limit = unlimit
+"C:/Program Files/WinRAR/WinRAR.exe" a 20101004.rev.982-987.netpolitan.lmsv2.zip @20101004.rev.982-987.netpolitan.lmsv2.txt
+
+26/09/2010
+rev 2.22
+-perbaikan pengambilan max u/ certification (base on period)
+-penambahan error handling, ketika jumlah soal tidak cukup
+rev 974 - 981
+"C:/Program Files/WinRAR/WinRAR.exe" a 20100926.rev.974-981.zip @20100926.rev.974-981.txt
+
+
+
+20/09/2010  rev 2.21
+gui for sap
+rev 956-965
+rev.967-973
+"C:/Program Files/WinRAR/WinRAR.exe" a 20100920.rev.956-966.zip @20100920.rev.956-966.txt
+
+
+15/09/2010 rev. 2.20
+report to sap
+rev 931-955
+"C:/Program Files/WinRAR/WinRAR.exe" a 20100915.rev.931-955.zip @20100915.rev.931-955.txt
+db patch : 
+/db/patch/20100905.0945.grade.sql
+/db/patch/20100905.0945.user.alter.sql
+
+28/07/2010	rev. 2.19
+rev 913-930 
+export training
+db patch : /db/patch/20100728.refreshment.sql
+
+"C:/Program Files/WinRAR/WinRAR.exe" a 20100728.rev.913-930.zip @20100728.rev.913-930.txt
+
+
+
+21/07/2010
+rev 901-912
+optimasi
+"C:/Program Files/WinRAR/WinRAR.exe" a 20100721.rev.901-912.zip @20100721.rev.901-912.txt
+
+
+20/07/2010
+20100720.rev.895-900
+offline materi popup
+"C:/Program Files/WinRAR/WinRAR.exe" a 20100720.rev.895-900.zip @20100720.rev.895-900.txt
+
+17/07/2010
+20100717.rev.889-894
+migrasi
+"C:/Program Files/WinRAR/WinRAR.exe" a 20100717.rev889-896.zip @20100717.rev889-896.txt
+
+13/07/2010 , 
+
+-config.app.php, change 
+	$config['exporthistoryfilename'] = "HRLMSOUT.CSV";
+
+changes
+- export to sap, in csv format
+"C:/Program Files/WinRAR/WinRAR.exe" a 20100713.rev.884-888.zip @20100713.rev.884-888.txt
+
+
+
+11/07/2010  , rev 865-882   rev 2.17
+- exclude config/database.php
+- config.app.php , change : 
+	$config['importfilename'] = "HRLMSIN.CSV";
+changes : 
+- import sap : xls to csv.
+- bank soal : dr 255 char => text
+- category administration : ganti aktif/non aktif
+db patch : /db/patch/20100706.questanswer.sql
+ "C:/Program Files/WinRAR/WinRAR.exe" a 20100711.rev.865-883.zip @20100711.rev.865-883.txt
+
+
+05/07/2010 rev 848 - 864
+- config.app.php , tambahkan : 
+ $config['root_path'] = str_replace("\\", "/", realpath(dirname(FCPATH)));;	
+ "C:/Program Files/WinRAR/WinRAR.exe" a 20100705.rev.848-865.zip @20100705.rev.848-865.txt
+ changes : 
+ - import SAP correction
+ 
+
+
+30/06/2010 rev 848 rev 2.16
+* "C:/Program Files/WinRAR/WinRAR.exe" a 20100630.rev.848.zip @20100630.1700.rev.848.txt
+
+
+28/06/2010  rev. 824 - 846   , rev 2.15
+* db patch : 
+	20100619_0823.uniqdeleg.sql
+* in config.app , remove 
+	$config['app_revision'] = "2.15";	
+* "C:/Program Files/WinRAR/WinRAR.exe" a 20100628.rev.824-846.zip @20100628.rev.824-846.txt
+
+
+28/06/2010  rev. 824 - 842   , rev 2.15  -- ga di jalanin
+* db patch : 
+	20100619_0823.uniqdeleg.sql
+* in config.app , remove 
+	$config['app_revision'] = "2.15";	
+* "C:/Program Files/WinRAR/WinRAR.exe" a 20100625.rev.824-842.zip @20100625.rev.824-842.txt
+	
+
+16/06/2010
+db patch : 
+E:\dedy\kerjaan\netpolitan\lms2\trunk\db\patch\20100612_1513.modulereport.sql  
+E:\dedy\kerjaan\netpolitan\lms2\trunk\db\patch\20100613_0649.remindertrainingtime.sql  
+E:\dedy\kerjaan\netpolitan\lms2\trunk\db\patch\20100614_0649.refreshmentallperiod.sql  
+E:\dedy\kerjaan\netpolitan\lms2\trunk\db\patch\20100616.isxport.sql  
+
+"C:/Program Files/WinRAR/WinRAR.exe" a 20100616.lmsv2.rev.799-823.zip @20100616.lmsv2.rev.799-823.txt
+
+
+20100614.rev792-298
+to permata
+
+
+10/06/2010 
+update to permata
+
+
+22/03/2010 
+update to wisman

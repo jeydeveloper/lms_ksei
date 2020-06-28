@@ -1,0 +1,381 @@
+<link type="text/css" href="{*$base_url*}js/jquery-ui-1.7.2.custom/development-bundle/themes/base/ui.all.css" rel="stylesheet" /> 
+<script type="text/javascript" src="{*$base_url*}js/jquery-ui-1.7.2.custom/development-bundle/external/bgiframe/jquery.bgiframe.js"></script> 
+<script type="text/javascript" src="{*$base_url*}js/jquery-ui-1.7.2.custom/development-bundle/ui/ui.core.js"></script> 
+<script type="text/javascript" src="{*$base_url*}js/jquery-ui-1.7.2.custom/development-bundle/ui/ui.draggable.js"></script> 
+<script type="text/javascript" src="{*$base_url*}js/jquery-ui-1.7.2.custom/development-bundle/ui/ui.resizable.js"></script> 
+<script type="text/javascript" src="{*$base_url*}js/jquery-ui-1.7.2.custom/development-bundle/ui/ui.dialog.js"></script> 
+<script>
+	var loaddvs = new Array();
+	var n_npk = {* $totalnpk *};
+	var lastjabatan = 0;			
+	
+	function showLevelGroup(parent, dv)
+	{
+		if ($(dv).css("display") != "none")
+		{
+			$(dv).hide();
+		}
+		else
+		{
+			if (hasLoad(dv))
+			{
+				$(dv).show();
+			}
+			else
+			{					
+				if (parent > 0)
+				{
+					ischecked = $("INPUT[name='levelgroup[]'][value='"+parent+"']").attr("checked");
+				}
+				else
+				{
+					ischecked = $("INPUT[name='allemp']").attr("checked")
+				}
+				
+				$.post("{* $site_url *}/level/showgroup/", {parent: parent, ischecked: ischecked, referenceid: {* $row->reference_id *}, isreference: 1},
+					function(data)
+					{
+						$(dv).html(data);
+						$(dv).show();
+					}
+				);
+				
+				loaddvs.push(dv);
+			}
+		}
+	}
+	
+	function showJabatan(id, dv)
+	{	
+		if ($(dv).css("display") != "none")
+		{
+			$(dv).hide();
+		}
+		else
+		{
+			if (hasLoad(dv))
+			{
+				$(dv).show();
+			}
+			else
+			{		
+				if (id > 0)
+				{
+					ischecked = $("INPUT[name='jabatan[]'][value='"+id+"']").attr("checked");
+				}
+				else
+				{
+					ischecked = $("INPUT[name='allemp']").attr("checked")
+				}
+							
+				$.post("{* $site_url *}/jabatan/show/", {id: id, ischecked: ischecked, referenceid: {* $row->reference_id *}},
+					function(data)						
+					{
+						$(dv).html(data);
+						$(dv).show();
+					}
+				);
+				
+				loaddvs.push(dv);
+			}
+		}
+	}	
+	
+	function hasLoad(dv)
+	{
+		for(var i=0; i < loaddvs.length; i++)
+		{
+			if (loaddvs[i] == dv)
+			{
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	function jabatan_onclick(id, ischecked)
+	{
+				
+		$.post("{* $site_url *}/jabatan/getfunctions", {id: id},
+			function (data)
+			{							
+				for(var i=0; i < data.length; i++)
+				{
+					$("INPUT[name='function[]'][value='"+data[i]+"']").attr("checked", ischecked);
+				}
+				
+				$("INPUT[name='allnpk"+id+"']").attr("checked", ischecked);
+			}
+			, "json"
+		);		
+		
+		
+		if (! ischecked)
+		{
+			uncheckjabatan(id);
+		}		
+	}
+	
+	function levelgroup_onclick(elmt)
+	{
+		checklevelgroup(elmt.value, elmt.checked);
+		checkjabatan(elmt.value, elmt.checked);
+	}
+	
+	function checklevelgroup(id, ischecked)
+	{
+		$.post("{* $site_url *}/level/getgroups", {id: id},
+			function (data)
+			{				
+				for(var i=0; i < data.length; i++)
+				{
+					$("INPUT[name='levelgroup[]'][value='"+data[i]['id']+"']").attr("checked", ischecked);	
+					if (data[i]['ishavejabatan'])
+					{
+						for(var j=0; j < data[i]['jabatan'].length; j++)
+						{
+							$("INPUT[name='jabatan[]'][value='"+data[i]['jabatan'][j]+"']").attr("checked", ischecked);
+							//checkjabatan(data[i], ischecked, true);
+						}
+					}
+				}
+			}
+			, "json"
+		);		
+		if (! ischecked)
+		{
+			uncheckallparents(id);
+		}
+	}
+	
+	function uncheckallparents(id)	
+	{
+		$.post("{* $site_url *}/level/getparents", {id: id},
+			function (data)
+			{	
+				for(var i=0; i < data.length; i++)
+				{
+					$("INPUT[name='levelgroup[]'][value='"+data[i]+"']").attr("checked", false);	
+				}
+			}
+			, "json"
+		);	
+		
+		$("INPUT[name='allemp']").attr("checked", false)
+	}
+	
+	function checkjabatan(id, ischecked)
+	{
+		$.post("{* $site_url *}/level/getjabatans", {id: id},
+			function (data)
+			{
+				for(var i=0; i < data.length; i++)
+				{
+					$("INPUT[name='jabatan[]'][value='"+data[i]+"']").attr("checked", ischecked);	
+					jabatan_onclick(data[i], ischecked);				
+				}
+			}
+			, "json"
+		);	
+	}
+	
+	function uncheckjabatan(id)
+	{		
+		$.post("{* $site_url *}/level/getjabatanparents", {id: id},
+			function (data)
+			{	
+				for(var i=0; i < data.length; i++)
+				{
+					$("INPUT[name='levelgroup[]'][value='"+data[i]+"']").attr("checked", false);	
+				}
+			}
+			, "json"
+		);
+		
+		$("INPUT[name='allemp']").attr("checked", false)
+	}
+	
+	function allnpk_onclick(elmt, id)
+	{
+		if (! elmt.checked)
+		{
+			$("INPUT[name='jabatan[]'][value='"+id+"']").attr("checked", false);
+			uncheckjabatan(id);
+		}
+	}
+	
+	function allemp_onclick(elmt)
+	{
+		checklevelgroup(0, elmt.checked);	
+	}
+	
+	function saveparticipant()
+	{
+		$("#message").html("updating...");
+		$.post("{* $site_url *}/resources/saveparticipant", $("#frmparticipant").serialize(),
+			function(data)
+			{
+				if (data.err > 0)
+				{
+					$("#message").html(data.message);
+					return;
+				}
+				
+				$("#message").html(data.message);
+			}
+			, "json"
+		);
+	}
+	
+	function shownpk(jabatan)
+	{
+		var ischecked = $("INPUT[name='allnpk"+jabatan+"']").attr("checked");
+		$.post("{* $site_url *}/user/showlist", {jabatan: jabatan, dialog: 1, ischecked: ischecked, noheader: 1},
+			function (data)
+			{			
+				$("#dialogcontent").html(data);	
+				$("#dialoguser").dialog("open");								
+			}
+		);	
+		
+		lastjabatan = jabatan;	
+	}
+	
+	$(document).ready(
+		function()
+		{
+			$("#dialoguser").dialog(
+				{ 
+					autoOpen: false 
+					,modal: true
+					,width: 850
+					,height: 450
+					,open: function()
+					{
+						if (n_npk > 0)
+						{
+							$("input[id='npk[]']").each( 
+							    function() 
+							    { 
+								$("input[id='_npk[]'][value='"+$(this).val()+"']").attr("checked", true);
+							    } 
+							);
+						}					
+					}
+				}
+			);
+			
+			{* if $isopenroot *}
+				showLevelGroup(0, "#div_emp");
+			{* /if *}
+			
+			document.frmparticipant.action = "{* $site_url *}/resources/importnpk/{* $row->reference_id *}";
+			document.frmparticipant.enctype = "multipart/form-data";
+			document.frmparticipant.target = "iframe_participant";			
+		}
+	);
+	
+	function adduser2participant()
+	{
+		var s = "";
+		$("input[id='_npk[]']").each( 
+		    function() 
+		    { 
+		    	var n = ($("input[id='npk[]'][value='"+$(this).val()+"']").length);		    	
+		    	if (n == 0)
+		    	{
+		    		var ischecked = $(this).attr("checked");
+		    		if (ischecked)
+		    		{
+			    		s += "<input type='hidden' name='npk[]' id='npk[]' value='" + $(this).val() + "' />";
+			    		n_npk++;
+			    	}
+			    	else
+			    	{
+			    		$("INPUT[name='allnpk"+lastjabatan+"']").attr("checked", false);
+
+					$("INPUT[name='jabatan[]'][value='"+lastjabatan+"']").attr("checked", false);
+					uncheckjabatan(lastjabatan);
+
+			    	}
+		    	}
+		    	else
+		    	{
+		    		var ischecked = $(this).attr("checked");
+		    		if (! ischecked)
+		    		{
+		    			$("input[id='npk[]'][value='"+$(this).val()+"']").val(0);
+		    			n_npk--;
+		    			
+		    			$("INPUT[name='allnpk"+lastjabatan+"']").attr("checked", false);
+
+					$("INPUT[name='jabatan[]'][value='"+lastjabatan+"']").attr("checked", false);
+					uncheckjabatan(lastjabatan);
+		    		}
+		    	}		    	   		    	   
+		    } 
+		);
+		
+		var ori = $("#listnpk").html();
+		$("#listnpk").html(ori+s)
+		$("#dialoguser").dialog("close");
+	}	
+	
+	function setErrorMessage(err)
+	{
+		$("#rowimportnpkmessage").show();
+		$("#importnpkmessage").html(err);		
+	}
+	
+	function setSuccess(msg)
+	{
+		$("#rowimportnpkmessage").show();
+		$("#importnpkmessage").html(msg);
+		setTimeout('location="{* $site_url *}/resources/participant/{* $row->reference_id *}"', {* $flashtime *}+1000);
+	}		
+</script>
+
+<div class="content-wrapper">
+
+	<!-- Main content -->
+	<section class="content">
+		<div class="row">
+			<div class="col-xs-12">
+				<div id="msg-content" class="alert alert-danger alert-dismissible" style="display: none;">
+					<div id="message"></div>
+				</div>
+				<div class="box">
+					<div class="box-body table-responsive">
+						<form id="frmparticipant" name="frmparticipant" method="post">
+							<input type="hidden" id="resourceid" name="resourceid" value="{* $row->reference_id *}" />
+							<h2>{* $lresources_participant *} {* if $row *}&quot;{* $row->reference_name *}&quot;{* /if *}</h2>
+							<br />
+							{* include file="training/import-participant.html" *}
+							<br />
+							{* include file="training/participant-search.html" *}
+							<table id="tbltrainingimport" class="table table-hover table-striped">
+								<tr>
+									<td>
+										<input type="checkbox" id="allemp" name="allemp" value="1" onclick="javascript:allemp_onclick(this)" {* if $row->reference_allstaff *}checked{* /if *} > <a href="javascript:showLevelGroup(0, '#div_emp')">{* $lall_staff *}</a>
+										<div id="div_emp" style="display: none;"></div>
+										<div id="message"></div><input type="button" value=" Save " onclick="javascript:saveparticipant()" />
+									</td>
+								</tr>
+							</table>
+							<div id="listnpk">
+								{* foreach from=$npks item=npk *}
+								<input type="hidden" id="npk[]" name="npk[]" value="{* $npk->reference_npk_npk *}" />
+								{* /foreach *}
+							</div>
+							<iframe id="iframe_participant" name="iframe_participant" src="" style="width:0px;height:0px;border:0px solid #000000;"></iframe>
+							<!--<div id="dialoguser" title="{* $lnpk *}(s)" style="display: none;">
+                                <div id="dialogcontent"></div>
+                            </div>-->
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+</div>

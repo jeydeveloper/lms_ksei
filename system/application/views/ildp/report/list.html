@@ -1,0 +1,34 @@
+	<table width="100%" cellpadding="3" class="tablelist"> 
+		<thead> 
+			<tr> 
+				<th width="100">{* $lnpk *}</th> 
+				<th>NAMA</th> 
+				<th width="150">DIREKTORAT</th> 
+				<th width="150">GROUP</th> 
+				<th width="300">JUDUL TRAINING</th> 
+				<th width="200">PERIODE TRAINING</th>
+				<th width="200">TANGGAL AKHIR PERSETUJUAN HRLD</th>
+				<th width="100">STATUS APPROVAL/REJECT</th>
+			</tr>
+		</thead>
+		<tbody>
+			{* foreach from=$rows item=row *}		
+			<tr>
+				<td>{* $row->order_user_npk *}</td>
+				<td>{* $row->order_user_first_name *} {* $row->order_user_last_name *}</td> 
+				<td>{* $row->categories[1]->level_group_name *}</td>
+				<td>{* $row->categories[0]->level_group_name *}</td>
+				<td>{* $row->training_name *}</td>
+				<td>{* $row->order_catalog_period_fmt *}</td>
+				<td>{* $row->order_hrld_date_fmt *}</td>
+				<td>{* $row->last_status *}</td>				
+			</tr>
+			{* /foreach *}	
+		</tbody>	
+		<tfoot>
+			<tr>
+				<td colspan="8">{* $paging *}</td>
+			</tr>
+		</tfoot>
+		</thead>
+	</table>

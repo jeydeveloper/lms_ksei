@@ -1,0 +1,104 @@
+/* style login page */
+#login-page  {
+	background-color: #ffffff;
+}
+
+#login-page .header-login {
+	background-color: #ffffff;
+}
+
+#login-page .section-lang span, #login-page .section-lang label {
+	color: #000000;
+}
+
+#login-page .section-body {
+	border-bottom: solid 1px #DFDFDF !important;
+}
+
+#login-page .section-footer {
+	border-bottom: solid 1px #DFDFDF !important;
+}
+
+#login-page .section-footer p {
+	color: #DFDFDF !important;
+}
+
+#login-page .footer-word {
+	color: #DFDFDF !important;
+}
+
+.skin-blue .main-header .navbar {
+    background-color: #ffffff !important;
+}
+
+/* style menu header left */
+.skin-blue .main-header .logo {
+	background-color: #1d81d1 !important;
+    color: #fff !important;
+}
+
+/* style menu header right */
+.skin-blue #active a {
+    color: #0000ff !important;
+    font-weight: bold;
+}
+
+.skin-blue .main-header .navbar .nav>li>a {
+    color: #9d9fa2;
+}
+
+.skin-blue .main-header .navbar .nav>li>a:hover {
+    background-color: #ecf0f5;
+}
+
+/* style menu sidebar */
+.skin-blue .main-sidebar {
+	background-color: #243d56 !important;
+}
+
+.skin-blue .sidebar-menu>li.active>a {
+	border-left-color: #F7B002;
+	color: #fff;
+    background: #1e282c;
+}
+
+.skin-blue .sidebar-menu>li.active>a:hover {
+    background: #1e282c;
+}
+
+.skin-blue .sidebar-menu>li.header {
+    color: #4b646f;
+    background: #1a2226;
+}
+
+/* content background */
+.skin-blue .content-wrapper {
+	background-color: #ecf0f5;
+}
+
+/* style font color */
+.skin-blue {
+	color: #333;
+}
+
+/* style footer */
+.skin-blue .main-footer {
+    background: #fff;
+    padding: 15px;
+    color: #444;
+    border-top: 1px solid #d2d6de;
+}
+
+/* style link url color */
+.skin-blue a {
+    color: #3c8dbc;
+}
+
+.skin-blue a:hover {
+    color: #337ab7;
+}
+
+/* style content header title */
+.content-header>h1 {
+	color: #000000;
+}

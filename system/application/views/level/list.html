@@ -1,0 +1,66 @@
+<script>
+    function chagestatus(id, status) {
+        f_onsubmit("{* $site_url *}/level/changestatus/" + id + "/" + status, "frmtemp", "status" + id, "Updating...",
+            function (data) {
+                document.frmtemp.submit();
+            }
+        );
+    }
+</script>
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>{* $lorganisational_structure *}</h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li><a href="#">Level</a></li>
+            <li class="active">Showlist</li>
+        </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-xs-12">
+                <div id="msg-content" class="alert alert-danger alert-dismissible" style="display: none;">
+                    <div id="message"></div>
+                </div>
+                <div class="box">
+                    <div class="box-body table-responsive">
+                        <p>{* $lheader_list_level *}</p>
+                        <div class="mg-btm-10">
+                            <a href="{* $site_url *}/level/form">{* $date_added *}</a> | <a href="{* $site_url *}/level/export">{* $lexport
+                            *}</a>
+                        </div>
+                        <hr>
+                        <table class="table table-hover table-striped">
+                            <thead>
+                            <tr>
+                                <th width="70%" align='left'><a href="#" class="thead">{* $lhierarchy *}</a></th>
+                                <!-- <th><div class="listmain"><a href="#" onclick="javascript:sortby('level_status', 'asc')" class="thead" title="sort by topic STATUS">{* $status *}</a></div></th>-->
+                                <th width="10%">&nbsp;</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {* $tree_html *}
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer clearfix">
+                        <div class="content-paging">{* $paging *}</div>
+                    </div>
+                </div>
+                <!-- /.box -->
+            </div>
+        </div>
+    </section>
+    <!-- /.content -->
+</div>
+<form id="frmtemp" name="frmtemp" method="post" action="{* $site_url *}/level/">
+    <input type="hidden" id="limit" name="limit" value="{* $limit *}"/>
+    <input type="hidden" id="sortby" name="sortby" value="{* $sortby *}"/>
+    <input type="hidden" id="orderby" name="orderby" value="{* $orderby *}"/>
+    <input type="hidden" id="offset" name="offset" value="{* $offset *}"/>
+</form>

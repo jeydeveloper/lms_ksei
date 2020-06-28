@@ -1,0 +1,79 @@
+ <script>
+	function selesai()
+	{
+		document.frmsoal.submit();
+	}
+</script>
+<h2>{* $lexam *} &quot;{* $rowtraining->training_name *}&quot;</h2>
+<form id="frmsoal" name="frmsoal" action="{* $site_url *}/training/savepraexam/{* $rowtraining->training_id *}/{* $tipe *}" method="post">
+<input type="hidden" name="examid" value="{* $lastid *}" />
+<table border="0" cellpadding="0" cellspacing="0"><tr><td>
+{* counter start=1 print=false assign="no" *}
+{* foreach from=$mysoals item=item *}
+	<table class="soal" style="display:none;"><thead><tr><td width="20" valign="top" align="right">{* $no *}.</td><td> {* $item->banksoal_question_quest *}</td></tr></thead>
+	<tr><td>&nbsp;</td><td>
+		<table>{* foreach from=$item->choices item=pil *}
+		<tr><td width="20" valign="top" align="right"><input type="radio" name="answer{* $lastid *}_{* $pil->banksoal_answer_question *}" value="{* $pil->banksoal_answer_id *}" required /></td><td>{* $pil->banksoal_answer_text *}</td></tr>
+		{* /foreach *}
+	{* counter *}</table></td></tr></table>
+{* /foreach *}
+</td></tr>
+</table>
+<br>
+<table border="0" cellpadding="0" cellspacing="0">
+	<tfoot>
+		<tr>
+			<td align="center">
+				<div id="message"></div>
+				<input type="button" class="btnSoal" id="btnNext" value="Selanjutnya">
+				<input class="btnSoal" style="display:none;" id="btnSelesai" type="submit" value=" {* $lselesai *} " />
+			</td>
+		</tr>
+	</tfoot>
+</table>
+
+</form>
+
+<script type="text/javascript">
+	$(function(){
+		var idxSoal = 0;
+		var lenSoal = $('.soal').length;
+
+		$('.soal').eq(0).show();
+
+		var checkAnswer = function(beforeIdx){
+			var idx = beforeIdx;
+
+			if(idx < 0) idx = 1;
+
+			var lenChecked = $('.soal').eq(idx).find('input[type="radio"]:checked').length;
+
+			if(lenChecked > 0) {
+				$('.soal').eq(idx).removeClass('soal');
+				idxSoal = idxSoal - 1;
+			}
+
+			lenSoal = $('.soal').length;
+
+			if(lenSoal == 1) {
+				$('.btnSoal').hide();
+				$('#btnSelesai').show();
+			}
+		}
+
+		$('#btnNext').click(function(e){
+			e.preventDefault();
+			var nextIdx = idxSoal + 1;
+			if(nextIdx == lenSoal) {
+				nextIdx = 0;
+				idxSoal = -1;
+			}
+			$('.soal').hide();
+			$('.soal').eq(nextIdx).show();
+
+			checkAnswer(idxSoal);
+
+			idxSoal++;
+		})
+	})
+</script>

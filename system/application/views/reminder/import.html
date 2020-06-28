@@ -1,0 +1,165 @@
+<script>
+	function courseid_onchange()
+	{
+	}
+		
+	function import_onsubmit()
+	{
+		if (! confirm('{* $l_confirm_import_reminder *}')) return false;
+		
+		$("#messageimport").html("importing...");
+		
+		return true;
+	}
+	
+	function setErrorMessage(err)
+	{
+		$("#messageimport").html(err);		
+	}
+	
+	function setSuccess(msg, loc)
+	{
+		$("#messageimport").html(msg);
+		g_loc = loc;
+		setTimeout('redirect()', 1000);
+	}	
+	
+	function redirect()
+	{
+		location = g_loc;
+	}
+	
+	function coursetype_onchange()
+	{
+		$.post("{* $base_url *}index.php/{* $type *}/getcourselist", $("#frmimport").serialize(),
+			function(r)
+			{
+				$("#dvcoursestitle").html(r.coursetitle);
+				$("#dvcourseslist").html(r.courselist);
+			}
+			, "json"
+		);
+	}
+	
+	function condition_onclick(elmt)
+	{
+		var hist = elmt.value;
+		if (hist == 1)
+		{
+			$("#dvcondition").show();
+		}
+		else
+		{
+			$("#dvcondition").hide();
+		}
+	}
+	
+	$(document).ready(
+		function()
+		{
+			coursetype_onchange();
+			//condition_onclick();
+		}
+	);
+</script>
+
+<iframe id="iframe_import" name="iframe_import" src="" style="width:600px;height:600px;border:1px solid #000000;display: none;"></iframe>
+
+<div class="content-wrapper">
+	<!-- Content Header (Page header) -->
+	<section class="content-header">
+		<h1>{* $limport_reminder *}</h1>
+		<ol class="breadcrumb">
+			<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+			<li><a href="#">Level</a></li>
+			<li class="active">Showlist</li>
+		</ol>
+	</section>
+
+	<!-- Main content -->
+	<section class="content">
+		<div class="row">
+			<div class="col-xs-12">
+				<div id="msg-content" class="alert alert-danger alert-dismissible" style="display: none;">
+					<div id="message"></div>
+				</div>
+				<div class="box">
+					<div class="box-body table-responsive">
+						<form id="frmimport" action="{* $site_url *}/{* $type *}/doimport" method="post" enctype="multipart/form-data" onsubmit="javascript: return import_onsubmit()" target="iframe_import">
+							<table class="table">
+								<tbody>
+								<tr class="odd">
+									<td class="odd" width="20%">{* $lcourse_type *}</td>
+									<td class="odd">
+										<select name="coursetype" id="coursetype" onchange="javascript:coursetype_onchange()">
+											<option value="training">{* $ltraining *}</option>
+											<option value="certificate">{* $lcertificate *}</option>
+											<!--<option value="classroom">{* $lclassroom *}</option>-->
+										</select>
+									</td>
+								</tr>
+								<tr class="odd">
+									<td class="odd"><div id="dvcoursestitle"></td>
+									<td class="odd"><div id="dvcourseslist"></div> </td>
+								</tr>
+								{* if $type eq "reminder" *}
+								<tr class="odd">
+									<td class="odd">{* $lreminder_schedule *}</td>
+									<td class="odd"><input type='text' name="schedule" id="schedule" class='formshort' value="" maxlength='6' size="5"> </td>
+								</tr>
+								<tr>
+									<td class="odd">{* $lhistory *}</td>
+									<td class="odd">
+										<!-- <input type="radio" name="condition" id="condition" value="0" checked onclick="javascript:condition_onclick(this)" />{* $lnever *} -->
+										<input type="radio" name="condition" id="condition" value="-1" onclick="javascript:condition_onclick(this)" />{* $lonce *}
+										<input type="radio" name="condition" id="condition" value="1" checked onclick="javascript:condition_onclick(this)" />{* $lndays *}
+										<span id="dvcondition" style="display: show;"><input type='text' name="ncondition" id="ncondition" class='formshort' value="" maxlength='6' size="5"></span>
+									</td>
+								</tr>
+								<tr>
+									<td class="odd">{* $ldeadline *}</td>
+									<td class="odd">
+										<select name="deadlineprefix" id="deadlineprefix">
+											{* foreach from=$prefixes key=lang item=prefix *}
+											<option value="{* $lang *}">{* $prefix *}</option>
+											{* /foreach *}
+										</select>
+										<select name="deadlinemonth" id="deadlinemonth">
+											{* foreach from=$months key=idx item=month *}
+											<option value="{* $idx *}">{* $month *}</option>
+											{* /foreach *}
+										</select>
+										<select name="deadlineyear" id="deadlineyear">
+											{* foreach from=$years item=year *}
+											<option value="{* $year *}">{* $year *}</option>
+											{* /foreach *}
+										</select>
+									</td>
+								</tr>
+								{* else *}
+								<input type='hidden' name="schedule" id="schedule" value="1">
+								<input type='hidden' name="condition" id="condition" value="1">
+								<input type='hidden' name="ncondition" id="ncondition" value="1">
+								{* /if *}
+								<!--<tr class="odd">
+                                  <td class="odd">{* $lfile *}</td>
+                                  <td class="odd"><input type="file" name="userfile" value="" /> </td>
+                                </tr>-->
+								<tr class="odd">
+									<td class="odd">&nbsp;</td>
+									<td class="odd"><div id="messageimport"></div></td>
+								</tr>
+								<tr class="odd">
+									<td class="odd">&nbsp;</td>
+									<td class="odd"><input type="submit" value="Submit" /> </td>
+								</tr>
+								</tbody>
+							</table>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+</div>
+

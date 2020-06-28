@@ -1,0 +1,114 @@
+<script>
+	$(document).ready(
+		function()
+		{
+			$("#own_paging a").each(
+				function()
+				{
+					$(this).click(
+						function(e)
+						{
+							e.preventDefault();
+							var ref = $(this).attr("href");
+							$.post(ref, {}, 
+								function(r)
+								{
+									$("#availparticipant").html(r);
+									$("#training_periode").attr("disabled", true);
+								}
+							);
+							//return false;
+						}
+					);
+				}
+			);
+			
+			$("#checkallavail").click(
+				function()
+				{
+					$("input[id=checkavail]").attr("checked", $(this).attr("checked"));					
+				}
+			);
+
+
+	$("input[name='checkavail[]']").click(function(e) {
+	if ($(e.target).attr('checked')) {
+              	    
+	} else {
+	   $("#checkallavail").attr('checked', false);
+	}
+	});
+
+	                
+			
+			$("#btnsaveavail").click(
+				function()
+				{
+					$("#training_periode").removeAttr("disabled");
+					var training_periode = $('#training_periode').val() || 0;
+					$.post("{* $site_url *}/training/updateavailparticipant/{* $trainingid *}/"+training_periode, $("#frmtraining").serialize(), 
+						function(r)
+						{    
+							var t=setTimeout("refresh()",500);
+						}
+						
+					)
+				}
+			);
+
+			$("#btnremoveall").click(
+					function()
+					{
+						if (confirm('{* $lremove_confirmation *}')){
+							$("#training_periode").removeAttr("disabled");
+							var training_periode = $('#training_periode').val() || 0;
+							$.post("{* $site_url *}/training/removeallavailparticipant/{* $trainingid *}/"+training_periode, $("#frmtraining").serialize(), 
+								function(r)
+								{
+									var t=setTimeout("refresh()",500);
+								}
+							)
+						}
+					}
+			);			
+			
+		}
+	);
+	
+</script>
+<table class="table" id="tbltrainingimport">
+	<tr>
+		<td>{* $lavailable_participant *}</td>
+	</tr>
+	<tr>
+		<td>
+			<table class="table" id="tbltrainingimport">
+				<tr style="background: #eeeeee;">
+					<th width="3%"><input type="checkbox" id="checkallavail" name="checkallavail" value="1" checked/></th>
+					<th width="9%">{* $lnpk *}</th>
+					<th>{* $lname *}</th>
+				</tr>
+				{* foreach from=$npks item=npk *}
+				<tr>
+					<td><input type="checkbox" name="checkavail[]" class="checkavail" value="{* $npk->user_id *}" checked /></td>
+					<td>{* $npk->user_npk *}</td>
+					<td>{* $npk->user_first_name *} {* $npk->user_last_name *}</td>
+				</tr>
+				<input type="hidden" name="hidecheckavail[]" value="{* $npk->user_id *}" />
+				{* /foreach *}
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<div id="own_paging">
+				{* $paging *}
+			</div>
+		</td>	
+	</tr>
+	{* if $npks *}
+	<tr>
+		<td><input type="button" id="btnsaveavail" value=" {* $lsave *} " /> <input type="button" id="btnremoveall" value=" {* $lremove_all *} " /></td>
+	</tr>
+	{* /if *}
+</table>

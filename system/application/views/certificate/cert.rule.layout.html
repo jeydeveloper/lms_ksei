@@ -1,0 +1,176 @@
+<table width="656" border="0" cellspacing="0" cellpadding="0" align="center" >
+                <tr align="left" valign="top">
+                      <td colspan="5" align="center" >{* $certificateku.training_name *}</td>
+              </tr>	
+              <tr>
+                    <td height="20" class="text" colspan="5"> </td>
+	          </tr>
+	          <tr align="left" valign="top"> 
+                      <td width="14%" >Nama</td>
+                      <td colspan="3" >{* $userku.user_first_name *} {* $userku.user_last_name *}</td>
+                     <td width="1%"> </td>
+                </tr>
+                <tr align="left" valign="top"> 
+<td width="14%" >{* $lnpk *}</td>
+                      <td colspan="3" >{* $userku.user_npk *}</td>
+                </tr>
+                <tr align="left" valign="top"> 
+			<td width="14%" >Jabatan</td>
+                      <td colspan="3"> {* $userku.jabatan_name *}</td>
+                     <td width="1%"> </td>
+                </tr>
+                <tr align="left" valign="top">
+                  <td class="style8">Tanggal </td>
+                  <td width="51%" class="text style4 style7"> {* $now *}</td>
+              </tr>
+              </table>
+      <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr align="left" valign="top" class="text">
+          <td height="22"> </td>
+          <td colspan="3" class="style9">Aturan Sertifikasi</td>
+        </tr>
+        <tr align="left" valign="top" class="text">
+          <td height="22"> </td>
+          <td colspan="3"> </td>
+        </tr>
+        <tr align="left" valign="top" class="text"> 
+          <td height="22"> </td>
+          <td colspan="3" class="style4">
+
+            <li class="style10">Soal Sertifikasi berjumlah <span class="style11">{* $certificateku.training_total_question *}</span> soal dengan batas waktu <span class="style11">{* $certificateku.training_duration/60 *}</span> menit. Sesudah batas waktu berakhir, maka otomatis Anda dianggap<span class="style11">
+
+              telah selesai ujian.</span>
+
+              
+
+            
+            <li class="style10">Semua soal yang sudah dijawab tidak dapat dikoreksi.
+
+              
+
+            
+            <li class="style10">Setiap soal akan ditampilkan satu per satu, masing-masing 
+
+              selama <strong> {* $certificateku.training_durationperquestion *}</strong> detik.
+
+              
+
+            
+            <li class="style10">Anda dapat mengklik tombol <strong>[Soal Berikutnya]</strong> untuk 
+
+              melewati soal yang ingin Anda jawab belakangan.
+
+              
+
+            
+            <li class="style10">Semua soal yang belum terjawab akan <span class="style11">dimunculkan 
+
+              sekaligus dalam satu 
+              halaman</span> di akhir sertifikasi apabila 
+
+              waktu masih tersedia.
+
+              
+
+            
+            <li class="style10">Soal yang <strong>tidak terjawab </strong>sampai batas waktu ujian berakhir 
+
+              atau Anda klik <strong>[Selesai]</strong>, akan dianggap sebagai <span class="style11">jawaban yang salah.</span>
+
+              
+
+            
+            <li class="style10">Tombol <strong>[Selesai] </strong>akan ditampilkan sesudah soal terakhir. 
+
+              
+
+            
+            <li class="style10">Jika Anda telah selesai sebelum batas waktu berakhir, 
+
+              silahkan klik tombol <strong>[Selesai]</strong>. 
+
+              
+
+            
+            <li class="style10">Tidak ada ujian ulang apabila Anda dinyatakan <strong>tidak lulus </strong>
+
+              dalam mengikuti ujian ini.
+
+              
+
+            
+            <li class="style10">Bila Anda dinyatakan <strong>lulus,</strong> Anda dapat langsung mencetak 
+
+              sertifikat.
+
+              
+
+            
+            <li class="style10">Bila Anda menemukan masalah dalam mengikuti ujian, segera 
+
+              hubungi PIC Service Support Region / Branch Banking
+            
+
+          </td>
+        </tr>
+      </table>
+      <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr align="left" valign="top" class="text">
+          <td height="22"> </td>
+          <td colspan="3" class="style9">Petunjuk Mengerjakan Soal</td>
+        </tr>
+        <tr align="left" valign="top" class="text">
+          <td height="22"> </td>
+          <td colspan="3"> </td>
+        </tr>
+        <tr align="left" valign="top" class="text">
+          <td height="22"> </td>
+          <td colspan="3" class="style4">
+
+              <li class="style10">Total question is <span class="style11">{* $certificateku.training_total_question *}</span> , with time limit <span class="style11">{* $certificateku.training_duration/60 *}</span> minutes. After the time ends, then automatically you have been consider <span class="style11">finish the certification.</span>
+
+                
+
+              
+            <li class="style10">All the questions that has been answered, can not be corrected.
+
+                  
+
+              
+            <li class="style10">Every question, will be displayed one by one, each will be displayed for <strong> {* $certificateku.training_durationperquestion *}</strong> seconds .
+
+              
+
+              
+            <li class="style10">You can click on the button <strong>[Next Question]</strong> to pass the question which you want to answer later.
+              
+            <li class="style10">All unanswered question, will be <span class="style11">displayed all at once in 1 page </span> at the end of  of certification if there is remaining time .
+              
+            <li class="style10"> <strong>Unanswered question </strong> until certification finish , or when you click 
+
+              <strong>[Finish]</strong>, then will consider as <span class="style11">wrong answer.</span>
+
+              
+
+              
+            <li class="style10">Button <strong>[Finish] </strong>will be displayed after last question. 
+
+              
+            <li class="style10">If you have finished before the end of the time, please click button <strong>[Selesai]</strong>. 
+  
+            <li class="style10">There will be no retake if you are not <strong>pass</strong> this certification.
+
+            <li class="style10">If you are <strong>passed,</strong> you can print your certificate directly.
+              
+            <li class="style10">If you found any trouble , please contact PIC Service Support Region / Branch Banking immediately.
+
+            <span class="style7"><strong>Please click button [Start] to start the certification .</strong></span>
+
+                
+
+
+            <p class="style13">Selamat mengerjakan!
+</td>
+        </tr>
+      </table>
+    

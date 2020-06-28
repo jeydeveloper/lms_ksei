@@ -1,0 +1,176 @@
+<script>
+	function frmcatalog_onsubmit()
+	{
+		if (! confirm("{* $lconfirm_ildp_catalog_save *}")) return false;
+		
+		$("#message").show();
+		$("#message").html("saving...");
+		
+		$.post("{* $site_url *}/ildpcatalog/save{* if $rowedit *}/{*$rowedit->ildp_catalog_id*}{*/if*}", $("#frmcatalog").serialize(),
+			function(r)
+			{
+				if (r.error)
+				{
+					$("#message").html(r.message);
+					return;
+				}
+				
+				$("#message").html(r.message);
+				setTimeout("location='{* $site_url *}/ildpcatalog/';", 1000);
+			}
+			, "json"
+		);
+		
+		return false;
+	}
+	
+	function checkallgrade()
+	{
+		$("input[id=grades]").attr("checked", $("#checkall").attr("checked"));
+	}
+	
+
+	function checkallmethod()
+	{
+		$("input[id=methods]").attr("checked", $("#checkall1").attr("checked"));
+	}
+		
+	$(document).ready(
+		function()
+		{
+			var inp = $("input[id=grades]:not(:checked)");
+			if (inp.length == 0)
+			{
+				$("#checkall").attr("checked", true);
+			}
+			
+			$("#add_area").click(function(){
+				$('.div_area').append('<br/><input type="text" name="dev_area[]" class="formdefault" value="" maxlength="50"><br/>');
+			});
+			
+			$("#cat").change(
+				function()
+				{
+					$.post("{* $site_url *}/ildpcatalog/getareadevtype", {cat: $(this).val()},
+						function(r)
+						{
+							if (r.type == 1)
+							{
+								$("#divdevarea").show();
+							}
+							else
+							{
+								$("#divdevarea").hide();
+							}
+						}
+						, "json"
+					);
+				}
+			);
+			
+			$("#cat").change();
+		}
+	);
+	
+</script>
+<h2>{* $ltitle *}</h2>
+<form name="frmcatalog" id="frmcatalog" onsubmit="javascript: return frmcatalog_onsubmit()">
+	<table id="tbltrainingtime" width="100%" cellpadding="3" cellspacing="3" border="0">
+		<tr>
+			<td width="25%">* {* $lcourse_abb *}</td>
+			<td>
+				{* if $rowedit *}
+				<input type='hidden' name='abb' id='abb' value='{* $rowedit->ildp_catalog_course_abb *}'>
+				{* $rowedit->ildp_catalog_course_abb *}
+				{* else *}
+					<input type='text' name="abb" id="abb" class='formmedium' value='' maxlength='12'>
+				{* /if *}
+  			</td>
+		</tr>	
+		<tr>
+			<td width="25%">* {* $category *}</td>
+			<td>
+  			<select name="cat" id="cat" style="width: 320px;" >
+  				{* foreach from=$categories item=category *}
+  				<option value="{* $category->ildp_category_id *}"{* if $category->ildp_category_id eq $rowedit->ildp_catalog_category *} selected{* /if *}>{* $category->ildp_category_name *}</option>
+  				{* /foreach *}
+  			</select>				
+				</td>
+		</tr>	
+		<tr>
+			<td>* {* $ltraining_type *}</td>
+			<td>
+				{* if $rowedit *}
+				<input type='hidden' name='training' value='{* $rowedit->ildp_catalog_training *}'>
+				{* $rowedit->ildp_catalog_training *}
+				{* else *}
+					<input type='text' name="training" id="training" class='formdefault' value="" maxlength='100'> </td>
+				{* /if *}
+				
+		</tr>	
+		
+		<tr valign='top' id="divdevarea">
+			<td width="25%">* {* $ldevelopment_area *}</td>
+			<td>
+				{* if $rowdevarea *}
+					{* counter print=false assign="i" start=0 *}
+					{* foreach from=$devarea item=area *}
+						{* if $i eq 0 *}
+							<input type='text' name="dev_area[]" class='formdefault' value='{* $area->dev_area_title *}' maxlength='50'>
+							<a id='add_area'>{* $ladd *}</a><br/>
+						{* else *}
+							<br/><input type='text' name="dev_area[]" class='formdefault' value='{* $area->dev_area_title *}' maxlength='50'><br/>
+						{* /if *}
+						{* counter *}
+					{* /foreach *}
+				
+				{* else *}
+					<input type='text' name="dev_area[]" class='formdefault' value='' maxlength='50'> <a id='add_area'>{* $ladd *}</a>
+				{* /if *}
+				<div class='div_area'></div>
+  			</td>
+		</tr>	
+		<tr>
+			<td valign='top'>* {* $leligable_grade *}</td>
+			<td>
+					<input class="checkbox"  type="checkbox" name="checkall" id="checkall" value="" onclick="javascript:checkallgrade()" /> {* $lcheck_all *}
+					<br>
+				<table border='0'>
+					{* counter print=false assign="i" start=0 *}
+					{* foreach from=$grades item=grade *}
+						{* if $i mod 3 eq 0*}
+						<tr>
+						{* /if *}
+							<td>
+								<input type="checkbox" class="checkbox" name="grade[]" id="grades" value="{* $grades[$i]->grade_code *}"{* if $grades[$i]->checked *} checked{* /if *}/> {* if $grades[$i]->grade_description *}{* $grades[$i]->grade_description *}{* else *}{* $grades[$i]->grade_code *}{* /if *}&nbsp;
+							</td>
+						{* if $i+1 mod 3 eq 0 *}
+						</tr>
+						{* /if *}
+						
+						{* counter *}
+					{* /foreach *} 	
+					{* if $i+1 mod 3 ne 0 *}
+					</tr>
+					{* /if *}
+				</table>
+			</td>
+		</tr>		
+		<tr>
+			<td valign='top'>* {* $llearning_method_dev *}</td>
+			<td>
+					<input class="checkbox"  type="checkbox" name="checkall1" id="checkall1" value="" onclick="javascript:checkallmethod()" /> {* $lcheck_all *}
+					{* foreach from=$methods item=method *}
+						<br><input type="checkbox" class="checkbox" name="method[]" id="methods" value="{* $method->ildp_method_id *}"{* if $method->checked *} checked{* /if *}/> {* $method->ildp_method_name *}&nbsp;
+					{* /foreach *}
+			</td>
+		</tr>
+		<tr>
+			<td valign="top">&nbsp;</td>
+			<td valign="top">
+				<div id="message" style="display: none;"></div><input type="submit" value="Submit" />
+				<input name="reset" type="reset" value="Reset" onclick="javascript: return confirm('{* $lconfirm_reset_data *}');" /></td>
+			</td>
+		</tr>	
+	</table>
+</form>

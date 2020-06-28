@@ -1,0 +1,255 @@
+<!--<link rel="stylesheet" href="{* $base_url *}js/autocomplete/jquery.autocomplete.css" type="text/css" />
+<script type="text/javascript" src="{* $base_url *}js/autocomplete/jquery.bgiframe.min.js"></script> 
+<script type="text/javascript" src="{* $base_url *}js/autocomplete/jquery.autocomplete.js"></script>-->
+
+<link rel="stylesheet" href="{* $base_url *}js/autocomplete3/easy-autocomplete.min.css" type="text/css" />
+<script type="text/javascript" src="{* $base_url *}js/autocomplete3/jquery.easy-autocomplete.min.js"></script>
+
+<script>
+	var mygroup = new Array();
+	{* if $jabatanedit *}
+		var iedit = 1;
+		
+		{* foreach from=$mygroup item=grp *}
+		mygroup.push("{* $grp *}");
+		{* /foreach *}		
+	{* /if *}
+	
+	  $(document).ready(
+	  	function()
+	  	{
+		    	$.post("{* $site_url *}/level/grouplist/1", {},
+		    		function (data)
+		    		{
+		    			/*var datas = data.split("\1");
+		    			$("#levelgroup1").autocomplete(datas);*/
+		    			
+		    			{* if $jabatanedit *}
+		    			$("#levelgroup1").val(mygroup[iedit-1]);
+		    			group_onchange(iedit);		    			
+		    			{* /if *}
+		    		}
+		    	);
+
+            var options = {
+
+                url: function(phrase) {
+                    return "{* $site_url *}/level/grouplist/1";
+                },
+
+                getValue: function(element) {
+                    return element.name;
+                },
+
+                ajaxSettings: {
+                    dataType: "json",
+                    method: "POST",
+                    data: {
+                        type: 1
+                    }
+                },
+
+                preparePostData: function(data) {
+                    data.phrase = $("#example-ajax-post").val();
+                    return data;
+                },
+
+                requestDelay: 200
+            };
+
+            $("#levelgroup1").easyAutocomplete(options);
+		    	
+		    	loadcat({* $jabatanedit->jabatan_category*});
+	  	}
+	  );
+	  
+	  function group_onchange(nth)
+	  {
+	  	$.post("{* $site_url *}/level/grouplist/"+(nth+1), {parent: $("#levelgroup"+nth).val(), nth: nth},
+	  		function (data)
+	  		{	  		
+	  			/*var dvname = "levelgroup"+(nth+1);
+	  			if (data.length > 0)
+	  			{
+					var datas = data.split("\1");
+					$("#"+dvname).autocomplete(datas);										
+					
+					if (! in_array(datas, $("#"+dvname).val()))
+					{
+						$("#"+dvname).val("");
+					}
+					$("#"+dvname).incHasFocus();	  			
+	  			}
+	  			else
+	  			{
+					$("#"+dvname).flushCache();
+					$("#"+dvname).val("");	  				
+	  			}*/
+	  			
+	  			{* if $jabatanedit *}	  			
+	  			if (iedit < mygroup.length)
+	  			{
+					iedit++;
+					$("#levelgroup"+iedit).val(mygroup[iedit-1]);
+					group_onchange(iedit);
+				}	  			
+	  			{* /if *}	
+	  		}
+	  	);
+
+          var options = {
+
+              url: function(phrase) {
+                  return "{* $site_url *}/level/grouplist/"+(nth+1);
+              },
+
+              getValue: function(element) {
+                  return element.name;
+              },
+
+              ajaxSettings: {
+                  dataType: "json",
+                  method: "POST",
+                  data: {parent: $("#levelgroup"+nth).val(), nth: nth}
+              },
+
+              preparePostData: function(data) {
+                  data.phrase = $("#example-ajax-post").val();
+                  return data;
+              },
+
+              requestDelay: 200
+          };
+
+          var dvname = "levelgroup"+(nth+1);
+          $("#"+dvname).easyAutocomplete(options);
+          $("#"+dvname).incHasFocus();
+
+	  }	  
+	  
+	  function frmjabatan_submit()
+	  {
+	  	$("#message").html("submitting...");
+	  	$.post("{* $site_url *}/jabatan/save{* if $jabatanedit *}/{* $jabatanedit->jabatan_id *}{* /if *}", $("#frmjabatan").serialize(),
+	  		function(data)
+	  		{
+	  			if (data.err > 0)
+	  			{
+	  				$("#message").html(data.message);
+	  				return;
+	  			}		
+
+	  			$("#message").html(data.message);
+	  			setTimeout('location = "'+data.redirect+'"', {* $flashtime *});
+	  		}
+	  		, "json"
+	  	);
+	  	
+	  	return false;
+	  }
+	  
+	  function loadcat(cat)
+	  {
+	  	if (! cat) cat = 0;
+	  	
+	  	$("#catjab").html("loading...");
+	  	$.post("{* $site_url *}/jabatan/categoryselectbox", {def: cat}, 
+	  		function(r)
+	  		{
+	  			$("#catjab").html(r);
+	  		}
+	  	);
+	  }
+	  
+	  function loadact1()
+	  {
+	  	loadcat($("#category").val());
+	  }
+	  
+	  function refresh()
+	  {
+	  	loadcat($('#category').val());
+	  }
+	  
+	  function addcategory()
+	  {
+	  	window.open("{* $site_url *}/jabatan/formcategory/0/popup", "catjabatan", "");
+	  }
+</script>
+
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <h1>
+      {* $ltitle_jabatan*}
+    </h1>
+    <ol class="breadcrumb">
+      <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+      <li><a href="#">Jabatan</a></li>
+      <li class="active">Form</li>
+    </ol>
+  </section>
+
+  <!-- Main content -->
+  <section class="content">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="box">
+          <div class="box-body table-responsive">
+            <form name="frmjabatan" id="frmjabatan" onsubmit="javascript: return frmjabatan_submit()">
+              <table class="table">
+                {* if $edit *}
+                <tr>
+                  <td width="200">
+                    &nbsp;&nbsp;ID</td>
+                  <td>:</td>
+                  <td>{* $jabatanedit->jabatan_id *}</td>
+                </tr>
+                {* /if *}
+                {* counter start=1 print=false assign="no" *}
+                {* foreach from=$levels item=level *}
+                <tr>
+                  <td>* {* $level->level_name *}</td>
+                  <td width="1">:</td>
+                  <td><input type='text' name="levelgroup[]" id="levelgroup{* $no *}" class='formdefault' value="" onblur="javascript: group_onchange({* $no *})" onchange="javascript: group_onchange({* $no *})" /></td>
+                </tr>
+                {* counter *}
+                {* /foreach *}
+                <tr>
+                  <td>&nbsp;&nbsp; {* $lcategory *}</td>
+                  <td>:</td>
+                  <td><div id="catjab"></div>
+                    <a href="javascript:addcategory()">{* $laddcategory *}</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="javascript:refresh()">{* $lrefresh *}</a>
+                  </td>
+                </tr>
+                <tr>
+                  <td>* {* $jabatan_name *}</td>
+                  <td>:</td>
+                  <td><input type='text' name="name" id="name" class='formdefault' value="{* $jabatanedit->jabatan_name *}" maxlength='100'></td>
+                </tr>
+                <tr>
+                  <td>* {* $status *}</td>
+                  <td>:</td>
+                  <td><select name="status" id="status">
+                    <option value="1" {* if $jabatanedit->jabatan_status eq 1 *}selected{* /if *}>
+                      {* $active *}
+                    </option>
+                    <option value="2" {* if $jabatanedit->jabatan_status eq 2 *}selected{* /if *}>
+                      {* $inactive *}
+                    </option>
+                  </select></td>
+                </tr>
+                <tr>
+                  <td>&nbsp;</td>
+                  <td>&nbsp;</td>
+                  <td><div id="message"></div><input name="submit" type="submit" value=" Submit " />
+                    <input name="reset" type="reset" value=" Reset " /></td>
+                </tr>
+              </table>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

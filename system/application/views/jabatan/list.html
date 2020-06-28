@@ -1,0 +1,134 @@
+<script>
+    {* if !$smarty.post.dialog *}
+
+    function chagestatus(id, status) {
+        f_onsubmit("{* $site_url *}/jabatan/changestatus/" + id + "/" + status, "frmtemp", "status" + id, "Updating...",
+            function (data) {
+                document.frmtemp.submit();
+            }
+        );
+    }
+
+    function search() {
+        $("#keyword").val($("#_keyword").val());
+        $("#searchby").val($("#_searchby").val());
+
+        document.frmtemp.submit();
+    }
+
+    {* /if *}
+</script>
+
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>Jabatan</h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li><a href="#">Jabatan</a></li>
+            <li class="active">Showlist</li>
+        </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-xs-12">
+                <div id="msg-content" class="alert alert-danger alert-dismissible" style="display: none;">
+                    <div id="message"></div>
+                </div>
+                <div class="box">
+                    <div class="box-body table-responsive">
+                        <p>{* $header_list_jabatan *}</p>
+                        <div class="mg-btm-10">
+                            {* $sort_list_by *} <a href="#" onclick="javascript:sortby('jabatan_name', 'asc')"{* if $sortby eq 'jabatan_name' *}class="lite"{* /if *}>{* $name *}</a> | <a href="#" onclick="javascript:sortby('level_group_name', 'asc')"{* if $sortby eq 'level_group_name' *}class="lite"{* /if *}>{* $lgroup *}</a> | <a href="#" onclick="javascript:sortby('jabatan_status', 'asc')"{* if $sortby eq 'jabatan_status' *}class="lite"{* /if *}>{* $status *}</a> | <a href="{* $site_url *}/jabatan/form">{* $date_added *}</a> | <a href="{* $site_url *}/jabatan/export">{* $lexport *}</a>
+                        </div>
+                        <div class="mg-btm-10">
+                            <form method="post" onsubmit="javascript: return search(this); return false;">
+                                <div class="row">
+                                    <div class="col-xs-3">
+                                        {* $lsearch_by *}
+                                    </div>
+                                    <div class="col-xs-3">
+                                        <select class="form-control" name="_searchby" id="_searchby">
+                                            <option value="jabatan_name">{* $lname *}</option>
+                                            {* foreach from=$levels item=level *}
+                                            <option value="level{* $level->level_nth *}">{* $level->level_name *}</option>
+                                            {* /foreach *}
+                                        </select>
+                                    </div>
+                                    <div class="col-xs-3">
+                                        <input class="form-control" type='text' name="_keyword" id="_keyword"
+                                               class='formdefault' value="{* $smarty.post.keyword *}">
+                                    </div>
+                                    <div class="col-xs-3">
+                                        <input class="btn btn-primary" type='submit' value=" {* $lsearch *} ">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <hr>
+                        <table class="table table-hover table-striped">
+                            <thead>
+                            <tr>
+                                {* if $smarty.post.dialog *}
+                                {* if $list *}
+                                <th><input type="checkbox" name="jabatanall" value="" onclick="javascript:jabatanall_onclick(this)" />&nbsp;</th>
+                                {* /if *}
+                                <th>{* $jabatan_name *}</th>
+                                <th width="30%">{* $lgroup *}</th>
+                                {* else *}
+                                <th><a href="#" onclick="javascript:sortby('jabatan_name', 'asc')" class="thead" title="{* $lsort_by_position_name *}">{* $jabatan_name *}</a></th>
+                                <th width="25%"><a href="#" onclick="javascript:sortby('catjabatan_name', 'asc')" class="thead" title="{* $lsort_by_category_name *}">{* $lcategory *}</a></th>
+                                <th width="25%"><a href="#" onclick="javascript:sortby('level_group_name', 'asc')" class="thead" title="{* $lsort_by_hierarchy *}">{* $lhierarchy *}</a></th>
+                                <th width="13%"><div class="listmain"><a href="#" onclick="javascript:sortby('jabatan_status', 'asc')" class="thead" title="{* $lsort_by_status *}">{* $status *}</a></div></th>
+                                <th width="10%">&nbsp;</th>
+                                {* /if *}
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {* counter start=1 print=false assign="no" *}
+                            {* foreach from=$list item=row *}
+                            <tr{* if $no%2 eq 1 *} class="odd"{* /if *}>
+                            {* if ! $smarty.post.dialog *}
+                            <td class="odd"><a href="{* $site_url *}/jabatan/form/{* $row->jabatan_id *}">{* $row->jabatan_name *}</a></td>
+                            <td class="odd"><a href="{* $site_url *}/jabatan/formcategory/{* $row->catjabatan_id *}">{* $row->catjabatan_name *}</a></td>
+                            <td class="odd"><a href="{* $site_url *}/level/groupform/{* $row->level *}/{* $row->jabatan_level_group *}">{* $row->level_group_name *}</a></td>
+                            <td class="odd"><div id="status{* $row->jabatan_id *}"><a href="#" onclick="javascript:chagestatus({* $row->jabatan_id *},{* $row->jabatan_status *})"><img src="{* $base_url *}images/16/{* if  $row->jabatan_status eq 2 *}inactive.png{* else *}active.png{* /if *}" border="0" alt="{* $row->jabatan_status_desc *}" title="{* $row->jabatan_status_desc *}" /></a></div></td>
+                            {* if $row->used *}
+                            <td>&nbsp;</td>
+                            {* else *}
+                            <td><a href="{* $site_url *}/jabatan/remove/{* $row->jabatan_id *}" onclick="javascript: return confirm('{* $confirm_delete *}');"><img src="{* $base_url *}images/b_del.gif" width="12" height="12" border="0" /></a></td>
+                            {* /if *}
+                            {* else *}
+                            <td class="odd"><input type="checkbox" name="jabatan[]" value="{* $row->jabatan_id *}" onclick="javascript:jabatan_click(this.checked)"{* if $row->jabatan_checked *} checked{* /if *} /></td>
+                            <td class="odd">{* $row->jabatan_name *}</td>
+                            <td class="odd">{* $row->level_group_name *}</td>
+                            {* /if *}
+                            </tr>
+                            {* counter *}
+                            {* /foreach *}
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer clearfix">
+                        <div class="content-paging">{* $paging *}</div>
+                    </div>
+                </div>
+                <!-- /.box -->
+            </div>
+        </div>
+    </section>
+    <!-- /.content -->
+</div>
+
+<form id="frmtemp" name="frmtemp" method="post" action="{* $site_url *}/jabatan/">
+    <input type="hidden" id="limit" name="limit" value="{* $limit *}"/>
+    <input type="hidden" id="sortby" name="sortby" value="{* $sortby *}"/>
+    <input type="hidden" id="orderby" name="orderby" value="{* $orderby *}"/>
+    <input type="hidden" id="offset" name="offset" value="{* $offset *}"/>
+    <input type="hidden" id="keyword" name="keyword" value="{* $smarty.post.keyword *}"/>
+    <input type="hidden" id="searchby" name="searchby" value="{* $smarty.post.searchby *}"/>
+</form>

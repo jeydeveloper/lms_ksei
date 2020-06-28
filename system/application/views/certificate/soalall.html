@@ -1,0 +1,87 @@
+<script>
+	var hour = {* $watch_hour *};
+	var minute = {* $watch_minute *};
+	var second = {* $watch_second *};
+	var nlen = {* $nlen *};
+	var tm = null;
+	
+	function nextstep()
+	{
+		document.frmexam.submit();
+	}
+	
+	function showclock()
+	{
+		if (tm)
+		{
+			clearTimeout(tm);
+		}
+		
+		if (nlen > {* $duration *})
+		{
+			nextstep();
+			return;
+		}
+		
+		nlen++;
+		
+		second = parseInt(second)-1;
+		if (second < 0)
+		{
+			second = 59;
+			minute = parseInt(minute)-1;
+			
+			if (minute < 0)
+			{
+				minute = 59;
+				hour = parseInt(hour)-1;
+			}
+		}
+		
+		$("#clock").html(leadzero(hour)+":"+leadzero(minute)+":"+leadzero(second));
+		tm  = setTimeout("showclock()", 1000);
+	}	
+	
+	function leadzero(i)
+	{
+		if (parseInt(i) >= 10) return i;
+		
+		return "0"+i;
+	}
+	
+	$(document).ready(
+		function()
+		{
+			tm  = setTimeout("showclock()", 1000);
+		}
+	);		
+	
+</script>
+<h2>{* $lcertificate *} "{* $res[0]->training_name *}"</h2>
+<br />
+<h3><div id="clock">{* $watch *}</div></h3>
+<br />&nbsp;
+<form id="frmexam" name="frmexam" action="{* $site_url *}/certificate/examfinished/{* $trainingid *}" method="post">
+	<table>
+	{* foreach from=$quests item=quest *}
+		<tr><td width="20" valign="top" align="right">{* $quest->history_answer_order *}.</td><td> {* $quest->banksoal_question_quest *}</td></tr>
+		<tr><td>&nbsp;</td><td>
+		<table>
+		{* foreach from=$quest->choices item=choice *}
+			<tr>
+				<td width="20" valign="top" align="right">
+					<input type="radio" value="{* $choice->banksoal_answer_id *}" name="answer{* $quest->history_answer_id *}" id="answer{* $quest->history_answer_id *}" />
+				</td>
+				<td>{* $choice->banksoal_answer_order_str *}.</td>
+				<td>{* $choice->banksoal_answer_text *}</td>
+			</tr>
+		{* /foreach *} 
+			<tr><td colspan='3'>&nbsp;</td>
+		</table>
+		</td>
+		</tr>
+	{* /foreach *} 
+</table>
+
+	<input type="button" value="{* $lselesai *}" onclick="javascript:nextstep()" />
+</form>

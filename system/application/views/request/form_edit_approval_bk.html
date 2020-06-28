@@ -1,0 +1,240 @@
+<style type="text/css">
+input[type="text"],textarea{width: 100%;}
+input.datex{width: inherit;}
+h1{margin: 0;padding: 0;}
+p{padding: 5px 10px;}
+.error_form{border: solid 1px; background: red;color:#fff;}
+td{vertical-align: top;}
+.search_wrap{margin-top: 10px;}
+.search_wrap select{width: 300px;height: 180px;}
+.search_wrap_content{display: inline-block;vertical-align:top;min-width: 100px;text-align: center;}
+.delete_row_schedule{display: none;}
+
+input:read-only, textarea:read-only, select:read-only{background-color: rgb(235, 235, 228);}
+input:-moz-read-only, textarea:-moz-read-only, select:-moz-read-only{background-color: rgb(235, 235, 228);}
+</style>
+
+<form id="frm_submit" action="{* $site_url *}/request/formtraining_edit_approval" method="post">
+	<input type="hidden" name="hd_request_id" value="{* $hd_request_id *}">
+    {* if $error_form *}
+    <p class="error_form">{* $request_inputerror *} : {* $error_form *}</p>
+    {* /if *}
+	<table width="100%" border="0" cellpadding="0" cellspacing="0" class="tb_data">
+		<tr>
+			<td colspan="3">
+				<h1>{* $request_newproposaltraining *}</h1>
+			</td>
+		</tr>
+		<tr>
+			<td width="200">Request No</td>
+			<td width="1">:</td>
+			<td>
+				{* if $is_admin eq 1 *}
+				<a href="{* $site_url *}/request/formtraining_edit_setting/{* $hd_request_id *}">{* $frm.rqtr_request_no *}</a>
+				{* else *}
+				<span>{* $frm.rqtr_request_no *}</span>
+				{* /if *}
+			</td>
+		</tr>
+		<tr>
+			<td width="200">{* $request_trainingtype *}</td>
+			<td width="1">:</td>
+			<td>
+				<label><input type="radio" name="training_type" id="training_type" value="1" checked>{* $request_pelatihaninhouse *}</label>
+				<label><input type="radio" name="training_type" id="training_type" value="2" {* if $frm.rqtr_type eq 2 *}checked{* /if *}>{* $request_pelatihaneksternal *}</label>
+				<label><input type="radio" name="training_type" id="training_type" value="3" {* if $frm.rqtr_type eq 3 *}checked{* /if *} >{* $request_onthejobtraining *}</label>
+			</td>
+		</tr>
+		<tr>
+			<td width="200">Jenis Pendidikan</td>
+			<td width="1">:</td>
+			<td>
+				<select name="rqtr_jepd_id" readonly>
+					<option value="">--- Pilih ---</option>
+				{* foreach from=$data_jenispendidikan item=row *}
+					<option value="{* $row.jepd_id *}" {* if $frm.rqtr_jepd_id eq $row.jepd_id *}selected{* /if *}>{* $row.jepd_name *}</option>
+				{* /foreach *}
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td width="200">BI Category</td>
+			<td width="1">:</td>
+			<td>
+				<select name="rqtr_bict_id" readonly>
+					<option value="">--- Pilih ---</option>
+				{* foreach from=$data_bicategory item=row *}
+					<option value="{* $row.bict_id *}" {* if $frm.rqtr_bict_id eq $row.bict_id *}selected{* /if *}>{* $row.bict_name *}</option>
+				{* /foreach *}
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td width="200">{* $request_penyelenggara *}</td>
+			<td width="1">:</td>
+			<td>
+				<input type="text" name="penyelenggara" id="penyelenggara" value="{* $frm.rqtr_penyelenggara *}" readonly>
+			</td>
+		</tr>
+		<tr>
+			<td width="200">{* $request_tema *}</td>
+			<td width="1">:</td>
+			<td>
+				<input type="text" name="tema" id="tema" value="{* $frm.rqtr_tema *}" readonly>
+			</td>
+		</tr>
+		<tr>
+			<td width="200">{* $request_judul *}</td>
+			<td width="1">:</td>
+			<td>
+				<input type="text" name="judul" id="judul" value="{* $frm.rqtr_judul *}" readonly>
+			</td>
+		</tr>
+		<tr>
+			<td width="200" style="vertical-align:top;">{* $request_waktu *} / {* $request_tanggal *}</td>
+			<td width="1" style="vertical-align:top;">:</td>
+			<td>
+				{* if !empty($frm.rqtr_schedule.tanggal) *}
+				{* counter start=0 print=false assign="no" *}
+				{* foreach from=$frm.rqtr_schedule.tanggal item=row *}
+				<div class="wrapDate" style="margin-bottom: 10px;">
+					<input class="datex" type="text" name="request_schedule[tanggal][]" id="tanggal" value="{* $row *}" placeholder="{* $request_tanggal *}" readonly> From : <input class="datex" type="text" name="request_schedule[waktu_awal][]" value="{* $frm.rqtr_schedule.waktu_awal[$no] *}" placeholder="{* $request_waktu *}" readonly> To : <input class="datex" type="text" name="request_schedule[waktu_akhir][]" value="{* $frm.rqtr_schedule.waktu_akhir[$no] *}" placeholder="{* $request_waktu *}" readonly>
+				</div>
+				{* counter *}
+				{* /foreach *}
+				{* else *}
+				<div class="wrapDate" style="margin-bottom: 10px;">
+					<input class="datex" type="text" name="request_schedule[tanggal][]" id="tanggal" value="{* $frm.tanggal *}" placeholder="{* $request_tanggal *}" readonly> From : <input class="datex" type="text" name="request_schedule[waktu_awal][]" value="{* $frm.waktu *}" placeholder="{* $request_waktu *}" readonly> To : <input class="datex" type="text" name="request_schedule[waktu_akhir][]" value="{* $frm.waktu *}" placeholder="{* $request_waktu *}" readonly> <a class="delete_row_schedule" href="#">( X )</a>
+				</div>
+				{* /if *}
+		</tr>
+		<tr>
+			<td width="200">{* $request_tempat *}</td>
+			<td width="1">:</td>
+			<td>
+				<input type="text" name="tempat" id="tempat" value="{* $frm.rqtr_tempat *}" readonly>
+			</td>
+		</tr>
+		<tr>
+			<td width="200">{* $request_pembicara *}</td>
+			<td width="1">:</td>
+			<td>
+				<input type="text" name="pembicara" id="pembicara" value="{* $frm.rqtr_pembicara *}" readonly>
+			</td>
+		</tr>
+		<tr>
+			<td width="200">{* $request_datapeserta *}</td>
+			<td width="1">:</td>
+			<td>
+				<div class="search_wrap">
+					<div class="search_wrap_content">
+						<select name="user_selected[]" id="user_selected" size="10" multiple readonly>
+							{* foreach from=$frm.participant_detail item=row *}
+							<option value="{* $row.id *}" selected>{* $row.name *}</option>
+							{* /foreach *}
+						</select>
+					</div>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td width="200">{* $request_tujuanpelatihan *}</td>
+			<td width="1">:</td>
+			<td>
+				<textarea name="tujuan_pelatihan" id="tujuan_pelatihan" readonly>{* $frm.rqtr_tujuan_pelatihan *}</textarea>
+			</td>
+		</tr>
+		<tr>
+			<td width="200">{* $request_rekomendasidirectsupervisor *}</td>
+			<td width="1">:</td>
+			<td>
+				<textarea name="rekomendasi_supervisor" id="rekomendasi_supervisor">{* $frm.rqtr_rekomendasi_supervisor *}</textarea>
+			</td>
+		</tr>
+		<tr>
+			<td width="200">Training Cost</td>
+			<td width="1">:</td>
+			<td>
+				<div style="margin-bottom: 10px;">
+					<label>Biaya instruktur :</label>
+					<input class="training_cost" type="text" name="biaya_program" id="biaya_program" value="{* $frm.rqtr_biaya_program *}" readonly>
+					<label>Biaya Akomodasi :</label>
+					<input class="training_cost" type="text" name="akomodasi" id="biaya_akomodasi" value="{* $frm.rqtr_akomodasi *}" readonly>
+					<label>Biaya Transportasi :</label>
+					<input class="training_cost" type="text" name="transportasi" id="biaya_transportasi" value="{* $frm.rqtr_transportasi *}" readonly>
+					<label>Biaya Konsumsi :</label>
+					<input class="training_cost" type="text" name="uang_makan" id="biaya_uang_makan" value="{* $frm.rqtr_uang_makan *}" readonly>
+				</div>
+
+				{* if !empty($frm.rqtr_biaya_lain.nama_biaya) *}
+				{* counter start=0 print=false assign="no" *}
+				{* foreach from=$frm.rqtr_biaya_lain.nama_biaya item=row *}
+				<div class="wrapBiayaLain" style="margin-bottom: 10px;">
+					<input class="datex" type="text" name="biaya_lain[nama_biaya][]" value="{* $row *}" placeholder="Nama Biaya Lain" readonly> <input class="datex training_cost" type="text" name="biaya_lain[jumlah_biaya][]" value="{* $frm.rqtr_biaya_lain.jumlah_biaya[$no] *}" placeholder="Jumlah Biaya Lain" readonly>
+				</div>
+				{* counter *}
+				{* /foreach *}
+				{* else *}
+				<div class="wrapBiayaLain" style="margin-bottom: 10px;">
+					<input class="datex" type="text" name="biaya_lain[nama_biaya][]" placeholder="Nama Biaya Lain" readonly> <input class="datex training_cost" type="text" name="biaya_lain[jumlah_biaya][]" placeholder="Jumlah Biaya Lain" readonly> <a class="delete_row_biaya_lain" href="#">( X )</a>
+				</div>
+				{* /if *}
+
+				<label>Total :</label>
+				<input type="text" name="biaya_total" id="biaya_total" value="{* $frm.rqtr_jumlah *}" disabled>
+			</td>
+		</tr>
+		<tr>
+			<td width="200">{* $request_rekomendasiprogramdevelopment *}</td>
+			<td width="1">:</td>
+			<td>
+				<textarea name="rekomendasi_development" id="rekomendasi_development">{* $frm.rqtr_rekomendasi_development *}</textarea>
+			</td>
+		</tr>
+		<tr>
+			<td width="200">Attachment</td>
+			<td width="1">:</td>
+			<td>
+				{* if !empty($frm.rqtr_attachment_alter) *}
+				{* counter start=0 print=false assign="no" *}
+				{* foreach from=$frm.rqtr_attachment_alter item=row *}
+				<div class="wrapFileImg">
+					{* if $row.is_pdf eq 1 *}
+					<a href="{* $base_url *}uploads/request_training/{* $row.file_name *}" target="_blank">File Name : {* $row.file_name *}</a>
+					{* else *}
+					<a href="{* $base_url *}uploads/request_training/{* $row.file_name *}" target="_blank"><img width="150px" height="150px;" src="{* $base_url *}uploads/request_training/{* $row.file_name *}"></a>
+					{* /if *}
+					<input type="hidden" name="userfile_exists[]" value="{* $row.file_name *}">
+				</div>
+				{* counter *}
+				{* /foreach *}
+				{* else *}
+				{* /if *}
+				<a style="display:none;" hred="#" id="addNewAttachment">ADD ATTACHMENT</a>
+			</td>
+		</tr>
+		<tr>
+			<td width="200">{* $request_statusapproval *}</td>
+			<td width="1">:</td>
+			<td>
+				{* foreach from=$userid_approval item=row *}
+
+				<label><input type="checkbox" name="status_approval" id="status_approval" value="1" {* if $row.trap_status_approval eq 1 *}checked{* /if *} {* if (!($user_id eq $row.trap_user_id) or $row.can_approve ne 1 or $row.trap_status_approval eq 1) *}disabled{* /if *}>{* if (($user_type eq 0) or ($row.trap_status_approval eq 1) or ($user_id eq $row.trap_user_id)) *}{* $row.user_first_name *}{* /if *} [Jabatan : {* $row.jabatan_name *}]</label><br>
+				<textarea name="trap_reason_approval" id="trap_reason_approval" {* if (!($user_id eq $row.trap_user_id) or $row.can_approve ne 1) *}disabled{* /if *}>{* $row.trap_reason_approval *}</textarea><br>
+
+				{* /foreach *}
+
+				{* if (($user_type eq 0 and $frm.rqtr_status_approval ne 2) or ($user_type eq 0 and $frm.rqtr_status_admin_approval eq 1)) *}
+				<br/>
+				<label><input type="checkbox" name="rqtr_status_admin_approval" id="rqtr_status_admin_approval" value="1" {* if $frm.rqtr_status_admin_approval eq 1 *}checked{* /if *} {* if (($frm.rqtr_status_admin_approval eq 1) or ($frm.rqtr_status_approval eq 2)) *} disabled{* /if *}>Admin Approval</label><br>
+				<textarea name="rqtr_reason_admin_approval" id="rqtr_reason_admin_approval">{* $frm.rqtr_reason_admin_approval *}</textarea><br>
+				{* /if *}
+			</td>
+		</tr>
+		<tr>
+			<td colspan="3" style="text-align:right;">
+				<input type="submit" name="btn_submit" value="Submit">
+			</td>
+		</tr>
+	</table>
+</form>

@@ -1,0 +1,158 @@
+<script>
+	function cetak(id)
+	{
+		$.post("{* $site_url *}/training/printcertificate", {id: id, isajax: 1},
+			function (data)
+			{
+				if (data.err > 0)
+				{
+					location = data.redirect;
+					return;
+				}
+				
+				window.open(data.url, 'materiwin2', 'menubar=no, toolbar=no, location=no, status=no,scrollbars=1 ,width=780,height=590"');
+			}
+			, "json"
+		);
+	}
+	
+	$(document).ready(
+		function()
+		{
+			$("a[id=linksort]").each(
+				function()
+				{
+					$(this).click(
+						function()
+						{
+							var ref = $(this).attr("href").substring(1);							
+							if ($("#sortby").val() == ref)
+							{
+								if ($("#orderby").val() == "desc")
+								{
+									$("#orderby").val("asc");
+								}
+								else
+								{
+									$("#orderby").val("desc");
+								}
+							}
+							else
+							{
+								$("#orderby").val("asc");;
+								$("#sortby").val(ref);
+							}
+							
+							$("#isexport").val(0);
+							
+							document.frmtemp.submit();
+							return false;
+						}
+					)
+					
+					$("#linkexport").click(
+						function()
+						{
+							$("#isexport").val(1);
+							document.frmtemp.submit();							
+							return false;
+						}
+					);
+				}
+			)
+		}
+	);
+	
+	function page(n)
+	{
+		if (! n) n = 0;
+		
+		$("#isexport").val(0);
+		$("#offset").val(n);
+		document.frmtemp.submit();
+	}       	
+	
+</script>
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>{* $luser_activities *}: {* $user->user_first_name *} {* $user->user_last_name *}({* $user->user_npk *})</h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li><a href="#">Activities</a></li>
+            <li class="active">Showlist</li>
+        </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-xs-12">
+                <div id="msg-content" class="alert alert-danger alert-dismissible" style="display: none;">
+                    <div id="message"></div>
+                </div>
+                <div class="box">
+                    <div class="box-body table-responsive">
+                        <p>{* $lheader_list_level *}</p>
+                        <div class="mg-btm-10">
+                            <a href="#" id="linkexport">{* $lexport *}</a>
+                        </div>
+                        <hr>
+                        <table class="table table-hover table-striped">
+                            <thead>
+                            <tr>
+                                <th width="25%"><a id="linksort" href="#history_exam_date|history_exam_time" class="thead" title="{* $lsort_by_date *}">{* $ldate *}</a></th>
+                                <th width="12%">{* $lcode *}</th>
+                                <th><a id="linksort" href="#training_name" class="thead" title="{* $lsort_by_training_name *}">{* $ltraingname *}</a></th>
+                                <th width="10%">{* $ltype *}</th>
+                                <th width="8%">{* $lactivity *}</th>
+                                <th width="5%"><a id="linksort" href="#history_exam_score|history_exam_date|history_exam_time" class="thead" title="{* $lsort_by_score *}">{* $lscore *}</a></th>
+                                <th width="10%">{* $lstatus *}</th>
+                                <th> </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {* counter start=1 print=false assign="no" *}
+                            {* foreach from=$histories item=row *}
+                            <tr{* if $no%2 eq 1 *} class="odd"{* /if *}>
+                            <td class="odd" style="text-align: left;">
+                                <!-- {* $row->history_exam_datetime_str *} s/d {* $row->history_exam_startdatetime_str *}-->
+                                {* $row->exam_date *}
+                            </td>
+                            <td class="odd">{* $row->training_code *}</td>
+                            <td class="odd">{* $row->training_name *}</td>
+                            <td class="odd">{* $row->history_exam_type_desc *}</td>
+                            <td class="odd">{* $row->activity *}</td>
+                            <td class="odd" style="text-align: right;">{* $row->history_exam_score_fmt *}</td>
+                            <td class="odd">{* $row->history_exam_status_str *}</td>
+                            <td>
+                                {* if $row->history_exam_status eq 1 and ($row->history_exam_type eq 2 or $row->history_exam_type eq 3) *}
+                                <a href="javascript:cetak({* $row->history_exam_id *})">{* $lcetak *}</a>
+                                {* /if *}
+                            </td>
+                            </tr>
+                            {* counter *}
+                            {* /foreach *}
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer clearfix">
+                        <div class="content-paging">{* $paging *}</div>
+                    </div>
+                </div>
+                <!-- /.box -->
+            </div>
+        </div>
+    </section>
+    <!-- /.content -->
+</div>
+
+<form id="frmtemp" name="frmtemp" method="post" action="{* $site_url *}/activities/detail/{* $user->user_id *}">
+	<input type="hidden" id="limit" name="limit" value="{* $limit *}" />
+	<input type="hidden" id="sortby" name="sortby" value="{* $sortby *}" />
+	<input type="hidden" id="orderby" name="orderby" value="{* $orderby *}" />
+	<input type="hidden" id="offset" name="offset" value="0" />
+	<input type="hidden" id="isexport" name="isexport" value="" />
+</form>

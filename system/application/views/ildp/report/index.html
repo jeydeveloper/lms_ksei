@@ -1,0 +1,159 @@
+<script type="text/javascript" src="{*$base_url*}js/date.js"></script>
+<script type="text/javascript" src="{*$base_url*}js/jquery.datePicker.js"></script>
+<link rel="stylesheet" type="text/css" media="screen" href="{*$base_url*}css/datePicker.css"> 
+<link rel="stylesheet" type="text/css" media="screen" href="{*$base_url*}css/date.css"> 
+
+<script>
+	$(document).ready(
+		function()
+		{
+			$("#submit1").datePicker({startDate: '01/01/1900'});
+			$("#submit2").datePicker({startDate: '01/01/1900'});
+			
+			searchby_onchange();
+			dir_onchange();
+			page(0);			
+		}
+	);	
+	
+	function doexport()
+	{
+		$("#act").val("export");
+		document.frmsearch.submit();
+	}
+	
+	function page(n)
+	{
+		$("#act").val("");
+		_page(n);
+	}
+	
+	function _page(n)
+	{
+		if (! n) n = 0;
+		
+		$("#wait").show();
+		
+		var url = "{* $base_url *}index.php/ildp/searchreport/" + n;
+		$.post(url, $("#frmsearch").serialize(),
+			function(r)
+			{
+				$("#wait").hide();
+				$("#list").html(r.html);
+			}
+			, "json"
+		);		
+	}
+	
+	function sortby(field)
+	{
+		if ($("#sortby").val() == field)
+		{
+			if ($("#orderby").val() == "asc")
+			{
+				$("#orderby").val("desc");
+			}
+			else
+			{
+				$("#orderby").val("asc");
+			}
+		}
+		else
+		{
+			$("#orderby").val("asc");
+		}
+		
+		$("#sortby").val(field);	
+		page(0);	
+	}
+	
+	function changelimit(elmt)
+	{
+		$("#limit").val(elmt.value);
+		page(0);
+		
+	}
+	
+	function searchby_onchange()
+	{
+		$("#dvkeyword").hide();
+		$("#dvgroup").hide();
+		$("#dvsubmit").hide();
+		$("#dvstatus").hide();
+		
+		switch($("#searchby").val())
+		{
+			case "user_npk":
+				$("#dvkeyword").show();
+			break;
+			case "group":
+				$("#dvgroup").show();
+			break;
+			case "submit":
+				$("#dvsubmit").show();
+			break;
+			case "status":
+				$("#dvstatus").show();
+			break;									
+		}
+	}
+	
+	function dir_onchange()
+	{
+		var url = "{* $base_url *}index.php/ildp/groups/" + $("#dir").val();
+		$.post(url, {},
+			function(r)
+			{
+				$("#dvgroup1").html(r.html);
+			}
+			, "json"
+		);		
+	}	
+	
+</script>
+<h2>{* $lreport *}</h2>
+        <br />        
+<!--{* $lsort_list_by *} <a href="#" onclick="javascript:sortby('user_npk')"{* if $sortby eq 'user_npk' *}class="lite"{* /if *}>NPK</a>-->
+<form id="frmsearch" name="frmsearch" method="post" action="{* $base_url *}index.php/ildp/searchreport/" onsubmit="javascript:page(0); return false;">
+	<input type="hidden" id="act" name="act" value="" />
+	<input type="hidden" id="limit" name="limit" value="{* $limit *}" />
+	<input type="hidden" id="sortby" name="sortby" value="user_npk" />
+	<input type="hidden" id="orderby" name="orderby" value="asc" />
+      <p>{* $lsearch_by *}
+      <select name="searchby" id="searchby" onchange="javascript:searchby_onchange()">
+      	<option value="user_npk">{* $lnpk *}</option>
+      	<option value="group">{* $lgroup *}</option>
+      	<option value="submit">{* $lsubmitdate *}</option>
+      	<option value="status">{* $lstatus *}</option>
+      </select> 
+      <span id="dvkeyword"><input type='text' name="keyword" id="keyword" class='formdefault' value=""></span>
+      <span id="dvgroup">
+      		<select name="dir" id="dir" onchange="dir_onchange()">
+      			<option value="0">{* $lall *}</option>
+      			{* foreach from=$rows item=row *}
+      			<option value="{* $row->level_group_id *}">{* $row->level_group_name *}</option>
+      			{* /foreach *}
+      		</select>
+      		<span id="dvgroup1"></span>
+      </span>
+      	<table id="dvsubmit">
+      		<tr>
+      			<td><input type='text' name="submit1" id="submit1"  class="date-pick" value=""  maxlength='10'></td>
+      			<td> - </td>
+      			<td><input type='text' name="submit2" id="submit2"  class="date-pick" value=""  maxlength='10'></td>
+      		</tr>
+   		</table>
+      <span id="dvstatus">
+      		<select name="status" id="status">
+      			<option value="0">{* $lall *}</option>
+      			<option value="1">{* $lsubmitted *}</option>
+      			<option value="2">{* $lapproved *}</option>
+      			<option value="3">{* $lrejected *}</option>
+      		</select>
+      	</span>
+      <input type='submit' value=" {* $lsearch *} ">
+      <input type='button' value=" {* $lexport *} " onclick="javascript:doexport()">
+      </p>    
+</form>  
+<div id="wait" style="display: none;"><img src="{* $base_url *}images/anim_wait.gif" border="0" /></div>
+<div id="list"></div>

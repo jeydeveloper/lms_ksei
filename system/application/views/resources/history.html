@@ -1,0 +1,44 @@
+      {* if $sess.asadmin *}
+      <h2>{* $lresources_history *}</h2>
+      {* else *}
+      <h2>{* $lmypersonal_report *}</h2>
+      {* /if *}      
+        <br />
+      {* $lsort_list_by *} <a href="#" onclick="javascript:sortby('reference_name', 'asc')"{* if $sortby eq 'reference_name' *}class="lite"{* /if *}>{* $lname *}</a>
+      <table width="100%" cellpadding="3" class="tablelist">
+        <thead>
+          <tr>
+            <th><a href="#" onclick="javascript:sortby('reference_name', 'asc')" class="thead" title="sort topics by code">{* $lname *}</a></th>
+            <th width="20%">{* $ltimetakes *}</th>
+            <th width="20%">{* $llasttake *}</th>
+          </tr>
+          {* counter start=1 print=false assign="no" *}
+          {* foreach from=$list item=row *}
+          	<tr{* if $no%2 eq 1 *} class="odd"{* /if *}>            
+          			<td><a href="{* $site_url*}/resources/historydetail/{* $row->reference_id *}">{* $row->reference_name *}</a></td>
+          			<td align="right">{* $row->ntaked *}</td>
+          			<td align="center">{* $row->nlasttaked *}</td>
+		</tr>
+		<div id="detail{* $row->reference_id *}"></div>
+          	{* counter *}
+          {* /foreach *}
+          
+        </thead>
+        <tbody>
+        </tbody>
+        <tr>
+          <td colspan="5">&nbsp;</td>
+        </tr>
+        <tfoot>
+          <tr>
+            	<td colspan="5">{* $paging *}</td>
+          </tr>
+        </tfoot>        
+      </table>
+<br />
+<form id="frmtemp" name="frmtemp" method="post" action="{* $site_url *}/training/history">
+	<input type="hidden" id="limit" name="limit" value="{* $limit *}" />
+	<input type="hidden" id="sortby" name="sortby" value="{* $sortby *}" />
+	<input type="hidden" id="orderby" name="orderby" value="{* $orderby *}" />
+	<input type="hidden" id="offset" name="offset" value="{* $offset *}" />
+</form>

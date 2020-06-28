@@ -1,0 +1,55 @@
+<aside class="main-sidebar" style="background-color: #243d56;">
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+        <!-- sidebar menu: : style can be found in sidebar.less -->
+        <ul class="sidebar-menu" data-widget="tree">
+            {* if $sess.user_type eq 0 or $sessmodules.master *}
+            <li class="{* if $page eq "generalsetting" and $subpage ne "backup" *}
+            active{*/if*}"><a href="{* $site_url *}/generalsetting/"><i class="fa fa-cog"></i> <span>{* $lgeneralsetting *}</span></a></li>
+            {* /if *}
+            {* if $sess.user_type eq 0 or $sessmodules.master *}
+            <li class="{* if $page eq "lokasi" *} active{*/if*}"><a href="{* $site_url *}/lokasi/"><i class="fa fa-building-o"></i> <span>{*
+            $llokasi_fisik *}</span></a></li>
+            {* /if *}
+            {* if ($sess.user_type eq 0 or $sessmodules.master) and $sess.asadmin *}
+            <li class="{* if $page eq "import" *} active{*/if*}"><a href="{* $site_url *}/import/masterdata"><i class="fa fa-upload"></i> <span>{* $limport
+            *}</span></a></li>
+            {* /if *}
+            {* if ($sess.user_type eq 0 or $sessmodules.master) and $sess.asadmin *}
+            <li class="{* if $page eq "generalsetting" and $subpage eq "backup"
+            *} active{*/if*}"><a href="{* $site_url *}/generalsetting/backup"><i class="fa fa-cloud-download"></i> <span>{* $lbackup *}</span></a></li>
+            {* /if *}
+            {* if ($sess.user_type eq 0 or $sessmodules.master) and $sess.asadmin *}
+            <li class="treeview{* if $page eq "reminder" *} active{*/if*}">
+                <a href="#reminder""><i class="fa fa-bell"></i> <span>{* $lreminder_new_joiner *}</span><span class="pull-right-container">
+					  <i class="fa fa-angle-left pull-right"></i>
+					</span></a>
+                <ul class="treeview-menu" id="actionlist">
+                    <li class="{* if $page eq "reminder" and $subpage eq ""
+                    *} active{*/if*}"><a name="reminder" href="{* $site_url *}/reminder/"><i class="fa fa-tasks"></i> <span>{* $llist *}</span></a></li>
+                    <li class="{* if $page eq "reminder" and $subpage eq "import" *}
+                    active{*/if*}"><a href="{* $site_url *}/reminder/import"><i class="fa fa-plus-square-o"></i> <span>{* $ladd_reminder *}</span></a></li>
+                    <li class="{* if $page eq "reminder" and $subpage eq "phistory"
+                    *} active{*/if*}"><a href="{* $site_url *}/reminder/phistory"><i class="fa fa-history"></i> <span>{* $lhistory *}</span></a></li>
+                </ul>
+            </li>
+            <li class="treeview{* if $page eq "refreshment" *} active{*/if*}">
+                <a href="#refreshment""><i class="fa fa-hourglass-half"></i> <span>{* $lreminder_refreshment *}</span><span class="pull-right-container">
+					  <i class="fa fa-angle-left pull-right"></i>
+					</span></a>
+                <ul class="treeview-menu" id="actionlist">
+                    <li class="{* if $page eq "refreshment" and
+                    $subpage eq "" *} active{*/if*}"><a name="refreshment" href="{* $site_url *}/refreshment/"><i class="fa fa-tasks"></i> <span>{* $llist *}</span></a>
+                    </li>
+                    <li class="{* if $page eq "refreshment" and $subpage eq
+                    "import" *} active{*/if*}"><a href="{* $site_url *}/refreshment/import"><i class="fa fa-plus-square-o"></i> <span>{* $ladd_refreshment *}</span></a></li>
+                    <li class="{* if $page eq "refreshment" and $subpage eq
+                    "phistory" *} active{*/if*}"><a href="{* $site_url *}/refreshment/phistory"><i class="fa fa-history"></i> <span>{* $lhistory *}</span></a>
+                    </li>
+                </ul>
+            </li>
+            {* /if *}
+        </ul>
+    </section>
+    <!-- /.sidebar -->
+</aside>

@@ -1,0 +1,138 @@
+<link rel="stylesheet" href="{* $base_url *}js/autocomplete/jquery.autocomplete.css" type="text/css" />
+<script type="text/javascript" src="{* $base_url *}js/autocomplete/jquery.bgiframe.min.js"></script> 
+<script type="text/javascript" src="{* $base_url *}js/autocomplete/jquery.autocomplete.js"></script>
+<script>
+	function frmunit_onchange()
+	{
+		return f_onsubmit("{* $site_url *}/unit/save/{* $edit *}", "frmunit", "message", "Saving...",
+			function(data)
+			{
+				$("#message").html("{* $ok_save_unit *}");
+				location = "{* $site_url *}/unit";
+			}
+		);				
+	}
+	
+	$(document).ready(function(){	
+		$.post("{* $site_url *}/directorat/getlist", {},
+			function (data)
+			{
+				var datas = data.split("\1");
+				$("#directorat").autocomplete(datas);
+				
+				{* if $edit *}
+				loadgroup();
+				{* /if *}				
+			}
+		);				
+	});
+	
+	function loadgroup(isdef)
+	{		
+		$.post("{* $site_url *}/group/getlist", {directorat: $("#directorat").val()},
+			function (data)
+			{				
+				if (data.length > 0)
+				{
+					var datas = data.split("\1");
+					$("#group").autocomplete(datas);
+					
+					if (! in_array(datas, $("#group").val()))
+					{
+						$("#group").val("");
+					}
+										
+					$("#group").incHasFocus();
+				}
+				else				
+				{
+					$("#group").flushCache();
+					$("#group").val("");					
+				}
+				
+				loaddept();			
+			}
+		);		
+	}
+	
+	function loaddept()
+	{
+		$.post("{* $site_url *}/department/getlist", {group: $("#group").val(), directorat: $("#directorat").val()},
+			function (data)
+			{				
+				if (data.length > 0)
+				{					
+					var datas = data.split("\1");	
+					$("#dept").autocomplete(datas);
+					
+					if (! in_array(datas, $("#dept").val()))
+					{
+						$("#dept").val("");
+					}
+										
+					$("#dept").incHasFocus();
+				}
+				else
+				{
+					$("#dept").flushCache();
+					$("#dept").val("");					
+				}
+			}
+		);		
+	}	
+	
+</script>
+<form name="frmunit" id="frmunit" onsubmit="javascript: return frmunit_onchange()">
+<table width="100%" border="0" cellpadding="0" cellspacing="0" class="tb_data">
+  <tr>
+    <td width="200">{* if $edit *}
+      ID</td>
+    <td>:</td>
+    <td>{* $unitedit.department_id *} </td>
+  </tr>
+  <tr>
+    <td>{* /if *}
+      {* $directorat *}</td>
+    <td width="1">:</td>
+    <td><input type='text' name="directorat" id="directorat" class='formdefault' value="{* $unitedit.directorat_name *}" onblur="javascript: loadgroup();" onchange="javascript: loadgroup();" /></td>
+  </tr>
+  <tr>
+    <td>{* $group *}</td>
+    <td>:</td>
+    <td><input type='text' name="group" id="group" class='formdefault' value="{* $unitedit.group_name *}" onchange="javascript: loaddept();" onblur="javascript: loaddept();" /></td>
+  </tr>
+  <tr>
+    <td>{* $department *}</td>
+    <td>:</td>
+    <td><input type='text' name="dept" id="dept" class='formdefault' value="{* $unitedit.department_name *}"></td>
+  </tr>
+  <tr>
+    <td>{* $unit_name *}</td>
+    <td>:</td>
+    <td><input type='text' name="name" id="name" class='formdefault' value="{* $unitedit.unit_name *}"></td>
+  </tr>
+  <tr>
+    <td>{* $status *}</td>
+    <td>:</td>
+    <td><select name="status" id="status">
+      <option value="1" {* if $unitedit.unit_status eq 1 *}selected{* /if *}>
+      {* $active *}
+      </option>
+      <option value="2" {* if $unitedit.unit_status eq 2 *}selected{* /if *}>
+      {* $inactive *}
+      </option>
+    </select></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td><div id="message"></div></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td><input name="submit" type="submit" value=" Submit " />
+        <input name="reset" type="reset" value=" Reset " /></td>
+  </tr>
+</table>
+</form>

@@ -1,0 +1,208 @@
+<!--<link rel="stylesheet" href="{* $base_url *}js/autocomplete/jquery.autocomplete.css" type="text/css" />
+<script type="text/javascript" src="{* $base_url *}js/autocomplete/jquery.bgiframe.min.js"></script>
+<script type="text/javascript" src="{* $base_url *}js/autocomplete/jquery.autocomplete.js"></script>-->
+
+<link rel="stylesheet" href="{* $base_url *}js/autocomplete3/easy-autocomplete.min.css" type="text/css" />
+<script type="text/javascript" src="{* $base_url *}js/autocomplete3/jquery.easy-autocomplete.min.js"></script>
+	
+	<script>
+		$(document).ready(
+			function()
+			{	
+				{* if $praexam_banksoal_checked *}
+					document.frmtraining.praexam.checked = true;
+					$("#dvpraexam").show();
+					$("#dvpramax").show();
+					$("#dvpraexampass").show();					
+					$("#dvprajmlsoal").show();
+					$("#praAllDuration").show();
+					$("#praEachDuration").show();
+				{* /if *}
+				
+				{* if $exam_banksoal_checked *}
+					document.frmtraining.exam.checked = true;
+					$("#dvexam").show();
+					$("#dvmax").show();
+					$("#dvexampass").show();
+					$("#dvjmlsoal").show();
+					$("#allDuration").show();
+					$("#eachDuration").show();
+				{* /if *}
+
+                    var options = {
+
+                        url: function(phrase) {
+                            return "{* $site_url *}/banksoal/getlist";
+                        },
+
+                        getValue: function(element) {
+                            return element.name;
+                        },
+
+                        ajaxSettings: {
+                            dataType: "json",
+                            method: "POST",
+                            data: {
+                                type: 1
+                            }
+                        },
+
+                        preparePostData: function(data) {
+                            data.phrase = $("#example-ajax-post").val();
+                            return data;
+                        },
+
+                        requestDelay: 200
+                    };
+
+                    $("#_praexam").easyAutocomplete(options);
+                    $("#_exam").easyAutocomplete(options);
+
+				
+			    	/*$.post("{* $site_url *}/banksoal/getlist", {type: 1},
+			    		function (data)
+			    		{
+			    			var datas = data.split("\1");
+			    			
+			    			$("#_praexam").autocomplete(datas);
+			    			$("#_exam").autocomplete(datas);
+			    		}
+			    	);*/
+			}
+		);
+		
+		function praexam_onclick()
+		{
+			if (document.frmtraining.praexam.checked)
+			{
+				$("#dvpraexam").show();	
+				$("#dvpramax").show();
+				$("#dvpraexampass").show();				
+				$("#dvprajmlsoal").show();
+				$("#praAllDuration").show();
+				$("#praEachDuration").show();
+			}
+			else
+			{
+				$("#dvpraexam").hide();
+				$("#dvpramax").hide();
+				$("#dvpraexampass").hide();
+				$("#dvprajmlsoal").hide();
+				$("#praAllDuration").hide();
+				$("#praEachDuration").hide();
+			}
+		}
+		
+		function exam_onclick()
+		{
+			if (document.frmtraining.exam.checked)
+			{
+				$("#dvexam").show();	
+				$("#dvmax").show();
+				$("#dvexampass").show();
+				$("#dvjmlsoal").show();
+				$("#allDuration").show();
+				$("#eachDuration").show();
+			}
+			else
+			{
+				$("#dvexam").hide();
+				$("#dvmax").hide();
+				$("#dvexampass").hide();
+				$("#dvjmlsoal").hide();
+				$("#allDuration").hide();
+				$("#eachDuration").hide();
+			}
+		}		
+
+		function saveBankSoal()
+		{
+			$('#topic').attr('disabled', false);
+			$('#name').attr('disabled', false);
+			f_onsubmit("{* $site_url *}/training/savebanksoal", "frmtraining", "messagex", "Saving...",
+				function(data)
+				{
+				    console.log('test');
+					$("#messagex").html("{* $ok_update_banksoal *}");
+					
+				}
+			);	
+			
+			return false;			
+		}
+
+	</script>
+
+
+<div class="row">
+	<div class="col-xs-12">
+		<div class="box">
+			<div class="box-body table-responsive">
+				<table id="tbltrainingtime" class="table">
+					<tr>
+						<td width="15%">&nbsp;</td>
+						<td><input type="checkbox" name="praexam" id="praexam" value="1" onclick="javascript:praexam_onclick()" /> {* $lpraexam *}</td>
+					</tr>
+					<tr id="dvpraexam" style="display: none;">
+						<td>{* $lbank_soal *}</td>
+						<td><input type='text' name="_praexam" id="_praexam" value="{* $praexam_banksoal_name *}" class='formdefault' value="" style="width: 90%" /></td>
+					</tr>
+					<tr id="dvprajmlsoal" style="display: none;">
+						<td>{* $ljumlah_soal *}</td>
+						<td><input type='text' name="_prajmlsoal" id="_prajmlsoal" value="{* $exam_prajmlsoal *}" class='formnumber' value="" ></td>
+					</tr>
+
+					<tr id="dvpramax" style="display: none;">
+						<td>{* $ltraining_max *}</td>
+						<td><input type='text' name="_pramax" id="_pramax" value="{* $exam_pramax *}" class='formnumber' value="" >&nbsp;&nbsp; *{* $lunlimit *}</td>
+					</tr>
+					<tr id="dvpraexampass" style="display: none;">
+						<td>{* $ltraining_pass *}</td>
+						<td><input type='text' name="_prapass" id="_prapass" value="{* $exam_prapass *}" class='formnumber' value="" ></td>
+					</tr>
+					<tr id="praAllDuration" style="display: none;">
+						<td>Durasi</td>
+						<td><input type='text' name="_praAllDurationHour" id="_praAllDurationHour" value="{* $exam_praalldurationhour *}" class='formnumber' value="" > Hour <input type='text' name="_praAllDurationMinute" id="_praAllDurationMinute" value="{* $exam_praalldurationminute *}" class='formnumber' value="" > Minute</td>
+					</tr>
+					<tr id="praEachDuration" style="display: none;">
+						<td>Durasi Per Soal</td>
+						<td><input type='text' name="_praEachDuration" id="_praEachDuration" value="{* $exam_praeachduration *}" class='formnumber' value="" > Second</td>
+					</tr>
+					<tr>
+						<td>&nbsp;</td>
+						<td><input type="checkbox" name="exam" id="exam" value="2" onclick="javascript:exam_onclick()" /> {* $lexam *}</td>
+					</tr>
+					<tr id="dvexam" style="display: none;">
+						<td>{* $lbank_soal *}</td>
+						<td><input type='text' name="_exam" id="_exam" value="{* $exam_banksoal_name *}" class='formdefault' value="" style="width: 90%" /></td>
+					</tr>
+					<tr id="dvjmlsoal" style="display: none;">
+						<td>{* $ljumlah_soal *}</td>
+						<td><input type='text' name="_jmlsoal" id="_jmlsoal" value="{* $exam_jmlsoal *}" class='formnumber' value="" ></td>
+					</tr>
+
+					<tr id="dvmax" style="display: none;">
+						<td>{* $ltraining_max *}</td>
+						<td><input type='text' name="_max" id="_max" value="{* $exam_max *}" class='formnumber' value="" >&nbsp;&nbsp; *{* $lunlimit *}</td>
+					</tr>
+					<tr id="dvexampass" style="display: none;">
+						<td>{* $ltraining_pass *}</td>
+						<td><input type='text' name="_pass" id="_pass" value="{* $exam_pass *}" class='formnumber' value="" ></td>
+					</tr>
+					<tr id="allDuration" style="display: none;">
+						<td>Durasi</td>
+						<td><input type='text' name="_allDurationHour" id="_allDurationHour" value="{* $exam_alldurationhour *}" class='formnumber' value="" > Hour <input type='text' name="_allDurationMinute" id="_allDurationMinute" value="{* $exam_alldurationminute *}" class='formnumber' value="" > Minute</td>
+					</tr>
+					<tr id="eachDuration" style="display: none;">
+						<td>Durasi Per Soal</td>
+						<td><input type='text' name="_eachDuration" id="_eachDuration" value="{* $exam_eachduration *}" class='formnumber' value="" > Second</td>
+					</tr>
+					<tr>
+						<td valign="top">&nbsp;</td>
+						<td valign="top"><div id="messagex"></div><input type="button" value=" Save " onclick="javascript:saveBankSoal()" /></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>

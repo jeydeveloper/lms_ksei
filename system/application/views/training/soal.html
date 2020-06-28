@@ -1,0 +1,230 @@
+ {* if $duration *}
+
+ <script>
+	function selesai()
+	{
+		document.frmsoal.submit();
+	}
+</script>
+
+<script>
+	var hour = {* $watch_hour *};
+	var minute = {* $watch_minute *};
+	var second = {* $watch_second *};
+	var nlen = 0;
+	var tm = null;
+	
+	function nextstep()
+	{
+		nlen = 0;
+
+		if($('.soal').length > 1) $("#btnNext").trigger('click');
+		
+	}
+	
+	function showclock()
+	{
+		if (tm)
+		{
+			clearTimeout(tm);
+		}
+
+		if(hour == 0 && minute == 0 && second == 0) {
+			selesai();
+			clearTimeout(tm);
+			return;
+		}
+		
+		{* if $durationperquestion and $showEach *}
+
+		if (nlen >= {* $durationperquestion *})
+		{
+			nextstep();
+		}
+
+		{* /if *}
+		
+		nlen++;
+		
+		second = parseInt(second)-1;
+		if (second < 0)
+		{
+			second = 59;
+			minute = parseInt(minute)-1;
+			
+			if (minute < 0)
+			{
+				minute = 59;
+				hour = parseInt(hour)-1;
+			}
+		}
+		
+		$("#clock").html(leadzero(hour)+":"+leadzero(minute)+":"+leadzero(second));
+		tm  = setTimeout("showclock()", 1000);
+	}	
+	
+	function leadzero(i)
+	{
+		if (parseInt(i) >= 10) return i;
+		
+		return "0"+i;
+	}
+	
+	$(document).ready(
+		function()
+		{
+			tm  = setTimeout("showclock()", 1000);
+		}
+	);		
+	
+</script>
+
+{* /if *}
+
+ <style>
+	 input[type="radio"] {
+		 margin-right: 10px;
+	 }
+ </style>
+
+ <div class="content-wrapper">
+	 <!-- Content Header (Page header) -->
+	 <section class="content-header">
+		 <h1>
+			 &nbsp;
+		 </h1>
+		 <ol class="breadcrumb">
+			 <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+			 <li><a href="#">Training</a></li>
+			 <li class="active">Exam Intro</li>
+		 </ol>
+	 </section>
+
+	 <!-- Main content -->
+	 <section class="content">
+		 <div class="row">
+			 <div class="col-xs-12">
+				 <div class="box">
+					 <div class="box-body table-responsive">
+						 <h3>{* $lexam *} &quot;{* $rowtraining->training_name *}&quot;</h3>
+
+						 {* if $duration *}
+						 <br />
+						 <h4><div id="clock">{* $watch *}</div></h4>
+						 <br />
+						 {* /if *}
+
+						 <form id="frmsoal" name="frmsoal" action="{* $site_url *}/training/savepraexam/{* $rowtraining->training_id *}/{* $tipe *}" method="post">
+							 <input type="hidden" name="examid" value="{* $lastid *}" />
+							 <table border="0" cellpadding="0" cellspacing="0"><tr><td>
+								 {* counter start=1 print=false assign="no" *}
+								 {* foreach from=$mysoals item=item *}
+								 <table class="soal" style="display:none;"><thead><tr><td width="20" valign="top" align="right">{* $no *}.</td><td> {* $item->banksoal_question_quest *}</td></tr></thead>
+									 <tr><td>&nbsp;</td><td>
+										 <table>{* foreach from=$item->choices item=pil *}
+											 <tr><td width="20" valign="top" align="right"><input type="radio" name="answer{* $lastid *}_{* $pil->banksoal_answer_question *}" value="{* $pil->banksoal_answer_id *}" /></td><td>{* $pil->banksoal_answer_text *}</td></tr>
+											 {* /foreach *}
+											 {* counter *}</table></td></tr></table>
+								 {* /foreach *}
+							 </td></tr>
+							 </table>
+							 <br>
+							 <table border="0" cellpadding="0" cellspacing="0">
+								 <tfoot>
+								 <tr>
+									 {* if $showEach *}
+									 <td align="center">
+										 <div id="message"></div>
+										 <input type="button" class="btnSoal" id="btnNext" value="Selanjutnya">
+										 <input class="btnSoal" style="display:none;" id="btnSelesai" type="submit" value=" {* $lselesai *} " />
+									 </td>
+									 {* else *}
+									 <td align="center">
+										 <div id="message"></div>
+										 <input class="btnSoal" id="btnSelesai" type="submit" value=" {* $lselesai *} " />
+									 </td>
+									 {* /if *}
+								 </tr>
+								 </tfoot>
+							 </table>
+
+						 </form>
+					 </div>
+				 </div>
+			 </div>
+		 </div>
+	 </section>
+ </div>
+
+
+
+{* if $showEach *}
+<script type="text/javascript">
+	$(function(){
+		var idxSoal = 0;
+		var lenSoal = $('.soal').length;
+
+		var checkAnswer = function(idx){
+			var idx = idx - 1;
+
+			if(idx < 0) idx = lenSoal - 1;
+
+			{* if $showAllloop ne 1 *}
+			var lenChecked = $('.soal').eq(idx).find('input[type="radio"]:checked').length;
+
+			if(lenChecked > 0) {
+				$('.soal').eq(idx).removeClass('soal');
+				idxSoal = idxSoal - 1;
+			}
+			{* /if *}
+
+			lenSoal = $('.soal').length;
+
+			if(lenSoal == 1) {
+				$('.btnSoal').hide();
+				$('#btnSelesai').show();
+			}
+
+		}
+
+		$('#btnNext').click(function(e){
+			e.preventDefault();
+
+			{* if $durationperquestion and $showEach *}
+			nlen = 0;
+			{* /if *}
+
+			if(idxSoal == lenSoal) {
+				$('#btnSelesai').show();
+				idxSoal = 0;
+			}
+
+			if(idxSoal == (lenSoal - 1)) $('#btnSelesai').show();
+
+			$('.soal').hide();
+			$('.soal').eq(idxSoal).show();
+
+			checkAnswer(idxSoal);
+
+			idxSoal++;
+		});
+
+		$('#btnNext').trigger('click');
+	})
+</script>
+{* else *}
+<script type="text/javascript">
+	$(function(){
+		$('.soal').show();
+	})
+</script>
+{* /if *}
+
+<script type="text/javascript">
+	$(function(){
+		$('#btnSelesai').click(function(e){
+			e.preventDefault();
+			if(confirm('Apakah anda yakin sudah selesai?')) document.frmsoal.submit();
+		});
+	})
+</script>

@@ -1,0 +1,6 @@
+    	<select name="jabatan" id="jabatan" class='formdefault' onchange="javascript:function_onchange(this.value, 0)">
+    	<option value="">--- {* $ljabatan *} ---</option>
+    	{* foreach from=$rows item=row *}
+    	<option value="{* $row->jabatan_id *}" {* if $def eq $row->jabatan_id *}selected{* /if *}>{* $row->jabatan_name *}</option>
+    	{* /foreach *}
+    	</select>

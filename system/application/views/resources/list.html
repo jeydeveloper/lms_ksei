@@ -1,0 +1,126 @@
+<script>
+    function chagestatus(id, status) {
+        f_onsubmit("{* $site_url *}/resources/changestatus/" + id + "/" + status, "frmtemp", "status" + id, "Updating...",
+            function (data) {
+                document.frmtemp.submit();
+            }
+        );
+    }
+
+    function search() {
+        $("#keyword").val($("#_keyword").val());
+        $("#searchby").val($("#_searchby").val());
+
+        document.frmtemp.submit();
+    }
+</script>
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>{* $lresources *}{* if $rowtopic *}: &quot;{* $rowtopic->category_name *}&quot;{* /if *}</h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li><a href="#">Resources</a></li>
+            <li class="active">Showlist</li>
+        </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-xs-12">
+                <div id="msg-content" class="alert alert-danger alert-dismissible" style="display: none;">
+                    <div id="message"></div>
+                </div>
+                <div class="box">
+                    <div class="box-body table-responsive">
+                        <div class="mg-btm-10">
+                            {* $sort_list_by *} <a href="#" onclick="javascript:sortby('reference_name', 'asc')"{* if $sortby eq 'reference_name' *}class="lite"{* /if *}>{* $lname *}</a> | <a href="#" onclick="javascript:sortby('category_name', 'asc')"{* if $sortby eq 'category_name' *}class="lite"{* /if *}>{* $ltopic *}</a> | <a href="#" onclick="javascript:sortby('category_name', 'asc')"{* if $sortby eq 'category_name' *}class="lite"{* /if *}>{* $lsize *}</a>{* if $sessmodules.resources and $sess.asadmin *} | <a href="{* $site_url *}/resources/form{* if $rowtopic *}/0/{* $rowtopic->category_id *}{* /if *}">{* $date_added *}</a> {* /if *}
+                        </div>
+                        <div class="mg-btm-10">
+                            <form onsubmit="javascript:search(); return false;">
+                                <div class="row">
+                                    <div class="col-xs-3">
+                                        {* $lsearch_by *}
+                                    </div>
+                                    <div class="col-xs-3">
+                                        <select class="form-control" name="_searchby" id="_searchby">
+                                            <option value="reference_name">{* $lresources_name *}</option>
+                                            <option value="category_name">{* $ltopic *}</option>
+                                            <option value="size_lt">{* $lsize *} &lt; (kB)</option>
+                                            <option value="size_gt">{* $lsize *} &gt; (kB)</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-xs-3">
+                                        <input class="form-control" type='text' name="_keyword" id="_keyword"
+                                               class='formdefault' value="{* $smarty.post.keyword *}">
+                                    </div>
+                                    <div class="col-xs-3">
+                                        <input class="btn btn-primary" type='submit' value=" {* $lsearch *} ">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <hr>
+                        <table class="table table-hover table-striped">
+                            <thead>
+                            <tr>
+                                <th width="20%"><a href="#" onclick="javascript:sortby('reference_name', 'asc')" class="thead" title="{* $lsort_by_resource_name *}">{* $lresources_name *}</a></th>
+                                <th width="20%"><a href="#" onclick="javascript:sortby('category_name', 'asc')" class="thead" title="{* $lsort_by_topic_name *}">{* $ltopic *}</a></th>
+                                <th width="20%"><a href="#" onclick="javascript:sortby('reference_filesize', 'asc')" class="thead" title="{* $lsort_by_size *}">{* $lsize *}</a></th>
+                                <th width="20%"><a href="#" onclick="javascript:sortby('reference_filetype', 'asc')" class="thead" title="{* $lsort_by_filetype *}">{* $lresource_type *}</a></th>
+                                {* if $sessmodules.resources and $sess.asadmin *}
+                                <th>{* $lstatus *}</th>
+                                <th>&nbsp;</th>
+                                <th>&nbsp;</th>
+                                <th>&nbsp;</th>
+                                {* /if *}
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {* counter start=1 print=false assign="no" *}
+                            {* foreach from=$list item=row *}
+                            <tr>
+                                {* if $sessmodules.trainee and ! $sess.asadmin *}
+                                <td class="odd"><a href="{* $site_url *}/resources/download/{* $row->reference_id *}">{* $row->reference_name *}</a></td>
+                                <td class="odd">{* $row->category_name *}</td>
+                                {* else *}
+                                <td class="odd"><a href="{* $site_url *}/resources/form/{* $row->reference_id *}">{* $row->reference_name *}</a></td>
+                                <td class="odd"><a href="{* $site_url *}/topic/formtopic/{* $row->reference_topic *}">{* $row->category_name *}</a></td>
+                                {* /if *}
+                                <td class="odd">{* $row->size_fmt *} kB</td>
+                                <td class="odd"><img src='{* $base_url *}images/16/{* $row->reference_png *}' alt='{* $row->reference_filetype *}' title='{* $row->reference_filetype *}' /></td>
+                                {* if $sessmodules.resources and $sess.asadmin *}
+                                <td class="odd"><div id="status{* $row->reference_id *}"><a href="#" onclick="javascript:chagestatus({* $row->reference_id *},{* $row->reference_status *})"><img src="{* $base_url *}images/16/{* if  $row->reference_status eq 2 *}inactive.png{* else *}active.png{* /if *}" border="0" alt="{* $row->reference_status_desc *}" title="{* $row->reference_status_desc *}" /></a></div></td>
+                                <td class="odd"><a href="{* $site_url *}/resources/participant/{* $row->reference_id *}">{* $lparticipant *}</a></td>
+                                <td class="odd"><a href="{* $site_url *}/resources/remove/{* $row->reference_id *}" onclick="javascript: return confirm('{* $lconfirm_delete *}');">{* $ldelete *}</a></td>
+                                <td class="odd"><a href="{* $site_url *}/resources/historydetail/{* $row->reference_id *}">{* $lhistory *}</a></td>
+                                {* /if *}
+                            </tr>
+                            {* counter *}
+                            {* /foreach *}
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer clearfix">
+                        <div class="content-paging">{* $paging *}</div>
+                    </div>
+                </div>
+                <!-- /.box -->
+            </div>
+        </div>
+    </section>
+    <!-- /.content -->
+</div>
+
+<form id="frmtemp" name="frmtemp" method="post"
+      action="{* $site_url *}/resources/{* if $rowtopic *}index/{* $rowtopic->category_id *}{* /if *}">
+    <input type="hidden" id="limit" name="limit" value="{* $limit *}"/>
+    <input type="hidden" id="sortby" name="sortby" value="{* $sortby *}"/>
+    <input type="hidden" id="orderby" name="orderby" value="{* $orderby *}"/>
+    <input type="hidden" id="offset" name="offset" value="{* $offset *}"/>
+    <input type="hidden" id="keyword" name="keyword" value="{* $smarty.post.keyword *}"/>
+    <input type="hidden" id="searchby" name="searchby" value="{* $smarty.post.searchby *}"/>
+</form>

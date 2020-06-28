@@ -1,0 +1,62 @@
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <h1>
+      {* $account_header *}
+    </h1>
+    <ol class="breadcrumb">
+      <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+      <li><a href="#">Tables</a></li>
+      <li class="active">Simple</li>
+    </ol>
+  </section>
+
+  <!-- Main content -->
+  <section class="content">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="box">
+          <div class="box-body table-responsive no-padding">
+            <table class="table table-hover">
+              <tr>
+                <td width="200px">{* $lnpk *}</td>
+                <td width="80px">:</td>
+                <td><b>{* $user.user_npk *}</b></td>
+              </tr>
+              <tr>
+                <td>{* $name *}</td>
+                <td>:</td>
+                <td><b>{* $user.user_first_name *} {* $user.user_last_name *}</b></td>
+              </tr>
+              <tr>
+                <td>{* $jabatan *}</td>
+                <td>:</td>
+                <td><b>{* $user.jabatan_name *}</b></td>
+              </tr>
+              {* foreach from=$levels item=level *}
+              <tr>
+                <td>{* $level->level_name *}</td>
+                <td>:</td>
+                <td><b>{* $level->group *}</b></td>
+              </tr>
+              {* /foreach *}
+              <tr>
+                <td>{* $city *}</td>
+                <td>:</td>
+                <td><b>{* if $user.user_city *}{* $user.user_city *}{* else *}{* $user.lokasi_alamat *} {* $user.lokasi_kota *}{* /if *}</b> </td>
+              </tr>
+              <tr>
+                <td>{* $last_login *}</td>
+                <td>:</td>
+                <td><b>{* $user.user_lastlogin_datetime *}</b></td>
+              </tr>
+            </table>
+          </div>
+          <!-- /.box-body -->
+        </div>
+        <!-- /.box -->
+      </div>
+    </div>
+  </section>
+  <!-- /.content -->
+</div>

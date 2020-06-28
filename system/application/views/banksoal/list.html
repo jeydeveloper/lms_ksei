@@ -1,0 +1,91 @@
+      <script>
+      	function chagestatus(id, status)
+      	{
+      		f_onsubmit("{* $site_url *}/banksoal/changestatus/" + id + "/" + status + "/{* $pageid *}", "frmtemp", "status"+id, "Updating...", 
+      			function(data)
+      			{      				
+      				document.frmtemp.submit();
+      			}
+      		);      			
+      	}
+      </script>
+
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <h1>{* $lbanksoal_list_training *}</h1>
+          <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li><a href="#">Bank Soal</a></li>
+            <li class="active">Showlist</li>
+          </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+          <div class="row">
+            <div class="col-xs-12">
+              <div id="msg-content" class="alert alert-danger alert-dismissible" style="display: none;">
+                <div id="message"></div>
+              </div>
+              <div class="box">
+                <div class="box-body table-responsive">
+                  <div class="mg-btm-10">
+                    {* $sort_list_by *} <a href="#" onclick="javascript:sortby('banksoal_name', 'asc')"{* if $sortby eq 'banksoal_name' *}class="lite"{* /if *}>NAME</a> | <a href="#" onclick="javascript:sortby('banksoal_status', 'asc')"{* if $sortby eq 'banksoal_status' *}class="lite"{* /if *}>{* $status *}</a> | <a href="{* $site_url *}/banksoal/form/{* $banksoal_type *}">{* $date_added *}</a>
+                  </div>
+                  <hr>
+                  <table class="table table-hover table-striped">
+                    <thead>
+                    <tr>
+                      <th width="60%"><a href="#" onclick="javascript:sortby('banksoal_name', 'asc')" class="thead" title="sort topics by code">{* $lbank_soal1 *}</a></th>
+                      <!--<th width="20%">{* $ljumlah_soal *}</th>-->
+                      <th><div class="listmain"><a href="#" onclick="javascript:sortby('directorat_status', 'asc')" class="thead" title="sort by topic STATUS">{* $status *}</a></div></th>
+                      <th width="10%">&nbsp;</th>
+                      <th width="10%">&nbsp;</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {* counter start=1 print=false assign="no" *}
+                    {* foreach from=$list item=row *}
+                    <tr{* if $no%2 eq 1 *} class="odd"{* /if *}>
+                    {* if $banksoal_type eq "training" *}
+                    <td class="odd"><a href="{* $site_url *}/banksoal/formedit/{* $row->banksoal_id *}">{* $row->banksoal_name *}</a></td>
+                    {* else *}
+                    <td class="odd"><a href="{* $site_url *}/banksoal/form/certificate/{* $row->banksoal_id *}">{* $row->banksoal_name *}</a></td>
+                    {* /if *}
+                    <!--<td class="odd">{* $row->jumlahsoal *}</td>-->
+                    <td class="odd"><div id="status{* $row->banksoal_id *}"><a href="#" onclick="javascript:chagestatus({* $row->banksoal_id *},{* $row->banksoal_status *})"><img src="{* $base_url *}images/16/{* if  $row->banksoal_status eq 2 *}inactive.png{* else *}active.png{* /if *}" border="0" alt="{* $row->banksoal_status_desc *}" title="{* $row->banksoal_status_desc *}" /></a></div></td>
+                    {* if $row->used *}
+                    <td>&nbsp;</td>
+                    {* else *}
+                    <td><a href="{* $site_url *}/banksoal/remove/{* $row->banksoal_id *}/{* $banksoal_type *}" onclick="javascript: return confirm('{* $confirm_delete *}');"><img src="{* $base_url *}images/b_del.gif" width="12" height="12" border="0" /></a></td>
+                    {* /if *}
+                    {* if $row->banksoal_type eq 2 *}
+                    <td><a href="{* $site_url *}/banksoal/history/{* $row->banksoal_id *}">{* $lhistory *}</a></td>
+                    {* else *}
+                    <td><a href="{* $site_url *}/banksoal/historytraining/{* $row->banksoal_id *}">{* $lhistory *}</a></td>
+                    {* /if *}
+                    </tr>
+                    {* counter *}
+                    {* /foreach *}
+                    </tbody>
+                  </table>
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer clearfix">
+                  <div class="content-paging">{* $paging *}</div>
+                </div>
+              </div>
+              <!-- /.box -->
+            </div>
+          </div>
+        </section>
+        <!-- /.content -->
+      </div>
+
+<form id="frmtemp" name="frmtemp" method="post" action="{* $site_url *}/banksoal/{* $banksoal_type *}">
+	<input type="hidden" id="limit" name="limit" value="{* $limit *}" />
+	<input type="hidden" id="sortby" name="sortby" value="{* $sortby *}" />
+	<input type="hidden" id="orderby" name="orderby" value="{* $orderby *}" />
+	<input type="hidden" id="offset" name="offset" value="{* $offset *}" />
+</form>

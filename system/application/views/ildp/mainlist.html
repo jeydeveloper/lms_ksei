@@ -1,0 +1,135 @@
+<script>
+	$(document).ready(
+		function()
+		{
+			page(0);
+		}
+	);	
+	
+	function page(n)
+	{
+		if (! n) n = 0;
+		
+		$("#wait").show();
+		
+		var url = "{* $base_url *}index.php/ildp/search/" + n;
+		$.post(url, $("#frmsearch").serialize(),
+			function(r)
+			{
+				$("#wait").hide();
+				$("#list").html(r.html);
+			}
+			, "json"
+		);
+	}
+	
+	function sortby(field)
+	{
+		if ($("#sortby").val() == field)
+		{
+			if ($("#orderby").val() == "asc")
+			{
+				$("#orderby").val("desc");
+			}
+			else
+			{
+				$("#orderby").val("asc");
+			}
+		}
+		else
+		{
+			$("#orderby").val("asc");
+		}
+		
+		$("#sortby").val(field);	
+		page(0);	
+	}
+	
+	function changelimit(elmt)
+	{
+		$("#limit").val(elmt.value);
+		page(0);
+		
+	}
+	
+</script>
+{* if $referer eq "cart" *}
+<h2>{* $lildp_form *}</h2>
+{* elseif $referer eq "approval" *}
+<h2>{* $lapproval_form *}</h2>
+{* elseif $referer eq "myform" *}
+<h2>{* $lmy_ildp_form *}</h2>
+{* else *}
+<h2>{* $lclassroom_catalog_list *}{* if $rowtopic *}: {* $rowtopic->category_name *}{* /if *}</h2>
+{* /if *}
+{* if $sess.asadmin and $referer ne "approval" and $referer ne "myform" *}
+<p><em>{* $lheader_catalog_list *}</em><br />
+        <br />                
+{* $lsort_list_by *} <a href="#" onclick="javascript:sortby('training_code')"{* if $sortby eq 'training_code' *}class="lite"{* /if *}>{* $lcategory *}</a>
+ | <a href="#" onclick="javascript:sortby('category_name')"{* if $sortby eq 'category_name' *}class="lite"{* /if *}>{* $ltopic *}</a>
+ | <a href="{* $base_url *}index.php/ildp/form">{* $ldata_added *}</a>
+{* /if *}
+<div id="wait" style="display: none;"><img src="{* $base_url *}images/anim_wait.gif" border="0" /></div>
+{* if $referer eq "cart" or $referer eq "approval" or $referer eq "myform" *}
+	 <p><em>{* $lildp_subtitle *}</em><br /> 
+        <br /> 
+    	{* $lpart1_cart *}
+		</p>
+	<dl class="def1"> 
+		<dt>{* $lemployee *}</dt> 
+		<form id="frmemployee">
+			<input name="grp" type="hidden" class="formmid" id="grp" value="{* $cats[1]->level_group_id *}" />
+			<input name="dept" type="hidden" class="formmid" id="dept" value="{* $cats[2]->level_group_id *}" />	
+			<input name="unit" type="hidden" class="formmid" id="unit" value="{* $cats[3]->level_group_id *}" />	
+			<input name="location" type="hidden" class="formmid" id="location" value="{* $user->user_location *}" />
+			
+			<dd><input name="name" type="text" class="formmid" id="name" value="{* $user->user_first_name *} {* $user->user_last_name *}" readonly /> {* $lname *}</dd> 
+			<dd><input name="npk" type="text" class="formmid" id="npk" value="{* $user->user_npk *}" readonly /> {* $lnpk *} </dd> 	
+			<dd><input name="jabatan" type="text" class="formmid" id="jabatan" value="{* $user->jabatan_name *}" readonly /> {* $ljob_title *}</dd> 
+            <dd><input name="grade" type="text" class="formmid" id="grade" value="{* $user->user_grade_code *}" readonly /> {* $lgrade *}</dd> 
+            <dd><input name="dirname" type="text" class="formmid" id="dirname" value="{* $cats[0]->level_group_name *}" readonly /> {* $ldirectorat *}</dd> 
+         	<dd><input name="grpname" type="text" class="formmid" id="grpname" value="{* $cats[1]->level_group_name *}" readonly /> {* $lgroup *}</dd> 
+			<dd><input name="deptname" type="text" class="formmid" id="deptname" value="{* $cats[2]->level_group_name *}" readonly /> {* $ldept *}</dd> 
+			<dd> <input name="unitname" type="text" class="formmid" id="unitname" value="{* $cats[3]->level_group_name *}" readonly /> {* $lunit *}</dd> 
+			{* if $referer eq "cart" *}
+			<dd> <input name="phone" type="text" class="formmid" id="phone" value="{* $user->order_phone *}" style="color: black;" /> {* $lphone *}</dd> 
+			<dd> <input name="mobile" type="text" class="formmid" id="mobile" value="{* $user->order_mobile *}" style="color: black;" /> {* $lmobile *}</dd> 			
+			{* else *}
+			<dd> <input name="phone" type="text" class="formmid" id="phone" value="{* $user->phone *}" readonly /> {* $lphone *}</dd> 
+			<dd> <input name="mobile" type="text" class="formmid" id="mobile" value="{* $user->mobile *}" readonly /> {* $lmobile *}</dd> 			
+			{* /if *}						
+			<dd> <input name="locationname" type="text" class="formmid" id="locationname" value="{* $user->lokasi_alamat *} {* $user->lokasi_kota *}" readonly /> Lokasi</dd> 
+		</form>
+          
+      </dl> 
+  <hr /> 
+  {* $lpart2_cart *}
+
+{* /if *}
+ <form id="frmsearch" onsubmit="javascript:page(0); return false;">
+	<input type="hidden" id="topicid" name="topicid" value="{* $topicid *}" />
+	<input type="hidden" id="limit" name="limit" value="{* $limit *}" />
+	<input type="hidden" id="sortby" name="sortby" value="training_code" />
+	<input type="hidden" id="orderby" name="orderby" value="asc" />
+	<input type="hidden" id="referer" name="referer" value="{* $referer *}" />
+	<input type="hidden" id="orderer" name="orderer" value="{* $user->user_id *}" />
+	<input type="hidden" id="orderid" name="orderid" value="{* $orderid *}" />
+	{* if $sess.asadmin and $referer ne "approval" and $referer ne "myform" *}
+      <p>{* $lsearch_by *}
+      <select name="searchby" id="searchby">
+      	{* if $referer ne "approval" *}
+      	<option value="training_code">{* $lcode *}</option>
+      	<option value="category_name">{* $ltopic *}</option>
+      	{* else *}
+      	<option value="npk">{* $lnpk *}</option>
+      	{* /if *}
+      </select> 
+      <input type='text' name="keyword" id="keyword" class='formdefault' value="">
+      <input type='submit' value=" {* $lsearch *} ">
+      </p>    
+      {* else *}
+      <input type="hidden" name="searchby" id="searchby" value="training_code" />
+      <br />
+     {* /if *}
+</form>  
+<div id="list"></div>

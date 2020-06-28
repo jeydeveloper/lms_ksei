@@ -1,0 +1,106 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>KSEI - FAQ</title>
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/modulstyles.css">
+        <link rel="stylesheet" href="css/preloader.css">
+        <script src="js/3rdparty/others/SCORM_API_wrapper.min.js" type="text/javascript"></script>
+        <script src="js/3rdparty/others/mobile-detect.min.js" type="text/javascript"></script>
+        <script src="js/library/core/Config.js" type="text/javascript"></script>
+        <script src="js/library/core/Setting.js" type="text/javascript"></script>
+        <script src="js/3rdparty/others/ifvisible.min.js" type="text/javascript"></script>
+    </head>
+    <body>
+        <div id="loading">
+            <div id="loading-center">
+                <div id="loading-center-absolute">
+                    <div class="load-obj" id="load-obj-four"></div>
+                    <div class="load-obj" id="load-obj-three"></div>
+                    <div class="load-obj" id="load-obj-two"></div>
+                    <div class="load-obj" id="load-obj-one"></div>
+                </div>
+            </div>
+        </div>
+        <div id="main" class="container-fluid">
+            <div id="content-container">
+                <div id="mod-frames">
+                    <!--header-->
+                    <div id="mod-header">
+                        <div class="row full-height nomargin-left nomargin-right">
+                            <div id="prev-bypass" class="col-xs-6 full-height nopadding-left nopadding-right">
+                                <img id="logo-col" class="full-height" src="data/image/logo.png">
+                            </div>
+                            <div id="next-bypass" class="col-xs-6 full-height nopadding-left nopadding-right">
+                                <div class="full-width" id="title-box">
+                                    <div id="modul-title-box">
+                                        <p id="modul-title"></p>
+                                    </div>
+                                    <div id="chapter-title-box">
+                                        <p id="chapter-title"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--modul frame-->
+                    <div id="mod-wrapper">
+                        <iframe id="screenF" type="text/html" frameborder="0" scrolling="no" src="about:blank"></iframe>
+                        <iframe id="helpF" type="text/html" frameborder="0" scrolling="no" src="about:blank"></iframe>
+                        <iframe id="indexListF" type="text/html" frameborder="0" scrolling="no" src="about:blank"></iframe>
+                        <iframe id="glossaryF" type="text/html" frameborder="0" scrolling="no" src="about:blank"></iframe>
+                        <iframe id="audioF" type="text/html" frameborder="0" scrolling="no" src="about:blank"></iframe>
+                        <iframe id="content-1F" type="text/html" frameborder="0" scrolling="no" src="about:blank"></iframe>
+                        <iframe id="content-2F" type="text/html" frameborder="0" scrolling="no" src="about:blank"></iframe>
+                        <iframe id="content-3F" type="text/html" frameborder="0" scrolling="no" src="about:blank"></iframe>
+                    </div>
+                    <!--Subtitle-->
+                    <div id="mod-subtitle">
+                        <div id="box-subtitle">
+                            <p id="subTxt"></p>
+                            <div id="btn-subtxt-con">
+                                <div id="btn-subtxt-prev">
+                                    <img id="btn-subtxt-prev-icn" src="data/image/up-sub.png" />
+                                </div>
+                                <div id="btn-subtxt-next">
+                                    <img id="btn-subtxt-next-icn" src="data/image/down-sub.png" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="mod-sub-btn">
+                        <img id="btn-sub-open" />
+                        <img id="btn-sub-close" />
+                    </div>
+                    <!--pdf frame-->
+                    <div id="mod-pdf">
+                        <div id="pdf-frame-head">
+                            <button id="pdf-btn-close" type="button" class="btn btn-primary">Close</button>
+                        </div>
+                        <div id="pdf-frame-body" >
+                            <iframe id="pdfF" frameborder="0" src="about:blank">This browser does not support PDFs. Please download the PDF to view it: <a href="#">Download PDF</a></iframe>
+                        </div>
+                    </div>
+                    <!--navigation-->
+                    <div id="mod-navi">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="js/3rdparty/jquery/jquery-1.11.2.min.js" type="text/javascript"></script>
+        <script src="js/3rdparty/bootstrap/bootstrap.min.js" type="text/javascript"></script>
+        <script src="js/3rdparty/others/howler.min.js" type="text/javascript"></script>
+        <script src="js/3rdparty/greensock/TweenMax.min.js" type="text/javascript"></script>
+        <script src="js/3rdparty/greensock/utils/Draggable.min.js" type="text/javascript"></script>
+        <script src="js/library/core/EffectManager.js" type="text/javascript"></script>
+        <script src="js/library/core/AudioManager.js" type="text/javascript"></script>
+        <script src="js/library/core/LayoutManager.js" type="text/javascript"></script>
+        <script src="js/library/core/PopupManager.js" type="text/javascript"></script>
+        <script src="js/library/core/TextHostManager.js" type="text/javascript"></script>
+        <script src="js/library/core/ScormManager.js" type="text/javascript"></script>
+        <script src="js/library/core/Main.js" type="text/javascript"></script>
+    </body>
+</html>

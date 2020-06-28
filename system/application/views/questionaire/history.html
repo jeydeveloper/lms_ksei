@@ -1,0 +1,69 @@
+<h2>Report Questionaire</h2>     
+<form method="post" action="">
+  <p>
+    Berikut adalah daftar dari history questionaire di Learning Management System:<br><br>
+    Urutkan berdasarkan <a onclick="javascript:sortby('user_first_name', 'asc')" href="#">Nama</a> | <a href="{* $site_url *}/questionaire/export_history/{* $qstr_id *}">Export</a>
+  </p>
+  <p>
+    Cari berdasarkan
+    <select name="searchby" id="searchby">
+      <option value="user_first_name">NAME</option>
+    </select> 
+    <input type="text" name="keyword" id="keyword" class="formdefault" value="{* $keyword *}">
+    <input type="submit" value="Cari">
+  </p>     
+</form>
+
+<table width="100%" cellpadding="3" class="tablelist">
+  <thead>
+    <tr>
+      <th width="5%"><a href="#" class="thead">No</a></th>
+      <th width="10%"><a href="#" class="thead">NIK</a></th>
+      <th width="20%"><a href="#" class="thead">Nama</a></th>
+      <th width="10%"><a href="#" class="thead">Tanggal</a></th>
+      {* if $col_history *}
+      {* foreach from=$col_history.no_urut item=row key=key *}
+      <th style="text-align:center;"><span title="{* $col_history.soal.$key *}">{* $row *}</span></th>
+      {* /foreach *}
+      {* /if *}
+    </tr>
+  </thead>
+  <tbody>
+    {* counter start=1 print=false assign="no" *}
+    {* foreach from=$row_history item=row *}
+    <tr{* if $no%2 eq 1 *} class="odd"{* /if *}>
+      <td class="odd">{* $no *}</td>
+      <td class="odd">{* $row.nik *}</td>
+      <td class="odd">{* $row.nama *}</td>
+      <td class="odd">{* $row.tanggalPengisian *}</td>
+
+      {* if $col_history *}
+      {* foreach from=$col_history.no_urut item=row2 key=key *}
+      {* assign var="x" value=$row.jawaban.$key *}
+      {* assign var="y" value=$x-1 *}
+      <td style="text-align:center;"><span title="{* $row.jawaban.$key *}">{* $col_history.optional.$key.$y *}</span></td>
+      {* /foreach *}
+      {* /if *}
+
+    </tr>
+    {* counter *}
+    {* /foreach *}
+  </tbody>
+
+  <!--<tfoot>
+    <tr>
+      <td colspan="5">
+        {* $paging *}
+      </td>
+    </tr>
+  </tfoot>-->
+</table>
+
+<form id="frmtemp" name="frmtemp" method="post" action="{* $site_url *}/questionaire/history/{* $qstr_id *}">
+  <input type="hidden" id="limit" name="limit" value="{* $limit *}" />
+  <input type="hidden" id="sortby" name="sortby" value="{* $sortby *}" />
+  <input type="hidden" id="orderby" name="orderby" value="{* $orderby *}" />
+  <input type="hidden" id="offset" name="offset" value="{* $offset *}" />
+  <input type="hidden" id="keyword" name="keyword" value="{* $smarty.post.keyword *}" />
+  <input type="hidden" id="searchby" name="searchby" value="{* $smarty.post.searchby *}" /> 
+</form>

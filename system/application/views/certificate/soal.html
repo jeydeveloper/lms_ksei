@@ -1,0 +1,97 @@
+<script>
+	var hour = {* $watch_hour *};
+	var minute = {* $watch_minute *};
+	var second = {* $watch_second *};
+	var nlen = 0;
+	var tm = null;
+	
+	function nextstep()
+	{
+		$("#dvnextbutton").html("loading...");
+		document.frmexam.submit();
+	}
+	
+	function showclock()
+	{
+		if (tm)
+		{
+			clearTimeout(tm);
+		}
+		
+		if (nlen > {* $duration *})
+		{
+			nextstep();
+			return;
+		}
+		
+		nlen++;
+		
+		second = parseInt(second)-1;
+		if (second < 0)
+		{
+			second = 59;
+			minute = parseInt(minute)-1;
+			
+			if (minute < 0)
+			{
+				minute = 59;
+				hour = parseInt(hour)-1;
+			}
+		}
+		
+		$("#clock").html(leadzero(hour)+":"+leadzero(minute)+":"+leadzero(second));
+		tm  = setTimeout("showclock()", 1000);
+	}	
+	
+	function leadzero(i)
+	{
+		if (parseInt(i) >= 10) return i;
+		
+		return "0"+i;
+	}
+	
+	$(document).ready(
+		function()
+		{
+			tm  = setTimeout("showclock()", 1000);
+		}
+	);		
+	
+</script>
+
+<style>
+	input[type=checkbox], input[type=radio] {
+		margin: 4px 10px 0;
+	}
+</style>
+
+<div class="content-wrapper">
+	<!-- Main content -->
+	<section class="content">
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="box">
+					<div class="box-body table-responsive">
+						<h2>{* $lcertificate *} "{* $certificate_name *}"</h2>
+						<br />
+						<h3><div id="clock">{* $watch *}</div></h3>
+						<br />
+						<form id="frmexam" name="frmexam" action="{* $site_url *}/certificate/showexam/{* $trainingid *}" method="post">
+							<table><thead><tr><td width="20" valign="top" align="right">{* $rowxyz->history_answer_order *}.</td><td> {* $quests[0]->banksoal_question_quest *}</td></tr></thead>
+								<tr><td>&nbsp;</td><td>
+									<table>{* foreach from=$quests item=quest *}
+										{* assign var="answerId" value=$quest->banksoal_answer_id *}
+										{* assign var="answerAnswer" value=$rowxyz->history_answer_answer *}
+										<tr  valign="top" ><td width="20" valign="top" align="right"><input type="radio" value="{* $quest->banksoal_answer_id *}" name="answer" id="answer" {* if $answerId eq $answerAnswer *}checked{* /if *} /></td><td  valign="top" >{* $quest->banksoal_answer_order_str *}. </td><td  valign="top" >{* $quest->banksoal_answer_text *}</td></tr>
+										{* /foreach *}
+									</table></td></tr></table>
+							<div id="dvnextbutton" style="margin-top: 10px;">
+								<input type="button" value="Next" onclick="javascript:nextstep()" />
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+</div>

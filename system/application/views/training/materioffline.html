@@ -1,0 +1,31 @@
+{* if $drive_trn *}
+	<html>
+		<body>
+			{* $lcopy_paste *}<BR><br>
+			
+			file:///{* $drive_trn *}:{* $materi_path *}/index.html
+			
+			<BR><BR>
+			<input type='button' name='cl_btn' value='Close' onClick='javascript:window.close();'>
+		</body>
+	</html>
+{* else *}
+	<html>
+		<body>
+			{* $lmateri_offline_message *}
+			
+			<form name='off001_frm' method='post' action='course_offline_001.php'>
+				<input type='hidden' name='id' value='{* $id *}'>
+				Drive  : 
+				<select name='drive_trn' style='width:60px'>
+					{* foreach from=$drive_letter item=drive_letter *}
+						<option value='{* $drive_letter *}'>{* $drive_letter *}:</option>
+					{* /foreach *}
+				</select>
+				<BR><BR>
+				<input type='submit' value='Next'>
+			</form>
+		</body>
+	</html>
+
+{* /if *}	

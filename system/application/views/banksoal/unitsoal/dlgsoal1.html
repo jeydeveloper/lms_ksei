@@ -1,0 +1,77 @@
+<script>
+	function setErrorMessage(err)
+	{
+		$("#messageunitsoalquest").html(err);
+		
+	}
+	
+	function setSuccess(msg)
+	{
+		$("#messageunitsoalquest").html(msg);
+		setTimeout("tutup()", 1000);
+	}
+	
+	function tutup()
+	{		
+		{* if ! $smarty.post.istraining *}
+			loadunitsoaldetailquest($("#jabatan").val(), $("#unitid").val(), true);
+		{* else *}
+			onload(true);			
+		{* /if *}		
+	}
+	
+</script>
+
+<style>
+	input[type="radio"] {
+		margin-right: 10px;
+	}
+	input[type="text"] {
+		width: 80%;
+	}
+</style>
+<form id="frmdlgsoal" action="{* $site_url *}/banksoal/savesoal/{* $rows[0]->banksoal_question_id *}" method="post" target="savesoalframe">
+	<input type="hidden" name="istraining" id="unitid" value="{* $smarty.post.istraining *}" />
+	<input type="hidden" name="unitid" id="unitid" value="{* $smarty.post.unitid *}" />
+	<input type="hidden" name="jabatanid" id="jabatanid" value="{* $smarty.post.jabatan *}" />
+	<input type="hidden" name="banksoalid" id="banksoalid" value="{* $smarty.post.banksoalid *}" />
+	<table class="table">
+		<tr>
+			<td width="20%">{* $lquestion *}</td>
+			<td><input type='text' name="inpertanyaan" id="inpertanyaan" class='formdefault' value="{* $rows[0]->banksoal_question_quest *}"></td>
+		</tr>
+		{* if ! $smarty.post.istraining *}
+		<tr>
+			<td>{* $lpacket *}</td>
+			<td align='left'><input type='text' name="inpacket" id="inpacket" class='formnumber' value="{* $rows[0]->banksoal_question_packet *}"></td>
+		</tr>
+		{* /if *}
+		{* counter start=1 print=false assign="no" *}
+		{* foreach from=$rows item=row *}
+		<tr>
+			<td align="right"><input type="radio" name="injawaban" id="injawaban" value="{* $row->banksoal_answer_id *}"{* if $rows[0]->banksoal_question_answer eq $row->banksoal_answer_id *} checked{* /if *} /> {* $row->code *}</td>			
+			<td><input type='text' name="inpilihan[]" id="inpilihan[]" class='formdefault' value="{* $row->banksoal_answer_text *}"></td>
+		</tr>		
+		{* counter *}
+		{* /foreach *}		
+		
+		{* if ! $smarty.post.istraining *}
+		 <tr>
+			<td>{* $lbobot *}</td>
+			<td align='left'>
+				<select name="inbobot" id="inbobot">
+					<option value="Mudah"{* if $rows[0]->banksoal_question_bobot eq "Mudah" *} selected{* /if *} >{* $lmudah *}</option>
+					<option value="Sedang"{* if $rows[0]->banksoal_question_bobot eq "Sedang" *} selected{* /if *}>{* $lsedang *}</option>
+					<option value="Sulit"{* if $rows[0]->banksoal_question_bobot eq "Sulit" *} selected{* /if *}>{* $lsulit *}</option>
+				</select>
+			</td>
+		</tr>
+		{* /if *}
+		<tfoot>		
+		<tr>
+			<td colspan="2"><div id="messageunitsoalquest"></div><input type="submit" value=" Save " /></td>
+		</tr>
+		</tfoot>
+	</table>
+</form>
+<iframe id="savesoalframe" name="savesoalframe" src="" style="width:0px;height:0px;border:0px solid #fff;"></iframe>

@@ -1,0 +1,61 @@
+<script>
+	function frmcatalog_onsubmit()
+	{
+		if (! confirm("{* $lconfirm_ildp_catalog_save *}")) return false;
+		
+		$("#message").show();
+		$("#message").html("saving...");
+		
+		$.post("{* $site_url *}/ildpregperiod/save", $("#frmcatalog").serialize(),
+			function(r)
+			{
+				if (r.error)
+				{
+					$("#message").html(r.message);
+					return;
+				}
+				
+				$("#message").html(r.message);
+				setTimeout("location='{* $site_url *}/ildpregperiod/';", 1000);
+			}
+			, "json"
+		);
+		
+		return false;
+	}
+	
+</script>
+<h2>{* $ladd_ildp_reg_period *}</h2>
+<form name="frmcatalog" id="frmcatalog" onsubmit="javascript: return frmcatalog_onsubmit()">
+	<table id="tbltrainingtime" width="100%" cellpadding="3" cellspacing="3" border="0">
+		<tr>
+			<td width="25%">* {* $lstart_period *}</td>
+			<td>
+  			<select name="month1" id="month1">
+  				{* foreach from=$months item=month key=imonth *}
+  				<option value="{* $imonth+1 *}"{* if $imonth+1 eq $monthnow *} selected{* /if *}>{* $month *}</option>
+  				{* /foreach *}
+  			</select>				
+  			<input type="text" name="year1" id="year1" value="{* $yearnow *}" class="formshort" /></td>
+				</td>
+		</tr>	
+		<tr>
+			<td>* {* $lend_period *}</td>
+			<td>
+  			<select name="month2" id="month2">
+  				{* foreach from=$months item=month key=imonth *}
+  				<option value="{* $imonth+1 *}"{* if $imonth+1 eq $monthnow *} selected{* /if *}>{* $month *}</option>
+  				{* /foreach *}
+  			</select>				
+  			<input type="text" name="year2" id="year2" value="{* $yearnow *}" class="formshort" /></td>
+			</td>
+		</tr>		
+		<tr>
+			<td valign="top">&nbsp;</td>
+			<td valign="top">
+				<div id="message" style="display: none;"></div><input type="submit" value="Submit" />
+				<input name="reset" type="reset" value="Reset" onclick="javascript: return confirm('{* $lconfirm_reset_data *}');" /></td>
+			</td>
+		</tr>	
+	</table>
+</form>

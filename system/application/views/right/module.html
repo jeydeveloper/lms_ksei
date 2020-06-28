@@ -1,0 +1,37 @@
+      <script>
+      	<!--
+      		function removemodule(id)
+      		{
+      			if (! confirm('{* $confirm_delete *}'))
+      			{
+      				return;
+      			}
+      			
+      			$.post("{* $site_url *}/right/removemodule/", {id: id},
+      				function (data)
+      				{
+      					refresh();
+      				}
+      			);
+      		}
+      	-->
+      </script>
+      <table width="100%" cellpadding="3" class="tablelist">
+        <thead>
+          <tr>
+            <th width="70%">{* $lright_module *}</th>
+            <th width="10%">&nbsp;</th>
+          </tr>
+          {* counter start=1 print=false assign="no" *}
+          {* foreach from=$list item=row *}
+          <tr{* if $no%2 eq 1 *} class="odd"{* /if *}>
+            <td class="odd">{* $row->module_name *}</td>
+            <td><a href="javascript: removemodule({* $row->right_module_id *})"><img src="{* $base_url *}images/b_del.gif" width="12" height="12" border="0" /></a></td>
+          </tr>          	
+          	{* counter *}
+          {* /foreach *}
+          
+        </thead>
+        <tbody>
+        </tbody>
+      </table>

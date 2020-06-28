@@ -1,0 +1,19 @@
+<ul class="treeview-menu">
+	<li class="{* if $page eq $pageid and ($subpage eq "showlist" or $subpage eq "form" or $subpage eq "historyexam" or $subpage eq "historydetail" or $subpage eq "historyparticipant" or $subpage eq "historynpk") *} active{*/if*}"><a href="{* $site_url *}/{* $pageid *}/showlist"><i class="fa fa-tasks"></i> <span>{* $llist *}</span></a></li>
+	{* if ($sess.user_type eq 0 or $sessmodules.certificate) and $sess.asadmin *}
+	{* if $pageid eq "certificate" *}
+	<li class="{* if $page eq $pageid and $subpage eq "setting" *} active{*/if*}"><a href="{* $site_url *}/{* $pageid *}/setting"><i class="fa fa-th"></i> <span>{* $lsetting *}</span></a></li>
+	{* /if *}
+	<li class="{* if $page eq $pageid and $subpage eq "participant" *} active{*/if*}"><a href="{* $site_url *}/{* $pageid *}/participant"><i class="fa fa-id-badge"></i> <span>{* $lparticipant *}</span></a></li>
+	<li class="{* if $page eq $pageid and $subpage eq "prequisite" *} active{*/if*}"><a href="{* $site_url *}/{* $pageid *}/prequisite"><i class="fa fa-arrow-circle-right"></i> <span>{* $lprequisite *}</span></a></li>
+	<li class="{* if $page eq $pageid and $subpage eq "postrequisite" *} active{*/if*}"><a href="{* $site_url *}/{* $pageid *}/postrequisite"><i class="fa fa-arrow-circle-left"></i> <span>{* $lpostrequisite *}</span></a></li>
+	{* if $pageid eq "training" *}
+	<li class="{* if $page eq $pageid and $subpage eq "praexam" *} active{*/if*}"><a href="{* $site_url *}/{* $pageid *}/praexam"><i class="fa fa-pencil-square-o"></i> <span>{* $lpraexam_lexam *}</span></a></li>
+	{* /if *}
+	<li class="{* if $page eq "banksoal" *} active{*/if*}"><a href="{* $site_url *}/banksoal/{* $pageid *}"><i class="fa fa-file-text-o"></i> <span>{* $lbank_soal_training *}</span></a></li>
+	{* if $pageid eq "training" *}
+	<li class="{* if $page eq $pageid and $subpage eq "material" *} active{*/if*}"><a href="{* $site_url *}/{* $pageid *}/material"><i class="fa fa-book"></i> <span>{* $lmateri *}</span></a></li>
+	{* /if *}
+	<li class="{* if $page eq $pageid and $subpage eq "summaryreport" *} active{*/if*}"><a href="{* $site_url *}/{* $pageid *}/summaryreport"><i class="fa fa-bar-chart"></i> <span>{* $lreport *}</span></a></li>
+	{* /if *}
+</ul>

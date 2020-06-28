@@ -1,0 +1,47 @@
+<script>
+	function frmforgot_onsubmit()
+	{
+		$("#msg").html("Submitting...");
+		$.post("{* $site_url *}/home/doforgotpass/", $("#frmforgot").serialize(),
+			function(data)
+			{		
+				$("#msg").html("");
+				
+				var datas = data.split("\1");
+				if (parseInt(datas[0]) > 0)
+				{
+					$("#msg").html(datas[1]);
+					return false;	
+				}
+				
+				$("#msg").html("password resetter link address has been sent to your email!");
+			}
+		);
+		
+		return false;
+	}	
+</script>
+<form id="frmforgot" onsubmit="javascript:return frmforgot_onsubmit()">
+	<table cellpadding="4" cellpadding="4">
+		<tr>
+			<td>&nbsp;</td>
+			<td>{* $forgot_password *}</td>
+		</tr>
+		<tr>
+			<td align="right" valign="top">
+				<select name="field" id="field">
+					<option value="npk">ID</option>
+					<option value="email">Email</option>
+				</select>
+			</td>
+			<td>
+				<input type='text' name="keyword" id="keyword" class='formdefault' value="" >
+			</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td valign="top"><div id="msg"></div><input type="submit" name="submit" id="submit" value=" Submit " /></td>
+		</tr>
+	</table>
+	<a href="{* $site_url *}/">Login</a>
+</form>

@@ -1,0 +1,120 @@
+<link type="text/css" href="{*$base_url*}js/jquery-ui-1.7.2.custom/development-bundle/themes/base/ui.all.css" rel="stylesheet" /> 
+<script type="text/javascript" src="{*$base_url*}js/jquery-ui-1.7.2.custom/development-bundle/external/bgiframe/jquery.bgiframe.js"></script> 
+<script type="text/javascript" src="{*$base_url*}js/jquery-ui-1.7.2.custom/development-bundle/ui/ui.core.js"></script> 
+<script type="text/javascript" src="{*$base_url*}js/jquery-ui-1.7.2.custom/development-bundle/ui/ui.draggable.js"></script> 
+<script type="text/javascript" src="{*$base_url*}js/jquery-ui-1.7.2.custom/development-bundle/ui/ui.resizable.js"></script> 
+<script type="text/javascript" src="{*$base_url*}js/jquery-ui-1.7.2.custom/development-bundle/ui/ui.dialog.js"></script>        
+      <script>
+	$(document).ready(
+		function()
+		{
+			unitid_onchange();
+			$("#dialog1").dialog(
+				{ 
+					autoOpen: false 
+					,modal: true
+					,width: 160
+				}
+			) 			
+		}
+	);      
+	  
+	  	function unitid_onchange()
+	  	{
+	  		$.post("{* $site_url *}/banksoal/jabatanperunit/{* $banksoal->banksoal_id *}", $("#frmhist").serialize(),
+	  			function(r)
+	  			{
+	  				$("#dvjabatan").html(r.html);
+	  			}
+	  			, "json"
+	  		);
+	  	}
+	  	  	
+      	function exporthist()
+      	{
+      		document.frmhist.submit();
+      	}
+	  
+      	function showhist()
+      	{
+      		$("#history").html("loading...");
+      		$.post("{* $site_url *}/banksoal/historydetail/{* $banksoal->banksoal_id *}", $("#frmhist").serialize(),
+      			function(data)
+      			{
+      				$("#history").html(data);
+      			}
+      		);
+      	}
+      	
+	function salah(qid, aid)
+	{
+		$.post("{* $site_url *}/banksoal/wronganswertraining/", {qid: qid, aid: aid, t: 3},
+			function(data)
+			{			
+				$("#dialogcontent").html(data);
+				$("#dialog1").dialog("open");
+			}	
+		);	
+	}      	
+      </script>
+
+<div class="content-wrapper">
+	<!-- Content Header (Page header) -->
+	<section class="content-header">
+		<h1>
+			{* $lhistory *} &quot;{* $banksoal->banksoal_name *}&quot;
+		</h1>
+		<ol class="breadcrumb">
+			<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+			<li><a href="#">Bank Soal</a></li>
+			<li class="active">History</li>
+		</ol>
+	</section>
+
+	<!-- Main content -->
+	<section class="content">
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="box">
+					<div class="box-body table-responsive">
+						<!--
+                        {* $sort_list_by *} <a href="#" onclick="javascript:sortby('banksoal_name', 'asc')"{* if $sortby eq 'banksoal_name' *}class="lite"{* /if *}>NAME</a> | <a href="#" onclick="javascript:sortby('banksoal_status', 'asc')"{* if $sortby eq 'banksoal_status' *}class="lite"{* /if *}>{* $status *}</a> | <a href="{* $site_url *}/banksoal/form/{* $banksoal_type *}">{* $date_added *}</a>      </p>
+                        -->
+						<form id="frmhist" name="frmhist" action="{* $site_url *}/banksoal/historydetail/{* $banksoal->banksoal_id *}/export" method="post">
+							<table class="table">
+								<tr>
+									<td width="15%">{* $lunit *}</td>
+									<td width="1%">:</td>
+									<td>
+										<select id="unitid" name="unitid" onchange="javascript:unitid_onchange()">
+											{* foreach from=$units item=unit *}
+											<option value="{* $unit->banksoal_unit_id *}">{* $unit->banksoal_unit_name *}</option>
+											{* /foreach *}
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<td>{* $ljabatan *}</td>
+									<td>:</td>
+									<td>
+										<div id="dvjabatan"></div>
+									</td>
+								</tr>
+								<tr>
+									<td colspan="2">&nbsp;</td>
+									<td><input type="button" value="Show" onclick="javascript:showhist()" /><input type="button" value="Export" onclick="javascript:exporthist()" /></td>
+								</tr>
+							</table>
+							<br />
+							<div id="history"></div>
+						</form>
+						<br />
+						<div id="dialog1" title="{* $lwrong_answered *}" style="display: none;">
+							<div id="dialogcontent"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+</div>

@@ -1,0 +1,74 @@
+	<script>
+		function checkall()
+		{
+			$("input[id=users]").attr("checked", $("#userall").attr("checked"));
+		}
+		
+		function resetildpform()
+		{
+			var inp = $("input[id=users]:checked");
+			if (inp.length == 0)
+			{
+				alert("{*$lempty_select_ildp_form *}");
+				return;
+			}
+			
+			if (! confirm("{* $lconfirm_ildp_reset *}")) 
+			{
+				return;
+			}
+			
+			$.post("{* $site_url *}/ildpqueue/doreset", $("#frmreset").serialize(),
+				function(r)
+				{
+					if (r.error)
+					{
+						alert(r.message);
+						return;
+					}
+					
+					alert(r.message);
+					page(0);
+				}
+				, "json"
+			);
+		}
+	</script>
+<form id="frmreset">
+	<table width="100%" cellpadding="3" class="tablelist"> 
+		<thead> 
+			<tr>
+				<th width="3%"><input type="checkbox" name="userall" id="userall" value="" onclick="javascript:checkall()" /></th> 
+				<th width="17%">{* $lnpk *}</th> 
+				<th width="30%">{* $lname *}</th> 
+				<th width="17%">{* $lsubmitdate *}</th> 
+				<th width="30%">{* $lstatus *}</th> 
+				<th>&nbsp;</th>
+			</tr> 
+		</thead>
+		<tbody>
+			{* counter start=1 print=false assign="no" *}
+			{* foreach from=$rows item=row *}
+			<tr> 
+				<td class="odd"><input type="checkbox" name="user[]" id="users" value="{* $row->ildp_id *}" /></td>
+				<td class="odd">{* $row->user_npk *}</td>
+				<td class="odd"><a href="{* $site_url *}/ildpform/approval/{* $row->ildp_id *}">{* $row->user_first_name *} {* $row->user_last_name *}</a></td>
+				<td class="odd">{* $row->ildp_period_start_t *}</td>
+				<td class="odd">{* $row->laststatus *}</td> 
+				<td>&nbsp;</td>
+			</tr>
+				{* counter *}
+			{* /foreach *}
+			{* if $rows *}
+			<tr>
+				<td colspan="6"><input type="button" value="{* $lreset *}" onclick="javascript: resetildpform()" /></td>
+			</tr>
+			{* /if *}
+		</tbody>
+		<tfoot>
+			<tr>
+				<td colspan="6">{* $paging *}</td>
+			</tr>
+		</tfoot>
+	</table>
+</form>	
