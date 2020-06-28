@@ -1673,6 +1673,7 @@ class User extends Base{
 		$this->mysmarty->assign("header_list_user", $this->config->item('header_list_user'));
 		$this->mysmarty->assign("jabatan", strtoupper($this->config->item('jabatan')));
 		$this->mysmarty->assign("ljabatan1", $this->config->item('jabatan'));
+		$this->mysmarty->assign("ljabatan", $this->config->item('jabatan'));
 		$this->mysmarty->assign("directorat_name", strtoupper($this->config->item('directorat')));
 		$this->mysmarty->assign("status", strtoupper($this->config->item('status')));
 		$this->mysmarty->assign("sort_list_by", $this->config->item('sort_list_by'));
