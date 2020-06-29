@@ -1703,6 +1703,15 @@ class User extends Base{
 		$this->mysmarty->assign("list", $list);
 		$this->mysmarty->assign("referer", $referer);
 
+		$this->mysmarty->assign("department", $this->config->item("department"));
+		$this->mysmarty->assign("unit", $this->config->item("unit"));
+
+		foreach ($list as $key => $value) {
+			$infoLevel = $this->getLevelGroup($value);
+			$list[$key]->divisi = !empty($infoLevel[2]) ? $infoLevel[2]->group : '';
+			$list[$key]->unit = !empty($infoLevel[3]) ? $infoLevel[3]->group : '';
+		}
+
 		if ($referer == "activities")
 		{
 			if($this->sess['asadmin'] == 1) {
@@ -3496,6 +3505,26 @@ class User extends Base{
 		} else {
 			return;
 		}
+	}
+
+	private function getLevelGroup($row) {
+		$arr1 = array();		
+		$this->levelmodel->getparentlevelgroups($row->jabatan_level_group, $arr1);		
+		$arr1 = array_reverse($arr1);
+		
+		$arrlevels = array();
+		$this->levelmodel->getalllevels(0, $arrlevels);
+		
+		for($i=0; $i < count($arr1); $i++)
+		{
+			$arr[$arr1[$i]->level_group_nth] = $arr1[$i];
+		}
+		
+		for($i=0; $i < count($arrlevels); $i++)
+		{
+			$arrlevels[$i]->group = isset($arr[$arrlevels[$i]->level_nth]) ? $arr[$arrlevels[$i]->level_nth]->level_group_name : "";
+		}
+		return $arrlevels;
 	}
 }
 

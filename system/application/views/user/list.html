@@ -242,16 +242,18 @@ $_POST['notadmin'] = '';
                                 <th width="10%">&nbsp;</th>
                                 {* /if *}
                                 {* if $smarty.post.dialog *}
-                                <th width="18%"><a href="javascript:shownpkorder({* $smarty.post.jabatan*} ,'user_npk', 'asc')" class="thead" title="{* $lsort_by_npk *}">{* $lnpk *}</a></th>
+                                <th width="10%"><a href="javascript:shownpkorder({* $smarty.post.jabatan*} ,'user_npk', 'asc')" class="thead" title="{* $lsort_by_npk *}">{* $lnpk *}</a></th>
                                 <th width="18%"><a href="javascript:shownpkorder({* $smarty.post.jabatan*} ,'user_name', 'asc')" class="thead" title="{* $lsort_by_name *}">{* $name *}</a></th>
                                 <th><a href="javascript:shownpkorder({* $smarty.post.jabatan*} ,'user_email', 'asc')" class="thead" title="{* $lsort_by_email *}">{* $email *}</a></th>
                                 {* else *}
-                                <th width="18%"><a href="#" onclick="javascript:sortby('user_npk', 'asc')" class="thead" title="{* $lsort_by_npk *}">{* $lnpk *}</a></th>
+                                <th width="10%"><a href="#" onclick="javascript:sortby('user_npk', 'asc')" class="thead" title="{* $lsort_by_npk *}">{* $lnpk *}</a></th>
                                 <th width="18%"><a href="#" onclick="javascript:sortby('user_name', 'asc')" class="thead" title="{* $lsort_by_name *}">{* $name *}</a></th>
                                 <th width="18%"><a href="#" onclick="javascript:sortby('user_email', 'asc')" class="thead" title="{* $lsort_by_email *}">{* $email *}</a></th>
                                 {* /if *}
                                 {* if (! $smarty.post.dialog) *}
                                 <th width="18%"><a href="#" onclick="javascript:sortby('jabatan_name', 'asc')" class="thead" title="{* $lsort_by_position *}">{* $ljabatan *}</a></th>
+                                <th width="10%">{* $department *}</th>
+                                <th width="10%">{* $unit *}</th>
                                 {* if $referer ne "activities" *}
                                 <th><div class="listmain"><a href="#" onclick="javascript:sortby('user_status', 'asc')" class="thead" title="{* $lsort_by_status *}">{* $status *}</a></div></th>
                                 <th>&nbsp;</th>
@@ -284,6 +286,8 @@ $_POST['notadmin'] = '';
                             <td class="odd">{* $row->user_email *}</td>
                             {* if ! $smarty.post.dialog *}
                             <td class="odd">{* if $referer ne "activities" *}<a href="{* $site_url *}/jabatan/form/{* $row->user_jabatan *}">{* /if *}{* $row->jabatan_name *}{* if $referer ne "activities" *}</a>{* /if *}</td>
+                            <td class="odd">{* $row->divisi *}</td>
+                            <td class="odd">{* $row->unit *}</td>
                             {* if $referer ne "activities" *}
                             {* if $row->user_type ne 0 *}
                             <td class="odd"><div id="status{* $row->user_id *}"><a href="#" onclick="javascript:chagestatus({* $row->user_id *},{* $row->user_status *})"><img src="{* $base_url *}images/16/{* if  $row->user_status eq 2 *}inactive.png{* else *}active.png{* /if *}" border="0" alt="{* $row->user_status_desc *}" title="{* $row->user_status_desc *}" /></a></div></td>
