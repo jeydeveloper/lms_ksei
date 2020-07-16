@@ -24,6 +24,8 @@ class Level extends Base{
 		$this->load->model("langmodel");
 		$this->load->model("commonmodel");
 		$this->load->model("levelmodel");
+
+		$this->load->model("logmodel");
 		
 		$this->load->database();	
 		$this->lang = $this->session->userdata('lms_lang');
@@ -1508,6 +1510,284 @@ class Level extends Base{
 
 		$this->xlswriter->close();
 	}	
+
+	function importunit()
+	{
+		$this->checkadmin();
+
+		if (! isset($this->modules['user']))
+		{
+			redirect(base_url());
+		}
+
+		$this->mysmarty->assign("luser_file", $this->config->item("luser_file"));
+		$this->mysmarty->assign("limport", $this->config->item("limport"));
+		$this->mysmarty->assign("lfile", $this->config->item("lfile"));
+
+		$this->mysmarty->assign("left_content", "user/menu_admin.html");
+		$this->mysmarty->assign("main_content", "level/import_unit.html");
+		$this->mysmarty->display("sess_template.html");
+	}
+
+	function saveimport($file="", $isrename=false)
+	{
+		$usess = $this->session->userdata('lms_sess');
+		$sess = unserialize($usess);
+
+		$errs = array();
+
+		if (! is_file($file))
+		{
+			if (! isset($_FILES['userfile']))
+			{
+				$errs[] = $this->config->item("lempty_file");
+			}
+			else
+			if (! $_FILES['userfile']['name'])
+			{
+				$errs[] = $this->config->item("lempty_file");
+			}
+		}
+
+		if (count($errs) == 0)
+		{
+			if ($_FILES['userfile']['type'] != 'application/vnd.ms-excel' && $_FILES['userfile']['type'] != "application/octet-stream")
+			{
+				$errs[] = $this->config->item("lempty_file");
+			}
+			else
+			{
+				$paths = pathinfo($_FILES['userfile']['name']);
+				if (strcasecmp($paths['extension'], "xls") != 0)
+				{
+					$errs[] = $this->config->item("lempty_file");
+				}
+
+			}
+		}
+
+		if (count($errs) > 0)
+		{
+			$this->mysmarty->assign("errs", $errs);
+			$err = $this->mysmarty->fetch("errmessage.html");
+			$err = str_replace("\"", "'", $err);
+			$err = str_replace("\r", "", $err);
+			$err = str_replace("\n", "", $err);
+
+			$s_error = join(",", $errs);
+			echo "<script>parent.setErrorMessage('messageimportnew', \"".$err."\")</script>";
+
+			return;
+		}
+
+		$filename = $_FILES['userfile']['tmp_name'];
+
+
+		$errs = $this->doImport("xls", $filename);
+
+		if (is_array($errs))
+		{
+			$this->mysmarty->assign("errs", $errs);
+			$err = $this->mysmarty->fetch("errmessage.html");
+			$err = str_replace("\"", "'", $err);
+			$err = str_replace("\r", "", $err);
+			$err = str_replace("\n", "", $err);
+
+			$s_error = join(",", $errs);
+			echo "<script>parent.setErrorMessage('messageimportnew', \"".$err."\")</script>";
+			return;
+		}
+
+		printf("<script>parent.setSuccess('messageimportnew', '%s')</script>", $this->config->item("limport").' done');
+	}
+
+	function doImport($type="csv", $filename="") 
+	{
+		set_time_limit(0);
+
+		if ($filename)
+		{
+			$file = $filename;
+		}
+		else
+		{
+			$file = $this->config->item("root_path")."/".$this->config->item("inbox")."/".$this->config->item("importfilename");
+		}
+
+		if (! is_file($file))
+		{
+			$s_echo = "can't open ".$file;
+			$this->logmodel->append($s_echo);
+
+			if ($filename) return array($s_echo);
+
+			echo $s_echo."\r\n";
+			return;
+		}
+
+		$nlevel = $this->levelmodel->getnlevel();
+		$startrow = 2;
+		$TotalColumn = $nlevel;
+
+		if ($type == "xls")
+		{
+
+			require_once BASEPATH . "application/libraries/PHPExcel.php";
+            require_once BASEPATH . "application/libraries/PHPExcel/IOFactory.php";
+
+            $objPHPExcel = PHPExcel_IOFactory::load($filename);
+
+			if (empty($objPHPExcel))
+			{
+				$s_echo = $this->config->item("lempty_file");
+
+				$this->logmodel->append($s_echo);
+
+				if ($filename) return array($s_echo);
+
+				echo $s_echo."\r\n";
+
+				return;
+			}
+
+			$this->logmodel->append("start reading excel file");
+
+			foreach ($objPHPExcel->getWorksheetIterator() as $worksheet) {
+                $worksheetTitle     = $worksheet->getTitle();
+                $highestRow         = $worksheet->getHighestRow(); // e.g. 10
+                $highestColumn      = $worksheet->getHighestColumn(); // e.g 'F'
+                $highestColumnIndex = PHPExcel_Cell::columnIndexFromString($highestColumn);
+
+                for ($irow = $startrow; $irow <= $highestRow; $irow++) {
+                    for($j=0;$j<$TotalColumn;$j++)
+					{
+						$nilai = $worksheet->getCellByColumnAndRow($j, $irow)->getValue();
+						$rows[$irow-2][$j] = trim($nilai);
+					}
+                }
+            }
+
+			$this->logmodel->append("end reading excel file");
+		}
+		else
+		{
+
+			$fin = fopen($file, "rb");
+			if (! $fin)
+			{
+				echo "can't open file ".$file;
+				$this->logmodel->append("can't open file ".$file);
+
+				return;
+			}
+
+			$this->logmodel->append("start reading csv file");
+			$i = 0;
+			while(! feof($fin))
+			{
+				$line = trim(fgets($fin));
+				if ($i == 0)
+				{
+					$i++;
+					continue;
+				}
+
+				if (strlen($line) == 0) break;
+				$lines = explode(";",  $line);
+
+				for($j=1;$j<=$TotalColumn;$j++)
+				{
+					$rows[$i-1][$j-1] = isset($lines[$j-1]) ? trim($lines[$j-1]) : "";
+				}
+
+				$i++;
+			}
+
+			fclose($fin);
+			$this->logmodel->append("end reading csv file");
+
+		}
+
+		if (! isset($rows))
+		{
+			unset($data);
+
+			$data['import_date'] = date("Ymd");
+			$data['import_time'] = date("Gis");
+			$data['import_nrecords'] = 0;
+			$data['import_nactive'] = 0;
+			$data['import_nnoactive'] = 0;
+			$data['import_creator'] = 0;
+
+			$this->db->insert("import", $data);
+
+			$s_echo = "file is empty";
+
+			$this->logmodel->append($s_echo);
+
+			if ($filename) return array($s_echo);
+
+			echo $s_echo."\r\n";
+			return;
+		}
+
+		$this->logmodel->append("start updating database");
+
+		$jend = $nlevel;
+
+		for($i=0; $i < count($rows); $i++)
+		{
+			unset($data);
+			$parent = 0;
+			$k = 1;
+			for($j=0; $j < $jend; $j++)
+			{
+				unset($data);
+				$data['level_group_parent'] = $parent;
+				$data['level_group_name'] = trim($rows[$i][$j]);
+				$data['level_group_status'] = 1;
+				$data['level_group_nth'] = $k++;
+				$data['level_group_created'] = date("Ymd");
+				$data['level_group_creator'] = 0;
+				if (($parent > 0) && (! $data['level_group_name']))
+				{
+					break;
+				}
+				$data['level_group_name'] = iconv("utf-8", "ascii//TRANSLIT//IGNORE", $data['level_group_name']);
+				$data['level_group_name'] =  preg_replace("/^'|[^A-Za-z0-9\s-]|'$/", '', $data['level_group_name']);
+				$this->db->where("level_group_name", $data['level_group_name']);
+				$this->db->where("level_group_parent", $data['level_group_parent']);
+				$q = $this->db->get("level_group");
+				$this->db->flush_cache();
+				if ($q->num_rows() > 0)
+				{
+					$row = $q->row();
+					$parent = $row->level_group_id;
+				}
+				else
+				{
+					$this->db->insert("level_group", $data);
+					$parent = $this->db->insert_id();
+				}
+			}
+		}
+		unset($data);
+		$data['import_date'] = date("Ymd");
+		$data['import_time'] = date("Gis");
+		$data['import_nrecords'] = count($rows);
+		$data['import_nactive'] = $total_nactive;
+		$data['import_nnoactive'] = $total_nnoactive;
+		$data['import_creator'] = 0;
+		$this->db->insert("import", $data);
+		$this->logmodel->append("end updating database");
+		if ($filename == "")
+		{
+			$oldFile =$this->config->item("root_path")."/".$this->config->item("inbox")."/".$this->config->item("importfilename");
+			$newFile = $this->config->item("root_path")."/".$this->config->item("inbox")."/".date("Ymd_His")."_".$this->config->item("importfilename");
+			rename($oldFile,$newFile);
+		}
+		return 0;
+	}
 }
 
 /* End of file welcome.php */
