@@ -64,7 +64,7 @@ $config['unit_list'] = "Daftar Unit";
 $config['header_list_unit'] = "Berikut adalah unit yang ada dalam Learning Management System ini:";
 $config['err_not_exist_unit'] = "Unit sudah ada!";
 
-$config['department'] = "Departemen";
+$config['department'] = "Divisi";
 $config['department_list'] = "Daftar Departemen";
 $config['department_name'] = "Nama Departemen";
 $config['header_list_department'] = "Berikut adalah department yang ada dalam Learning Management System ini:";
